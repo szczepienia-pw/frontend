@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('haha') {
             steps {
-                echo 'this is a test'
+                echo 'ls -la'
             }
         }
     }
