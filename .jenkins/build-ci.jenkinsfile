@@ -1,0 +1,25 @@
+pipeline {
+    agent vps 
+    stages {
+        stage('copy artifact') {
+            echo "test"
+        }
+        stage('Build') { 
+            steps {
+                //docker exec -it vue npm install --progress=false
+                //npm run build
+            }
+        }
+        stage('Test') { 
+            steps {
+                // TODO
+                echo "for now assume all tests have passed"
+            }
+        }
+        stage('Deploy') { 
+            steps {
+                // 
+            }
+        }
+    }
+}
