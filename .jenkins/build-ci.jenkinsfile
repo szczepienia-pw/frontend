@@ -1,5 +1,5 @@
 pipeline {
-    agent vps 
+    agent { label: 'vps' }
     stages {
         stage('copy artifact') {
             echo "test"
