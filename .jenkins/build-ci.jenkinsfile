@@ -1,25 +1,33 @@
 pipeline {
-    agent { label: 'vps' }
+    agent any
     stages {
-        stage('copy artifact') {
-            echo "test"
-        }
-        stage('Build') { 
-            steps {
-                //docker exec -it vue npm install --progress=false
-                //npm run build
-            }
-        }
-        stage('Test') { 
-            steps {
-                // TODO
-                echo "for now assume all tests have passed"
-            }
-        }
-        stage('Deploy') { 
-            steps {
-                // 
-            }
+        stage('haha') {
+            echo 'this is a test'
         }
     }
 }
+// pipeline {
+//     agent { label: 'vps' }
+//     stages {
+//         stage('copy artifact') {
+//             echo "test"
+//         }
+//         stage('Build') { 
+//             steps {
+//                 //docker exec -it vue npm install --progress=false
+//                 //npm run build
+//             }
+//         }
+//         stage('Test') { 
+//             steps {
+//                 // TODO
+//                 echo "for now assume all tests have passed"
+//             }
+//         }
+//         stage('Deploy') { 
+//             steps {
+//                 // 
+//             }
+//         }
+//     }
+// }
