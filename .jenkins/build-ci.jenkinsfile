@@ -1,35 +1,56 @@
 pipeline {
-    agent any
     stages {
-        stage('haha') {
-            steps {
-                echo 'ls -la'
+        stage('build and update') {
+             when {
+                // execute only on merges to develop and main
+                allOf {
+                    anyOf {
+                        branch: develop;
+                        branch: main;
+                    }
+                    expression {
+                        return env.CHANGE_TARGET
+                    }
+                }
+            }
+            stages('build and update') {
+                agent {
+                    label: 'vue'
+                }
+                stage('build') {
+                    steps {
+                        sh npm install
+                        sh npm build
+                        stash includes: './dist/*', name: 'build'
+                    }
+                }
+                stage('update develop') {
+                    agents {
+                        label: 'vps'
+                    }
+                    when {
+                        branch: develop
+                    }
+                    steps {
+                        unstash 'build'
+                        sh yes | rm -r /home/flatly/drop_zone/www/develop/*
+                        sh cp * /home/flatly/drop_zone/www/develop/
+                    }
+                }
+                stage('update main') {
+                    agents {
+                        label: 'vps'
+                    }
+                    when {
+                        branch: main
+                    }
+                    steps {
+                        unstash 'build'
+                        sh yes | rm -r /home/flatly/drop_zone/www/frontend/*
+                        sh cp * /home/flatly/drop_zone/www/frontend/
+                    }
+                }
             }
         }
     }
 }
-// pipeline {
-//     agent { label: 'vps' }
-//     stages {
-//         stage('copy artifact') {
-//             echo "test"
-//         }
-//         stage('Build') { 
-//             steps {
-//                 //docker exec -it vue npm install --progress=false
-//                 //npm run build
-//             }
-//         }
-//         stage('Test') { 
-//             steps {
-//                 // TODO
-//                 echo "for now assume all tests have passed"
-//             }
-//         }
-//         stage('Deploy') { 
-//             steps {
-//                 // 
-//             }
-//         }
-//     }
-// }
