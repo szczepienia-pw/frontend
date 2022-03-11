@@ -14,8 +14,43 @@ pipeline {
                     }
                 }
             }
-            steps {
-                sh 'echo "chuj"'
+            stages('build and update') {
+                stage('build') {
+                    agent {
+                        label: 'vue'
+                    }
+                    steps {
+                        sh 'npm install'
+                        sh 'npm build'
+                        stash includes: './dist/*', name: 'build'
+                    }
+                }
+                stage('update develop') {
+                    agents {
+                        label: 'vps'
+                    }
+                    when {
+                        branch: 'develop'
+                    }
+                    steps {
+                        unstash 'build'
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/develop/*'
+                        sh 'cp * /home/flatly/drop_zone/www/develop/'
+                    }
+                }
+                stage('update main') {
+                    agents {
+                        label: 'vps'
+                    }
+                    when {
+                        branch: 'main'
+                    }
+                    steps {
+                        unstash 'build'
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/frontend/*'
+                        sh 'cp * /home/flatly/drop_zone/www/frontend/'
+                    }
+                }
             }
         }
     }
