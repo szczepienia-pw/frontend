@@ -60,6 +60,9 @@ pipeline {
         }
     }
     post {
+        agent {
+            label 'vue'
+        }
         always {
             cleanWs()
         }
