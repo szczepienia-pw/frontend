@@ -26,7 +26,7 @@ pipeline {
                     }
                 }
                 stage('update develop') {
-                    agents {
+                    agent {
                         label 'vps'
                     }
                     when {
@@ -39,7 +39,7 @@ pipeline {
                     }
                 }
                 stage('update main') {
-                    agents {
+                    agent {
                         label 'vps'
                     }
                     when {
