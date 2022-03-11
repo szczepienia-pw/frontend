@@ -1,4 +1,4 @@
-# front-admin
+# szczepienia-pw-front
 
 ## Project setup
 ```

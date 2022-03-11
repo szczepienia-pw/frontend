@@ -3,15 +3,9 @@ pipeline {
     stages {
         stage('build and update') {
             when {
-                // execute only on merges to develop and main
-                allOf {
-                    anyOf {
-                        branch 'develop';
-                        branch 'main';
-                    }
-                    expression {
-                        return env.CHANGE_TARGET
-                    }
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
                 }
             }
             stages('build and update') {
@@ -20,17 +14,15 @@ pipeline {
                         label 'vue'
                     }
                     steps {
-                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                        sh 'tar -xf /app/global/node_modules.tar -C .'
                     }
                 }
-                stage('build') {
+                stage('install') {
                     agent {
                         label 'vue'
                     }
                     steps {
                         sh 'npm install'
-                        sh 'npm build'
-                        stash includes: './dist/*', name: 'build'
                     }
                 }
                 stage('update global node_modules') {
@@ -39,6 +31,15 @@ pipeline {
                     }
                     steps {
                         sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
+                }
+                stage('build') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'npm run build'
+                        stash includes: 'dist/**', name: 'build'
                     }
                 }
                 stage('update develop') {
@@ -50,8 +51,8 @@ pipeline {
                     }
                     steps {
                         unstash 'build'
-                        sh 'yes | rm -r /home/flatly/drop_zone/www/develop/*'
-                        sh 'cp * /home/flatly/drop_zone/www/develop/'
+                        sh 'yes | rm -rf /home/flatly/apps/www/develop/*'
+                        sh 'cp -r ./dist/* /home/flatly/apps/www/develop/'
                     }
                 }
                 stage('update main') {
@@ -63,8 +64,16 @@ pipeline {
                     }
                     steps {
                         unstash 'build'
-                        sh 'yes | rm -r /home/flatly/drop_zone/www/frontend/*'
-                        sh 'cp * /home/flatly/drop_zone/www/frontend/'
+                        sh 'yes | rm -rf /home/flatly/apps/www/main/*'
+                        sh 'cp -r ./dist/* /home/flatly/apps/www/main/'
+                    }
+                }
+                stage('clean workspace') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        cleanWs()
                     }
                 }
             }

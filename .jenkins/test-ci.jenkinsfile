@@ -42,21 +42,15 @@ pipeline {
                                 unstash 'repo'
                                 sh 'npm run test:unit'
                             }
-                            
                         }
                     }
                 }
+                stage('clean workspace') {
+                    steps {
+                        cleanWs()
+                    }
+                }
             }
-            // parallel {
-            //     stage('build') {
-            //         sh npm install
-            //         sh npm run build
-            //     }
-            //     stage('UT') {
-            //         sh npm install
-            //         sh npm run test:unit
-            //     }
-            // }
         }
     }
 }
