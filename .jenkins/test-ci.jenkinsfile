@@ -42,7 +42,6 @@ pipeline {
                                 unstash 'repo'
                                 sh 'npm run test:unit'
                             }
-                            
                         }
                     }
                 }
