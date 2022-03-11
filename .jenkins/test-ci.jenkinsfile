@@ -1,39 +1,46 @@
 pipeline {
+    agent none
     stages {
         stage('PR-test-ci-worker') {
+            agent {
+                label 'vue'
+            }
             when {
-                // execute only on PRs to develop and master
-                allOf {
-                    anyOf {
-                        branch: develop;
-                        branch: master;
-                    }
-                    changeRequest()
+                // execute only on PRs to develop and main
+                anyOf {
+                    changeRequest target: 'main'
+                    changeRequest target: 'develop'
                 }
             }
-            agent {
-                // execute on the vue container
-                label: "vue"
-            }
             stages {
+                stage('recreate old node_modules') {
+                    steps {
+                        sh 'tar -xf /app/global/node_modules.tar -C .'
+                    }
+                }
                 stage('npm-install') {
                     steps {
-                        sh npm install
+                        sh 'npm install'
                         stash name: 'repo'
                     } 
+                }
+                stage('update global node_modules') {
+                    steps {
+                        sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
                 }
                 stage('build and test') {
                     parallel {
                         stage('build') {
                             steps {
                                 unstash 'repo' 
-                                sh npm run build
+                                sh 'npm run build'
                             }
                         }
                         stage('UT') {
                             steps {
                                 unstash 'repo'
-                                sh npm run test:unit
+                                sh 'npm run test:unit'
                             }
                             
                         }

@@ -1,12 +1,13 @@
 pipeline {
+    agent none
     stages {
         stage('build and update') {
-             when {
+            when {
                 // execute only on merges to develop and main
                 allOf {
                     anyOf {
-                        branch: develop;
-                        branch: main;
+                        branch 'develop';
+                        branch 'main';
                     }
                     expression {
                         return env.CHANGE_TARGET
@@ -14,40 +15,56 @@ pipeline {
                 }
             }
             stages('build and update') {
-                agent {
-                    label: 'vue'
+                stage('recreate old node_modules') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                    }
                 }
                 stage('build') {
+                    agent {
+                        label 'vue'
+                    }
                     steps {
-                        sh npm install
-                        sh npm build
+                        sh 'npm install'
+                        sh 'npm build'
                         stash includes: './dist/*', name: 'build'
                     }
                 }
+                stage('update global node_modules') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
+                }
                 stage('update develop') {
-                    agents {
-                        label: 'vps'
+                    agent {
+                        label 'vps'
                     }
                     when {
-                        branch: develop
+                        branch 'develop'
                     }
                     steps {
                         unstash 'build'
-                        sh yes | rm -r /home/flatly/drop_zone/www/develop/*
-                        sh cp * /home/flatly/drop_zone/www/develop/
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/develop/*'
+                        sh 'cp * /home/flatly/drop_zone/www/develop/'
                     }
                 }
                 stage('update main') {
-                    agents {
-                        label: 'vps'
+                    agent {
+                        label 'vps'
                     }
                     when {
-                        branch: main
+                        branch 'main'
                     }
                     steps {
                         unstash 'build'
-                        sh yes | rm -r /home/flatly/drop_zone/www/frontend/*
-                        sh cp * /home/flatly/drop_zone/www/frontend/
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/frontend/*'
+                        sh 'cp * /home/flatly/drop_zone/www/frontend/'
                     }
                 }
             }
