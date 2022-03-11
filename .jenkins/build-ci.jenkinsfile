@@ -17,13 +17,12 @@ pipeline {
                         sh 'tar -xf /app/global/node_modules.tar -C .'
                     }
                 }
-                stage('build') {
+                stage('install') {
                     agent {
                         label 'vue'
                     }
                     steps {
                         sh 'npm install'
-                        sh 'npm run build'
                         stash includes: './dist/*', name: 'build'
                     }
                 }
@@ -33,6 +32,14 @@ pipeline {
                     }
                     steps {
                         sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
+                }
+                stage('build') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'npm run build'
                     }
                 }
                 stage('update develop') {
