@@ -13,6 +13,11 @@ pipeline {
                 }
             }
             stages {
+                stage('recreate old node_modules') {
+                    steps {
+                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                    }
+                }
                 stage('npm-install') {
                     steps {
                         sh 'npm install'
