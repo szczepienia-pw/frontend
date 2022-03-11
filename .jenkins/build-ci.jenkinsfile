@@ -52,7 +52,7 @@ pipeline {
                     steps {
                         unstash 'build'
                         sh 'yes | rm -rf /home/flatly/drop_zone/www/develop/*'
-                        sh 'cp * /home/flatly/drop_zone/www/develop/'
+                        sh 'cp -r * /home/flatly/drop_zone/www/develop/'
                     }
                 }
                 stage('update main') {
@@ -65,7 +65,7 @@ pipeline {
                     steps {
                         unstash 'build'
                         sh 'yes | rm -rf /home/flatly/drop_zone/www/frontend/*'
-                        sh 'cp * /home/flatly/drop_zone/www/frontend/'
+                        sh 'cp -r * /home/flatly/drop_zone/www/frontend/'
                     }
                 }
                 stage('clean workspace') {
