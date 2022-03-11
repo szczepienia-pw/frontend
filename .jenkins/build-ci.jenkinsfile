@@ -5,8 +5,8 @@ pipeline {
                 // execute only on merges to develop and main
                 allOf {
                     anyOf {
-                        branch: develop;
-                        branch: main;
+                        branch 'develop';
+                        branch 'main';
                     }
                     expression {
                         return env.CHANGE_TARGET
