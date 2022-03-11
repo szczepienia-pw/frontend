@@ -5,20 +5,20 @@ pipeline {
                 // execute only on PRs to develop and master
                 allOf {
                     anyOf {
-                        branch: develop;
-                        branch: master;
+                        branch 'develop';
+                        branch 'master';
                     }
                     changeRequest()
                 }
             }
             agent {
                 // execute on the vue container
-                label: "vue"
+                label 'vue'
             }
             stages {
                 stage('npm-install') {
                     steps {
-                        sh npm install
+                        sh 'npm install'
                         stash name: 'repo'
                     } 
                 }
@@ -27,13 +27,13 @@ pipeline {
                         stage('build') {
                             steps {
                                 unstash 'repo' 
-                                sh npm run build
+                                sh 'npm run build'
                             }
                         }
                         stage('UT') {
                             steps {
                                 unstash 'repo'
-                                sh npm run test:unit
+                                sh 'npm run test:unit'
                             }
                             
                         }
