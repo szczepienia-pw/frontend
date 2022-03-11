@@ -1,14 +1,18 @@
 <template>
     <nav>
+        <div v-if="userType === 'doctor'">
+            This is a doctor nav component
+        </div>
+        <div v-else>
+            This is a patient nav component
+        </div>
     </nav>
 </template>
 
-<script>
+<script setup>
+    import Cookies from '../services/cookies'
 
-    export default {
-        name: "HeadContainer",
-       
-    }
+    const userType = Cookies.getCookie('userType')
 </script>
 
 <style lang="scss">

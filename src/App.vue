@@ -6,16 +6,14 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import HeadContainer from "./containers/HeadContainer";
+  import BodyContainer from "./containers/BodyContainer";
+  import FooterContainer from "./containers/FooterContainer";
+  import Cookies from './services/cookies'
 
-import HeadContainer from "./containers/HeadContainer";
-import BodyContainer from "./containers/BodyContainer";
-import FooterContainer from "./containers/FooterContainer";
+  Cookies.setCookie('userType', 'doctor')
 
-export default {
-  name: 'app',
-  components: {BodyContainer, HeadContainer, FooterContainer},
-}
 </script>
 
 <style lang="scss">

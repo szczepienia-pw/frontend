@@ -3,10 +3,8 @@
     </footer>
 </template>
 
-<script>
-    export default {
-        name: "FooterContainer"
-    }
+<script setup>
+
 </script>
 
 <style lang="scss">

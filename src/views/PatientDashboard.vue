@@ -4,12 +4,8 @@
     </div>
 </template>
 
-<script>
+<script setup>
 
-    export default {
-        name: "PatientDashboard",
-        
-    }
 </script>
 
 <style lang="scss">
