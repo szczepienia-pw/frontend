@@ -40,6 +40,7 @@ pipeline {
                     steps {
                         sh 'npm run build'
                         stash includes: 'dist/**', name: 'build'
+                        cleanWs()
                     }
                 }
                 stage('update develop') {
@@ -53,6 +54,7 @@ pipeline {
                         unstash 'build'
                         sh 'yes | rm -rf /home/flatly/apps/www/develop/*'
                         sh 'cp -r ./dist/* /home/flatly/apps/www/develop/'
+                        cleanWs()
                     }
                 }
                 stage('update main') {
@@ -66,13 +68,6 @@ pipeline {
                         unstash 'build'
                         sh 'yes | rm -rf /home/flatly/apps/www/main/*'
                         sh 'cp -r ./dist/* /home/flatly/apps/www/main/'
-                    }
-                }
-                stage('clean workspace') {
-                    agent {
-                        label 'vue'
-                    }
-                    steps {
                         cleanWs()
                     }
                 }
