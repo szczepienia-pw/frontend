@@ -3,15 +3,9 @@ pipeline {
     stages {
         stage('build and update') {
             when {
-                // execute only on merges to develop and main
-                allOf {
-                    anyOf {
-                        branch 'develop';
-                        branch 'main';
-                    }
-                    expression {
-                        return env.CHANGE_TARGET
-                    }
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
                 }
             }
             stages('build and update') {
