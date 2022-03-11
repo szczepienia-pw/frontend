@@ -3,5 +3,5 @@ import LoginPage from '@/views/LoginPage'
 
 test('lorem-ipsum on main scr', () => {
     const wrapper = mount(LoginPage)
-    expect(wrapper.text()).toContain('Lorem ipsum')
+    expect(wrapper.text()).toContain('Lorem ipsumv2')
 })
