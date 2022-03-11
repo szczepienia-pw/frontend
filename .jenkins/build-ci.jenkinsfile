@@ -14,10 +14,10 @@ pipeline {
                 }
             }
             stages('build and update') {
-                agent {
-                    label: 'vue'
-                }
                 stage('build') {
+                    agent {
+                        label: 'vue'
+                    }
                     steps {
                         sh npm install
                         sh npm build
