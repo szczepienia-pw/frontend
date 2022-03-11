@@ -2,7 +2,8 @@ pipeline {
     agent none
     stages {
         stage('build and update') {
-             when {
+            agent none
+            when {
                 // execute only on merges to develop and main
                 allOf {
                     anyOf {
