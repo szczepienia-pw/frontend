@@ -3,13 +3,10 @@ pipeline {
     stages {
         stage('PR-test-ci-worker') {
             when {
-                // execute only on PRs to develop and master
-                allOf {
-                    anyOf {
-                        branch 'develop';
-                        branch 'main';
-                    }
-                    changeRequest()
+                // execute only on PRs to develop and main
+                anyOf {
+                    changeRequest target: 'main'
+                    changeRequest target: 'develop'
                 }
             }
             agent {
