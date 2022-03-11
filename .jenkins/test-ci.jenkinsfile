@@ -1,0 +1,62 @@
+pipeline {
+    agent none
+    stages {
+        stage('PR-test-ci-worker') {
+            agent {
+                label 'vue'
+            }
+            when {
+                // execute only on PRs to develop and main
+                anyOf {
+                    changeRequest target: 'main'
+                    changeRequest target: 'develop'
+                }
+            }
+            stages {
+                stage('recreate old node_modules') {
+                    steps {
+                        sh 'tar -xf /app/global/node_modules.tar -C .'
+                    }
+                }
+                stage('npm-install') {
+                    steps {
+                        sh 'npm install'
+                        stash name: 'repo'
+                    } 
+                }
+                stage('update global node_modules') {
+                    steps {
+                        sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
+                }
+                stage('build and test') {
+                    parallel {
+                        stage('build') {
+                            steps {
+                                unstash 'repo' 
+                                sh 'npm run build'
+                            }
+                        }
+                        stage('UT') {
+                            steps {
+                                unstash 'repo'
+                                sh 'npm run test:unit'
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            // parallel {
+            //     stage('build') {
+            //         sh npm install
+            //         sh npm run build
+            //     }
+            //     stage('UT') {
+            //         sh npm install
+            //         sh npm run test:unit
+            //     }
+            // }
+        }
+    }
+}

@@ -1,0 +1,73 @@
+pipeline {
+    agent none
+    stages {
+        stage('build and update') {
+            when {
+                // execute only on merges to develop and main
+                allOf {
+                    anyOf {
+                        branch 'develop';
+                        branch 'main';
+                    }
+                    expression {
+                        return env.CHANGE_TARGET
+                    }
+                }
+            }
+            stages('build and update') {
+                stage('recreate old node_modules') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                    }
+                }
+                stage('build') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'npm install'
+                        sh 'npm build'
+                        stash includes: './dist/*', name: 'build'
+                    }
+                }
+                stage('update global node_modules') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
+                }
+                stage('update develop') {
+                    agent {
+                        label 'vps'
+                    }
+                    when {
+                        branch 'develop'
+                    }
+                    steps {
+                        unstash 'build'
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/develop/*'
+                        sh 'cp * /home/flatly/drop_zone/www/develop/'
+                    }
+                }
+                stage('update main') {
+                    agent {
+                        label 'vps'
+                    }
+                    when {
+                        branch 'main'
+                    }
+                    steps {
+                        unstash 'build'
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/frontend/*'
+                        sh 'cp * /home/flatly/drop_zone/www/frontend/'
+                    }
+                }
+            }
+        }
+    }
+}
