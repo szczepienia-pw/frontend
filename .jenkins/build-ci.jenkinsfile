@@ -14,7 +14,7 @@ pipeline {
                         label 'vue'
                     }
                     steps {
-                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                        sh 'tar -xf /app/global/node_modules.tar -C .'
                     }
                 }
                 stage('build') {
@@ -23,7 +23,7 @@ pipeline {
                     }
                     steps {
                         sh 'npm install'
-                        sh 'npm build'
+                        sh 'npm run build'
                         stash includes: './dist/*', name: 'build'
                     }
                 }
