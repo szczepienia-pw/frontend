@@ -18,7 +18,7 @@ pipeline {
             stages('build and update') {
                 stage('build') {
                     agent {
-                        label: 'vue'
+                        label 'vue'
                     }
                     steps {
                         sh 'npm install'
@@ -28,10 +28,10 @@ pipeline {
                 }
                 stage('update develop') {
                     agents {
-                        label: 'vps'
+                        label 'vps'
                     }
                     when {
-                        branch: 'develop'
+                        branch 'develop'
                     }
                     steps {
                         unstash 'build'
@@ -41,10 +41,10 @@ pipeline {
                 }
                 stage('update main') {
                     agents {
-                        label: 'vps'
+                        label 'vps'
                     }
                     when {
-                        branch: 'main'
+                        branch 'main'
                     }
                     steps {
                         unstash 'build'
