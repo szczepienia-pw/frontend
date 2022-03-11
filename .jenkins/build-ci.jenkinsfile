@@ -15,6 +15,14 @@ pipeline {
                 }
             }
             stages('build and update') {
+                stage('recreate old node_modules') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                    }
+                }
                 stage('build') {
                     agent {
                         label 'vue'

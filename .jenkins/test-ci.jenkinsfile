@@ -15,7 +15,7 @@ pipeline {
             stages {
                 stage('recreate old node_modules') {
                     steps {
-                        sh 'tar -xvf /app/global/node_modules.tar -C .'
+                        sh 'tar -xf /app/global/node_modules.tar -C .'
                     }
                 }
                 stage('npm-install') {
@@ -23,6 +23,11 @@ pipeline {
                         sh 'npm install'
                         stash name: 'repo'
                     } 
+                }
+                stage('update global node_modules') {
+                    steps {
+                        sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
                 }
                 stage('build and test') {
                     parallel {
