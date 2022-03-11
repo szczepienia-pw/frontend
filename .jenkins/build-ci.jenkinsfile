@@ -51,8 +51,8 @@ pipeline {
                     }
                     steps {
                         unstash 'build'
-                        sh 'yes | rm -rf /home/flatly/drop_zone/www/develop/*'
-                        sh 'cp -r ./dist/* /home/flatly/drop_zone/www/develop/'
+                        sh 'yes | rm -rf /home/flatly/apps/www/develop/*'
+                        sh 'cp -r ./dist/* /home/flatly/apps/www/develop/'
                     }
                 }
                 stage('update main') {
@@ -64,8 +64,8 @@ pipeline {
                     }
                     steps {
                         unstash 'build'
-                        sh 'yes | rm -rf /home/flatly/drop_zone/www/frontend/*'
-                        sh 'cp -r ./dist/* /home/flatly/drop_zone/www/frontend/'
+                        sh 'yes | rm -rf /home/flatly/apps/www/main/*'
+                        sh 'cp -r ./dist/* /home/flatly/apps/www/main/'
                     }
                 }
                 stage('clean workspace') {
