@@ -23,7 +23,7 @@ pipeline {
                     }
                     steps {
                         sh 'npm install'
-                        stash includes: './dist/**', name: 'build'
+                        //stash includes: './dist/**', name: 'build'
                     }
                 }
                 stage('update global node_modules') {
