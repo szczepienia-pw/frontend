@@ -1,6 +1,6 @@
 <template>
     <div>
-        Lorem ipsum
+        Lorem ipsumv2
     </div>
 </template>
 
