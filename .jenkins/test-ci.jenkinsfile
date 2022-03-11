@@ -2,16 +2,15 @@ pipeline {
     agent none
     stages {
         stage('PR-test-ci-worker') {
+            agent {
+                label 'vue'
+            }
             when {
                 // execute only on PRs to develop and main
                 anyOf {
                     changeRequest target: 'main'
                     changeRequest target: 'develop'
                 }
-            }
-            agent {
-                // execute on the vue container
-                label 'vue'
             }
             stages {
                 stage('npm-install') {
