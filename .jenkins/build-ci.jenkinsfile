@@ -51,7 +51,7 @@ pipeline {
                     }
                     steps {
                         unstash 'build'
-                        sh 'yes | rm -r /home/flatly/drop_zone/www/develop/*'
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/develop/* 2>&1 /dev/null'
                         sh 'cp * /home/flatly/drop_zone/www/develop/'
                     }
                 }
@@ -64,7 +64,7 @@ pipeline {
                     }
                     steps {
                         unstash 'build'
-                        sh 'yes | rm -r /home/flatly/drop_zone/www/frontend/*'
+                        sh 'yes | rm -r /home/flatly/drop_zone/www/frontend/* 2>&1 /dev/null'
                         sh 'cp * /home/flatly/drop_zone/www/frontend/'
                     }
                 }
