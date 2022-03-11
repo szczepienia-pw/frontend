@@ -46,6 +46,11 @@ pipeline {
                         }
                     }
                 }
+                stage('clean workspace') {
+                    steps {
+                        cleanWs()
+                    }
+                }
             }
             // parallel {
             //     stage('build') {
@@ -57,14 +62,6 @@ pipeline {
             //         sh npm run test:unit
             //     }
             // }
-        }
-    }
-    post {
-        agent {
-            label 'vue'
-        }
-        always {
-            cleanWs()
         }
     }
 }

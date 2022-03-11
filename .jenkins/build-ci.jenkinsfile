@@ -68,15 +68,15 @@ pipeline {
                         sh 'cp * /home/flatly/drop_zone/www/frontend/'
                     }
                 }
+                stage('clean workspace') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        cleanWs()
+                    }
+                }
             }
-        }
-    }
-    post {
-        agent {
-            label 'vue'
-        }
-        always {
-            cleanWs()
         }
     }
 }
