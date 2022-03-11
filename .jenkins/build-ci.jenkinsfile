@@ -33,6 +33,14 @@ pipeline {
                         stash includes: './dist/*', name: 'build'
                     }
                 }
+                stage('update global node_modules') {
+                    agent {
+                        label 'vue'
+                    }
+                    steps {
+                        sh 'tar -czf /app/global/node_modules.tar node_modules'
+                    }
+                }
                 stage('update develop') {
                     agent {
                         label 'vps'
