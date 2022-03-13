@@ -10,9 +10,9 @@
 </template>
 
 <script setup>
-    import Cookies from '../services/cookies'
+    import { useCookies } from '@vueuse/integrations/useCookies'
 
-    const userType = Cookies.getCookie('userType')
+    const userType = useCookies().get('user-type')
 </script>
 
 <style lang="scss">
