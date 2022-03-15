@@ -20,7 +20,7 @@ const setTokenAndCookies = (userType, token) => {
 }
 
 export const loginDoctor = (email, password) => {
-    api.post('/doctor/login', {
+    return api.post('/doctor/login', {
         email: email,
         password: password
     }).then(response => {
