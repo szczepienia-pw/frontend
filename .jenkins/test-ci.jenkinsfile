@@ -40,7 +40,7 @@ pipeline {
                         stage('UT') {
                             steps {
                                 unstash 'repo'
-                                sh 'npm run test:unit'
+                                //sh 'npm run test:unit'
                             }
                         }
                     }
