@@ -28,6 +28,15 @@ export const loginDoctor = (email, password) => {
     })
 }
 
+export const loginPatient = (email, password) => {
+    return api.post('/patient/login', {
+        email: email,
+        password: password
+    }).then(response => {
+        setTokenAndCookies('patient', response.data.token);
+    })
+}
+
 export const createVaccinationSlot = (date) => {
     return api.post('/doctor/vaccination-slots', {
         date: date

@@ -4,20 +4,34 @@
     <template #content>
       <div class="flex flex-column">
         <span class="p-float-label mb-4">
-          <InputText class="w-full" id="email-input" type="text" v-model="email" />
+          <InputText
+            class="w-full"
+            id="email-input"
+            type="text"
+            v-model="email"
+          />
           <label for="email-input">Email</label>
         </span>
- <span class="p-float-label mb-6">
+        <span class="p-float-label">
           <Password
-          id="password-input"
-          inputClass="w-full"
-          class="w-full"
-          v-model="password"
-          :feedback="false"
-        />
+            id="password-input"
+            inputClass="w-full"
+            class="w-full"
+            v-model="password"
+            :feedback="false"
+          />
           <label for="password-input">Password</label>
         </span>
-        
+        <Button v-if="!isDoctor"
+          label="Are you a doctor?"
+          class="p-button-link align-self-end mb-6 p-0"
+          @click="changeLogin"
+        />
+        <Button v-else
+          label="Are you a patient?"
+          class="p-button-link align-self-end mb-6 p-0"
+          @click="changeLogin"
+        />
         <Button label="Log in" @click="login" :loading="isLoading" />
       </div>
     </template>
@@ -32,13 +46,31 @@ import { useRouter } from "vue-router";
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
+const isDoctor = ref(false);
 const router = useRouter();
+
+function changeLogin() {
+  isDoctor.value = !isDoctor.value;
+}
 
 function login() {
   isLoading.value = true;
-  Api.loginDoctor(email.value, password.value)
+  if (isDoctor.value) {
+    Api.loginDoctor(email.value, password.value)
+      .then(() => {
+        router.push({ name: "doctor" });
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        isLoading.value = false;
+      });
+  }
+  else{
+      Api.loginPatient(email.value, password.value)
     .then(() => {
-      router.push({ name: "doctor" });
+      router.push({ name: "patient" });
     })
     .catch((err) => {
       console.error(err);
@@ -46,6 +78,7 @@ function login() {
     .finally(() => {
       isLoading.value = false;
     });
+  }
 }
 </script>
 
