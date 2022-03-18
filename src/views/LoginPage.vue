@@ -57,19 +57,19 @@ const toggleMenu = (event) => {
 
 const userTypes = computed(() => [
   {
-    label: 'Patient log-in',
+    label: 'Log in as patient',
     command: () => {
       userType.value = 'patient'
     }
   },
   {
-    label: 'Doctor log-in',
+    label: 'Log in as doctor',
     command: () => {
       userType.value = 'doctor'
     }
   },
   {
-    label: 'Administrator log-in',
+    label: 'Log in as admin',
     command: () => {
       userType.value = 'admin'
     }
