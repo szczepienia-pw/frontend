@@ -80,15 +80,15 @@ function login() {
   isLoading.value = true;
   Api.login(userType.value, email.value, password.value)
     .then(() => {
-      router.push({ name: userType });
+      router.push({ name: userType.value });
     })
     .catch((err) => {
       console.error(err);
       toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'Could not log in',
-                    life: 3000
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'Could not log in',
+                  life: 3000
                 })
     })
     .finally(() => {
