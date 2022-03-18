@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="w-screen h-screen flex justify-content-center align-items-center">
         <Card>
             <template #title>
                 Add new vaccination slot

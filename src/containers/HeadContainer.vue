@@ -1,10 +1,10 @@
 <template>
     <nav v-if="loggedIn">
         <div v-if="userType === 'doctor'">
-            This is a doctor nav component
+            
         </div>
         <div v-else>
-            This is a patient nav component
+            
         </div>
     </nav>
     <Toast /> 

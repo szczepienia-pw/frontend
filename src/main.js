@@ -10,6 +10,7 @@ import Calendar from "primevue/calendar";
 import Card from "primevue/card";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
+import Menu from "primevue/menu";
 
 import App from "./App.vue";
 
@@ -28,4 +29,5 @@ createApp(App)
   .component("Card", Card)
   .component("InputText", InputText)
   .component("Password", Password)
+  .component("Menu", Menu)
   .mount("#app");
