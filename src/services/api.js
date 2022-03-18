@@ -19,21 +19,12 @@ const setTokenAndCookies = (userType, token) => {
     cookies.set('auth-token', token, cookieOptions);
 }
 
-export const loginDoctor = (email, password) => {
-    return api.post('/doctor/login', {
+export const login = (userType, email, password) => {
+    return api.post(`/${userType}/login`, {
         email: email,
         password: password
     }).then(response => {
-        setTokenAndCookies('doctor', response.data.token);
-    })
-}
-
-export const loginPatient = (email, password) => {
-    return api.post('/patient/login', {
-        email: email,
-        password: password
-    }).then(response => {
-        setTokenAndCookies('patient', response.data.token);
+        setTokenAndCookies(userType, response.data.token);
     })
 }
 
