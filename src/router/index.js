@@ -6,6 +6,10 @@ const router = createRouter({
     linkActiveClass: 'is-active',
     routes: [
         {
+          path: '/',
+          redirect: '/login'
+        },
+        {
           path: '/login',
           name: 'login',
           component: () => import("@/views/LoginPage.vue")

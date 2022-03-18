@@ -10,9 +10,6 @@
   import HeadContainer from "./containers/HeadContainer";
   import BodyContainer from "./containers/BodyContainer";
   import FooterContainer from "./containers/FooterContainer";
-  import * as Api from './services/api'
-
-  Api.loginDoctor('test@test.com', 'test');
 
 </script>
 
