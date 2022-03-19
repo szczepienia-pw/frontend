@@ -38,6 +38,14 @@ pipeline {
                         label 'vue'
                     }
                     steps {
+                        script {
+                            if (env.BRANCH_NAME == 'develop') {
+                                sh 'cd ./src/services; sed -i "s_https://localhost:7229_https://backend-develop_g" api.js'
+                            } else {
+                                sh 'cd ./src/services; sed -i "s_https://localhost:7229_https://backend_g" api.js'
+                            }
+                        }
+
                         sh 'npm run build'
                         stash includes: 'dist/**', name: 'build'
                         cleanWs()
