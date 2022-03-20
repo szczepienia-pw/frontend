@@ -19,39 +19,43 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import { useToast } from "primevue/usetoast";
-    import * as Api from '../services/api'
+import Button from "primevue/button";
+import Calendar from "primevue/calendar";
+import Card from "primevue/card";
 
-    const toast = useToast();
+import { ref } from 'vue'
+import { useToast } from "primevue/usetoast";
+import { createVaccinationSlot } from '@/services/api'
 
-    const selectedDate = ref('');
-    const isLoading = ref(false);
+const toast = useToast();
 
-    function submitTimeslot() {
-        isLoading.value = true;
-        Api.createVaccinationSlot(new Date(selectedDate.value || new Date().toString()).toISOString())
-            .then(() => {
-                toast.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Successfully added vaccination slot',
-                    life: 3000
-                })
+const selectedDate = ref('');
+const isLoading = ref(false);
+
+function submitTimeslot() {
+    isLoading.value = true;
+    createVaccinationSlot(new Date(selectedDate.value || new Date().toString()).toISOString())
+        .then(() => {
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Successfully added vaccination slot',
+                life: 3000
             })
-            .catch(err => {
-                console.error(err)
-                toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'Could not add vaccination slot',
-                    life: 3000
-                })
+        })
+        .catch(err => {
+            console.error(err)
+            toast.add({
+                severity: 'error',
+                summary: err?.response?.statusText || 'Error',
+                detail: err?.response?.data?.msg || 'Could not add vaccination slot',
+                life: 3000
             })
-            .finally(() => {
-                isLoading.value = false;
-            })
-    }
+        })
+        .finally(() => {
+            isLoading.value = false;
+        })
+}
 
 </script>
 

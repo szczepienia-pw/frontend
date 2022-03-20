@@ -29,7 +29,7 @@
             @click="toggleMenu"
           />
           <Menu ref="userTypeMenu" :model="userTypes" :popup="true" />
-          <Button label="Log in" @click="login" :loading="isLoading" />
+          <Button label="Log in" @click="sendLoginRequest" :loading="isLoading" />
         </div>
       </template>
     </Card>
@@ -37,8 +37,14 @@
 </template>
 
 <script setup>
+import Button from "primevue/button";
+import Card from "primevue/card";
+import InputText from "primevue/inputtext";
+import Password from "primevue/password";
+import Menu from "primevue/menu";
+
 import { computed, ref } from "vue";
-import * as Api from "../services/api";
+import { login } from "@/services/api";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
@@ -76,9 +82,9 @@ const userTypes = computed(() => [
   }
 ].filter(item => !item.label.toLowerCase().includes(userType.value)))
 
-function login() {
+function sendLoginRequest() {
   isLoading.value = true;
-  Api.login(userType.value, email.value, password.value)
+  login(userType.value, email.value, password.value)
     .then(() => {
       router.push({ name: userType.value });
     })
@@ -86,8 +92,8 @@ function login() {
       console.error(err);
       toast.add({
                   severity: 'error',
-                  summary: 'Error',
-                  detail: 'Could not log in',
+                  summary: err?.response?.statusText || 'Error',
+                  detail: err?.response?.data?.msg || 'Could not log in',
                   life: 3000
                 })
     })
