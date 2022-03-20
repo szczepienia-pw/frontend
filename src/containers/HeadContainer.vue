@@ -11,10 +11,11 @@
 </template>
 
 <script setup>
-    import { useCookies } from '@vueuse/integrations/useCookies'
+import Toast from "primevue/toast";
+import { useCookies } from '@vueuse/integrations/useCookies'
 
-    const userType = useCookies().get('user-type')
-    const loggedIn = useCookies().get('logged-in')
+const userType = useCookies().get('user-type')
+const loggedIn = useCookies().get('logged-in')
 </script>
 
 <style lang="scss">
