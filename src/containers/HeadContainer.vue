@@ -12,10 +12,10 @@
 
 <script setup>
 import Toast from "primevue/toast";
-import { useCookies } from '@vueuse/integrations/useCookies'
+import Cookies from 'js-cookie'
 
-const userType = useCookies().get('user-type')
-const loggedIn = useCookies().get('logged-in')
+const userType = Cookies.get('user-type')
+const loggedIn = Cookies.get('logged-in')
 </script>
 
 <style lang="scss">

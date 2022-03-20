@@ -47,8 +47,8 @@ function submitTimeslot() {
             console.error(err)
             toast.add({
                 severity: 'error',
-                summary: 'Error',
-                detail: 'Could not add vaccination slot',
+                summary: err.response.statusText,
+                detail: err.response.data.msg,
                 life: 3000
             })
         })

@@ -92,8 +92,8 @@ function sendLoginRequest() {
       console.error(err);
       toast.add({
                   severity: 'error',
-                  summary: 'Error',
-                  detail: 'Could not log in',
+                  summary: err.response.statusText,
+                  detail: err.response.data.msg,
                   life: 3000
                 })
     })
