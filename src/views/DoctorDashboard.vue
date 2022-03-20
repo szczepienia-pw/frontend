@@ -25,7 +25,7 @@ import Card from "primevue/card";
 
 import { ref } from 'vue'
 import { useToast } from "primevue/usetoast";
-import * as Api from '@/services/api'
+import { createVaccinationSlot } from '@/services/api'
 
 const toast = useToast();
 
@@ -34,7 +34,7 @@ const isLoading = ref(false);
 
 function submitTimeslot() {
     isLoading.value = true;
-    Api.createVaccinationSlot(new Date(selectedDate.value || new Date().toString()).toISOString())
+    createVaccinationSlot(new Date(selectedDate.value || new Date().toString()).toISOString())
         .then(() => {
             toast.add({
                 severity: 'success',
@@ -47,8 +47,8 @@ function submitTimeslot() {
             console.error(err)
             toast.add({
                 severity: 'error',
-                summary: err.response.statusText,
-                detail: err.response.data.msg,
+                summary: err?.response?.statusText || 'Error',
+                detail: err?.response?.data?.msg || 'Could not add vaccination slot',
                 life: 3000
             })
         })
