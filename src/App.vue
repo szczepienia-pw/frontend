@@ -6,18 +6,13 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import HeadContainer from "./containers/HeadContainer";
+  import BodyContainer from "./containers/BodyContainer";
+  import FooterContainer from "./containers/FooterContainer";
 
-import HeadContainer from "./containers/HeadContainer";
-import BodyContainer from "./containers/BodyContainer";
-import FooterContainer from "./containers/FooterContainer";
-
-export default {
-  name: 'app',
-  components: {BodyContainer, HeadContainer, FooterContainer},
-}
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+  @import '../node_modules/primeflex/primeflex.css'
 </style>

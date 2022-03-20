@@ -1,36 +1,40 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import LoginPage from "@/views/LoginPage.vue";
+import Cookies from 'js-cookie'
 
 const router = createRouter({
     history: createWebHistory(),
     linkActiveClass: 'is-active',
     routes: [
         {
-            path: '/',
-            redirect: '/login'
+          path: '/',
+          redirect: '/login'
         },
         {
-            path: '/login',
-            name: 'login',
-            component: LoginPage
+          path: '/login',
+          name: 'login',
+          component: () => import("@/views/LoginPage.vue")
         },
-    ],
-    scrollBehavior (to, from, savedPosition) {
-        let position = { x: 0, y: 0 }
-        // Keep scroll position when using browser buttons
-        if (savedPosition) {
-          position = savedPosition
-        }
-    
-        // Workaround for transitions scrolling to the top of the page
-        // However, there are still some problems being fixed by the vue team
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(position)
-          }, 1000)
-        })
-      }
-      
+        {
+          path: '/doctor',
+          name: 'doctor',
+          component: () => import("@/views/DoctorDashboard.vue")
+        },
+        {
+          path: '/patient',
+          name: 'patient',
+          component: () => import("@/views/PatientDashboard.vue")
+        },
+        {
+          path: '/admin',
+          name: 'admin',
+          component: () => import("@/views/AdminDashboard.vue")
+      },
+    ]
+});
+
+router.beforeEach((to, from, next) => {
+  if(to.name != 'login' && !Cookies.get('logged-in')) next({ name: 'login' })
+  else next();
 });
 
 export default router;
