@@ -1,8 +1,6 @@
-import { render, screen, fireEvent, waitFor, getByText } from '@testing-library/vue'
+import { render, screen, fireEvent} from '@testing-library/vue'
 import FooterContainer from '@/containers/FooterContainer'
 import PrimeVue from 'primevue/config';
-import axios from 'axios'
-import ToastService from "primevue/toastservice";
 
 const mockfn = jest.fn();
 
@@ -15,7 +13,7 @@ jest.mock('vue-router', () => ({
 describe("reporting bugs test", () => {
   describe("when report bug button is pressed", () => {
       it("should open model dialog", async () => {
-        const container = render(FooterContainer, {
+        render(FooterContainer, {
             global: {
               plugins: [PrimeVue]
             }
