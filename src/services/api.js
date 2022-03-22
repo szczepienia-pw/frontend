@@ -31,3 +31,12 @@ export const createVaccinationSlot = (date) => {
         date: date
     });
 }
+
+export const reportBug = (name, description) => {
+    return api.post(`/bugs`, {
+        name: name,
+        description: description
+    }).then(response => {
+        console.log(response);
+    })
+}
