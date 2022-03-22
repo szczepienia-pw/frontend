@@ -20,7 +20,7 @@ describe("reporting bugs test", () => {
 
       const button = screen.getByRole('button', { name: 'Report a bug' });
       await fireEvent.click(button);
-      const sendButton = await screen.findByRole('button', { name: 'Send' });
+      const sendButton = screen.getByRole('button', { name: 'Send' });
       const nameInput = screen.getByLabelText('Bug name');
       const descInput = screen.getByLabelText('Bug description');
       await fireEvent.update(nameInput, 'name');
