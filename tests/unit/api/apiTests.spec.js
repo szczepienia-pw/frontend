@@ -1,6 +1,9 @@
 import { login, createVaccinationSlot } from '@/services/api'
+import { render, screen, fireEvent} from '@testing-library/vue'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import PrimeVue from 'primevue/config';
+import FooterContainer from '@/containers/FooterContainer'
 
 jest.mock('js-cookie')
 
@@ -45,6 +48,26 @@ describe("api tests", () => {
             expect(axios.post).toHaveBeenCalledWith(`/doctor/vaccination-slots`, {
                 date: date
             });
+        });
+    });
+
+    describe("when reportBug() is called", () => {
+        it("should correctly post entered data", async () => {
+            render(FooterContainer, {
+                global: {
+                  plugins: [PrimeVue]
+                }
+            })
+    
+            const button = screen.getByRole('button', { name: 'Report a bug' });
+            await fireEvent.click(button);
+            const sendButton = await screen.findByRole('button', { name: 'Send' });
+            const nameInput = screen.getByLabelText('Bug name');
+            const descInput = screen.getByLabelText('Bug description');
+            await fireEvent.update(nameInput, 'name');
+            await fireEvent.update(descInput, 'desc');
+            await fireEvent.click(sendButton);
+            expect(axios.post).toHaveBeenCalledWith("/bugs", { name: 'name', description: 'desc'});
         });
     });
 });

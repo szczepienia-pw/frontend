@@ -1,11 +1,6 @@
 <template>
   <footer>
-    <Dialog
-      header="Header"
-      footer="Footer"
-      v-model:visible="display"
-      :style="{ width: '50vw', height: '65vh', justifyContent: 'space-between' }"
-    >
+    <Dialog v-model:visible="display">
       <template #header>
         <h3>Report a bug</h3>
       </template>
@@ -17,7 +12,7 @@
             type="text"
             v-model="name"
           />
-          <label for="desc-input">Bug name</label>
+          <label for="name-input">Bug name</label>
         </span>
 
         <span class="p-float-label mb-2">
@@ -25,10 +20,10 @@
             class="w-full"
             id="desc-input"
             v-model="description"
-            rows="5"
-            cols="30"
+            rows="8"
+            cols="50"
           />
-          <label for="name-input">Bug description</label>
+          <label for="desc-input">Bug description</label>
         </span>
       </div>
       <template #footer>
