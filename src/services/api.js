@@ -27,12 +27,6 @@ export const login = (userType, email, password) => {
     })
 }
 
-export const logout = () => {
-    Cookies.remove('logged-in');
-    Cookies.remove('user-type');
-    Cookies.remove('auth-token');
-}
-
 export const createVaccinationSlot = (date) => {
     return api.post('/doctor/vaccination-slots', {
         date
