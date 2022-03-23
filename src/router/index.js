@@ -6,35 +6,35 @@ const router = createRouter({
     linkActiveClass: 'is-active',
     routes: [
         {
-          path: '/',
-          redirect: '/login'
+            path: '/',
+            redirect: '/login'
         },
         {
-          path: '/login',
-          name: 'login',
-          component: () => import("@/views/LoginPage.vue")
+            path: '/login',
+            name: 'login',
+            component: () => import("@/views/LoginPage.vue")
         },
         {
-          path: '/doctor',
-          name: 'doctor',
-          component: () => import("@/views/DoctorDashboard.vue")
+            path: '/doctor',
+            name: 'doctor',
+            component: () => import("@/views/DoctorDashboard.vue")
         },
         {
-          path: '/patient',
-          name: 'patient',
-          component: () => import("@/views/PatientDashboard.vue")
+            path: '/patient',
+            name: 'patient',
+            component: () => import("@/views/PatientDashboard.vue")
         },
         {
-          path: '/admin',
-          name: 'admin',
-          component: () => import("@/views/AdminDashboard.vue")
-      },
+            path: '/admin',
+            name: 'admin',
+            component: () => import("@/views/AdminDashboard.vue")
+        },
     ]
 });
 
 router.beforeEach((to, from, next) => {
-  if(to.name != 'login' && !useUserSession().isLoggedIn) next({ name: 'login' })
-  else next();
+    if (to.name != 'login' && !useUserSession().isLoggedIn) next({ name: 'login' })
+    else next();
 });
 
 export default router;

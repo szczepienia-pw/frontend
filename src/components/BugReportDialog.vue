@@ -26,13 +26,17 @@
             </div>
         </div>
         <template #footer>
-            <Button label="Send" icon="pi pi-check" @click="report" :loading="loading"/>
+            <Button
+                label="Send"
+                icon="pi pi-check"
+                @click="report"
+                :loading="loading"
+            />
         </template>
     </Dialog>
 </template>
 
 <script setup>
-
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
@@ -43,12 +47,12 @@ import { reportBug } from "../services/api";
 import { useToast } from "primevue/usetoast";
 
 defineProps({
-  visible: {
+    visible: {
         type: Boolean,
-        default: false
-    }
-})
-const emit = defineEmits(['hide'])
+        default: false,
+    },
+});
+const emit = defineEmits(["hide"]);
 
 const name = ref("");
 const description = ref("");
@@ -60,31 +64,29 @@ function report() {
     reportBug(name.value, description.value)
         .then(() => {
             toast.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Successfully reported bug',
-                life: 3000
-            })
+                severity: "success",
+                summary: "Success",
+                detail: "Successfully reported bug",
+                life: 3000,
+            });
         })
-        .catch(err => {
-            console.error(err)
+        .catch((err) => {
+            console.error(err);
             toast.add({
-                severity: 'error',
-                summary: err?.response?.statusText || 'Error',
-                detail: err?.response?.data?.msg || 'Could not report bug',
-                life: 3000
-            })
+                severity: "error",
+                summary: err?.response?.statusText || "Error",
+                detail: err?.response?.data?.msg || "Could not report bug",
+                life: 3000,
+            });
         })
         .finally(() => {
             loading.value = false;
-            emit('hide');
+            emit("hide");
             name.value = "";
             description.value = "";
-        })
+        });
 }
-
 </script>
 
 <style lang="scss">
-
 </style>

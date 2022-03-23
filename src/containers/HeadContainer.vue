@@ -1,13 +1,9 @@
 <template>
     <nav v-if="userSession.isLoggedIn">
-        <div v-if="userSession.userType === 'doctor'">
-            
-        </div>
-        <div v-else>
-            
-        </div>
+        <div v-if="userSession.userType === 'doctor'"></div>
+        <div v-else></div>
     </nav>
-    <Toast /> 
+    <Toast />
 </template>
 
 <script setup>
@@ -18,5 +14,4 @@ const userSession = useUserSession();
 </script>
 
 <style lang="scss">
-    
 </style>
