@@ -1,4 +1,4 @@
-import { login, createVaccinationSlot } from '@/services/api'
+import { login, createVaccinationSlot, reportBug } from '@/services/api'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
@@ -21,7 +21,7 @@ describe("api tests", () => {
                 email: "email",
                 password: "password"
             });
-            expect(Cookies.set).toHaveBeenCalledWith('auth-token', 'mocked-token', {expires: 1, sameSite: 'strict'})
+            expect(Cookies.set).toHaveBeenCalledWith('auth-token', 'mocked-token', { expires: 1, sameSite: 'strict' })
         });
     });
 
@@ -30,9 +30,9 @@ describe("api tests", () => {
             const message = "error";
             axios.post.mockRejectedValueOnce(new Error(message));
 
-            try {  
+            try {
                 await login('patient', 'email', 'password');
-            } catch(err) {
+            } catch (err) {
                 expect(err.message).toBe("error")
             }
         });
@@ -44,6 +44,16 @@ describe("api tests", () => {
             await createVaccinationSlot(date);
             expect(axios.post).toHaveBeenCalledWith(`/doctor/vaccination-slots`, {
                 date: date
+            });
+        });
+    });
+
+    describe("when reportBug() is called", () => {
+        it("should correctly post bug info", async () => {
+            await reportBug('name', 'desc');
+            expect(axios.post).toHaveBeenCalledWith(`/bugs`, {
+                name: 'name',
+                description: 'desc'
             });
         });
     });

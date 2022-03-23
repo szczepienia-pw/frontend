@@ -1,26 +1,27 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
+import { saveUserSession, useUserSession } from '@/services/useUserSession'
+
+const userSession = useUserSession();
 
 const api = axios.create({
     baseURL: 'https://localhost:7229',
     timeout: 2000,
     headers: {
-        'Authorization': Cookies.get('auth-token')
+        'Authorization': userSession.token
     }
 })
 
 const setTokenAndCookies = (userType, token) => {
-    const cookieOptions = { expires: 1, sameSite: 'strict'};
     api.defaults.headers['Authorization'] = token;
-    Cookies.set('logged-in', 'true', cookieOptions);
-    Cookies.set('user-type', userType, cookieOptions);
-    Cookies.set('auth-token', token, cookieOptions);
+    userSession.token = token;
+    userSession.userType = userType;
+    saveUserSession();
 }
 
 export const login = (userType, email, password) => {
     return api.post(`/${userType}/login`, {
-        email: email,
-        password: password
+        email,
+        password
     }).then(response => {
         setTokenAndCookies(userType, response.data.token);
     })
@@ -28,6 +29,13 @@ export const login = (userType, email, password) => {
 
 export const createVaccinationSlot = (date) => {
     return api.post('/doctor/vaccination-slots', {
-        date: date
+        date
     });
+}
+
+export const reportBug = (name, description) => {
+    return api.post(`/bugs`, {
+        name,
+        description
+    })
 }

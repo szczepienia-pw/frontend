@@ -12,8 +12,8 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 
 createApp(App)
-  .use(router)
-  .use(PrimeVue, { ripple: true })
-  .use(ToastService)
-  .directive("tooltip", Tooltip)
-  .mount("#app");
+    .use(router)
+    .use(PrimeVue, { ripple: true })
+    .use(ToastService)
+    .directive("tooltip", Tooltip)
+    .mount("#app");
