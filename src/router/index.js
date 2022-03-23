@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import Cookies from 'js-cookie'
+import { useUserSession } from '@/services/useUserSession';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -33,7 +33,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if(to.name != 'login' && !Cookies.get('logged-in')) next({ name: 'login' })
+  if(to.name != 'login' && !useUserSession().isLoggedIn) next({ name: 'login' })
   else next();
 });
 

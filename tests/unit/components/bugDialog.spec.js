@@ -3,6 +3,12 @@ import FooterContainer from '@/containers/FooterContainer';
 import PrimeVue from 'primevue/config';
 import ToastService from "primevue/toastservice";
 import axios from 'axios';
+import { useUserSession } from '@/services/useUserSession'
+
+jest.mock('@/services/useUserSession', () => ({
+  useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true }),
+  saveUserSession: () => {}
+}))
 
 describe("reporting bugs test", () => {
   describe("when a bug is submitted", () => {

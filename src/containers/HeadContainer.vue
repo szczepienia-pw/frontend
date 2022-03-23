@@ -1,6 +1,6 @@
 <template>
-    <nav v-if="loggedIn">
-        <div v-if="userType === 'doctor'">
+    <nav v-if="userSession.isLoggedIn">
+        <div v-if="userSession.userType === 'doctor'">
             
         </div>
         <div v-else>
@@ -12,10 +12,9 @@
 
 <script setup>
 import Toast from "primevue/toast";
-import Cookies from 'js-cookie'
+import { useUserSession } from "@/services/useUserSession";
 
-const userType = Cookies.get('user-type')
-const loggedIn = Cookies.get('logged-in')
+const userSession = useUserSession();
 </script>
 
 <style lang="scss">
