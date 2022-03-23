@@ -19,8 +19,8 @@ const setTokenAndCookies = (userType, token) => {
 
 export const login = (userType, email, password) => {
     return api.post(`/${userType}/login`, {
-        email: email,
-        password: password
+        email,
+        password
     }).then(response => {
         setTokenAndCookies(userType, response.data.token);
     })
@@ -28,13 +28,13 @@ export const login = (userType, email, password) => {
 
 export const createVaccinationSlot = (date) => {
     return api.post('/doctor/vaccination-slots', {
-        date: date
+        date
     });
 }
 
 export const reportBug = (name, description) => {
     return api.post(`/bugs`, {
-        name: name,
-        description: description
+        name,
+        description
     })
 }

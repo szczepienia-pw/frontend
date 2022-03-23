@@ -4,7 +4,7 @@
       <template #title> Log in </template>
       <template #content>
         <div class="flex flex-column">
-          <span class="p-float-label mb-4">
+          <div class="p-float-label mb-4">
             <InputText
               class="w-full"
               id="email-input"
@@ -12,8 +12,8 @@
               v-model="email"
             />
             <label for="email-input">Email</label>
-          </span>
-          <span class="p-float-label">
+          </div>
+          <div class="p-float-label">
             <Password
               id="password-input"
               inputClass="w-full"
@@ -22,7 +22,7 @@
               :feedback="false"
             />
             <label for="password-input">Password</label>
-          </span>
+          </div>
           <Button
             :label="`Not ${userType == 'admin' ? 'an' : 'a'} ${userType == 'admin' ? 'administrator' : userType}?`"
             class="p-button-link align-self-end mb-6 p-0"
