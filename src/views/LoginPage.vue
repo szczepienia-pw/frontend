@@ -59,7 +59,7 @@
 							@click="sendLoginRequest"
 							:loading="isLoading"
 						/>
-						<Button v-if="!isRegistering"
+						<Button v-if="!isRegistering && userType == 'patient'"
 							label="Create an account"
 							class="p-button-link mt-2 p-0 h-2rem"
 							@click="register"
@@ -70,7 +70,7 @@
 			<Divider layout="vertical" />
 			<Card class="w-20rem justify-content-center align-items-center no-margin-top">
 				<template #content>
-					<div v-if="isRegistering">
+					<div v-if="isRegistering && userType == 'patient'">
 						<div class="flex flex-row justify-content-end" style="height: 40px">
 							<Button
 								icon="pi pi-times"
