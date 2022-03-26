@@ -14,7 +14,8 @@
 								inputClass="w-full"
 								class="w-full"
 								v-model="password"
-								:feedback="false" />
+								:feedback="false"
+								v-on:keyup.enter="sendLoginRequest" />
 							<label for="password-input">Password</label>
 						</div>
 						<Button

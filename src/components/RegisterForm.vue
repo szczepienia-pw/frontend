@@ -170,7 +170,7 @@
 				</span>
 			</div>
 		</div>
-		<Button type="submit" label="Register" class="mt-2" />
+		<Button type="submit" label="Register" class="mt-2" v-on:keyup.enter="handleSubmit" />
 	</form>
 </template>
 
