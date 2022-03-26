@@ -1,10 +1,10 @@
 <template>
-	<div class="w-screen h-screen flex flex-row justify-content-center align-items-center" style="padding-top: 150px">
+	<div class="flex flex-row justify-content-center align-items-center" style="padding-top: 150px; padding-bottom: 150px; min-height: 100vh; width: 100vw;">
 		<div class="h-auto flex flex-row">
 			<Card class="btw">
 				<template #content>
 					<div class="flex flex-column justify-content-space-between">
-						<div class="p-float-label mb-4">
+						<div class="p-float-label mb-5">
 							<InputText class="w-full" id="email-input" type="text" v-model="email" />
 							<label for="email-input">Email</label>
 						</div>

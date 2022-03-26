@@ -1,6 +1,6 @@
 <template>
 	<form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
-		<div class="field mb-4">
+		<div class="field mb-5">
 			<div class="p-float-label">
 				<InputText
 					id="firstname"
@@ -12,7 +12,7 @@
 				{{ v$.firstname.required.$message.replace("Value", "Firstname") }}
 			</small>
 		</div>
-		<div class="field mb-4">
+		<div class="field mb-5">
 			<div class="p-float-label">
 				<InputText
 					id="lastname"
@@ -24,7 +24,7 @@
 				{{ v$.lastname.required.$message.replace("Value", "Lastname") }}
 			</small>
 		</div>
-		<div class="field mb-4">
+		<div class="field mb-5">
 			<div class="p-float-label">
 				<InputMask
 					id="pesel"
@@ -37,7 +37,7 @@
 				{{ v$.pesel.required.$message.replace("Value", "Pesel") }}
 			</small>
 		</div>
-		<div class="field mb-4">
+		<div class="field mb-5">
 			<div class="p-float-label p-input-icon-right">
 				<i class="pi pi-envelope" />
 				<InputText
@@ -56,7 +56,7 @@
 				{{ v$.email.required.$message.replace("Value", "Email") }}
 			</small>
 		</div>
-		<div class="field mb-4">
+		<div class="field mb-5">
 			<div class="p-float-label">
 				<Password
 					id="password"
@@ -84,7 +84,7 @@
 				{{ v$.password.required.$message.replace("Value", "Password") }}
 			</small>
 		</div>
-		<div class="field mb-4">
+		<div class="field mb-5">
 			<div class="p-float-label">
 				<InputText
 					id="street"
@@ -103,7 +103,7 @@
 				{{ v$.address.street.required.$message.replace("Value", "Street") }}
 			</small>
 		</div>
-		<div class="field mb-4 flex justify-content-between">
+		<div class="field mb-5 flex justify-content-between">
 			<div class="p-float-label w-7">
 				<div class="p-float-label w-12 pr-1">
 					<InputNumber
@@ -127,14 +127,10 @@
 			</div>
 			<div class="p-float-label w-7 pl-1">
 				<InputNumber id="localNumber" v-model="v$.address.localNumber.$model" />
-				<label
-					for="localNumber"
-					:style="[v$.address.houseNumber.$invalid && submitted ? { top: '34%' } : { top: '50%' }]">
-					Local number
-				</label>
+				<label for="localNumber">Local number</label>
 			</div>
 		</div>
-		<div class="field mb-4 flex justify-content-between">
+		<div class="field mb-5 flex justify-content-between">
 			<div class="p-float-label w-10">
 				<div class="p-float-label w-12 pr-1">
 					<InputText
@@ -170,7 +166,7 @@
 				</span>
 			</div>
 		</div>
-		<Button type="submit" label="Register" class="mt-2" v-on:keyup.enter="handleSubmit" />
+		<Button type="submit" label="Register" class="mt-2" v-on:keyup.enter="handleSubmit" :loading="isLoading" />
 	</form>
 </template>
 
@@ -185,6 +181,9 @@ import Password from "primevue/password";
 import Divider from "primevue/divider";
 import InputMask from "primevue/inputmask";
 import { register } from "@/services/api";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
 
 const state = reactive({
 	firstname: "",
@@ -217,6 +216,7 @@ const rules = {
 };
 
 const submitted = ref(false);
+const isLoading = ref(false);
 
 const v$ = useVuelidate(rules, state);
 
@@ -225,12 +225,30 @@ const handleSubmit = (isFormValid) => {
 	if (!isFormValid) {
 		return;
 	}
+	isLoading.value = true;
 	register(state.firstname, state.lastname, state.pesel, state.email, state.password, state.address)
 		.then(() => {
 			resetForm();
+			toast.add({
+				severity: "success",
+				summary: "Success",
+				detail: "Successfully registered",
+				life: 3000,
+			});
 		})
 		.catch((err) => {
 			console.error(err);
+			toast.add({
+                severity: "error",
+                summary: err?.response?.statusText || "Error",
+                detail:
+                    err?.response?.data?.msg ||
+                    "Something went wrong during registration",
+                life: 3000,
+            });
+		})
+		.finally(() => {
+			isLoading.value = false;
 		});
 };
 
