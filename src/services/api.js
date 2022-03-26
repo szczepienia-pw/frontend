@@ -47,12 +47,6 @@ export const register = (firstName, lastName, pesel, email, password, address) =
         pesel, 
         email, 
         password,
-        "address": {
-          "city": address.city,
-          "zipCode": address.zipCode,
-          "street": address.street,
-          "houseNumber": address.houseNumber,
-          "localNumber": address.localNumber,
-        }
+        address
       })
 }

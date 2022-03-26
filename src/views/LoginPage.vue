@@ -1,18 +1,11 @@
 <template>
-	<div
-		class="w-screen h-screen flex flex-row justify-content-center align-items-center"
-	>
+	<div class="w-screen h-screen flex flex-row justify-content-center align-items-center" style="padding-top: 150px">
 		<div class="h-auto flex flex-row">
 			<Card class="btw">
 				<template #content>
 					<div class="flex flex-column justify-content-space-between">
 						<div class="p-float-label mb-4">
-							<InputText
-								class="w-full"
-								id="email-input"
-								type="text"
-								v-model="email"
-							/>
+							<InputText class="w-full" id="email-input" type="text" v-model="email" />
 							<label for="email-input">Email</label>
 						</div>
 						<div class="p-float-label">
@@ -21,8 +14,7 @@
 								inputClass="w-full"
 								class="w-full"
 								v-model="password"
-								:feedback="false"
-							/>
+								:feedback="false" />
 							<label for="password-input">Password</label>
 						</div>
 						<Button
@@ -30,40 +22,22 @@
 								userType == 'admin' ? 'administrator' : userType
 							}?`"
 							class="p-button-link align-self-end mb-6 p-0"
-							@click="toggleMenu"
-						/>
-						<Menu
-							ref="userTypeMenu"
-							:model="userTypes"
-							:popup="true"
-						/>
+							@click="toggleMenu" />
+						<Menu ref="userTypeMenu" :model="userTypes" :popup="true" />
 					</div>
-					<div
-						v-if="isRegistering"
-						class="flex justify-content-center align-items-center h-20rem"
-					>
+					<div v-if="isRegistering" class="flex justify-content-center align-items-center h-20rem">
 						<img
 							alt="Doctor"
-							style="
-								object-fit: cover;
-								width: 100%;
-								max-width: 400px;
-								height: auto;
-							"
-							:src="require('@/assets/doctor.png')"
-						/>
+							style="object-fit: cover; width: 100%; max-width: 400px; height: auto"
+							:src="require('@/assets/doctor.png')" />
 					</div>
 					<div class="flex flex-column">
+						<Button label="Log in" @click="sendLoginRequest" :loading="isLoading" />
 						<Button
-							label="Log in"
-							@click="sendLoginRequest"
-							:loading="isLoading"
-						/>
-						<Button v-if="!isRegistering && userType == 'patient'"
+							v-if="!isRegistering && userType == 'patient'"
 							label="Create an account"
 							class="p-button-link mt-2 p-0 h-2rem"
-							@click="register"
-						/>
+							@click="register" />
 					</div>
 				</template>
 			</Card>
@@ -75,27 +49,16 @@
 							<Button
 								icon="pi pi-times"
 								class="p-button-text p-button-rounded"
-                                style="width: 20px"
-                                @click="register"
-							/>
+								style="width: 20px"
+								@click="register" />
 						</div>
-
 						<RegisterForm />
 					</div>
-					<div
-						v-else
-						class="flex justify-content-center align-items-center h-20rem"
-					>
+					<div v-else class="flex justify-content-center align-items-center h-20rem">
 						<img
 							alt="Doctor"
-							style="
-								object-fit: cover;
-								width: 100%;
-								max-width: 400px;
-								height: auto;
-							"
-							:src="require('@/assets/doctor.png')"
-						/>
+							style="object-fit: cover; width: 100%; max-width: 400px; height: auto"
+							:src="require('@/assets/doctor.png')" />
 					</div>
 				</template>
 			</Card>
@@ -147,12 +110,14 @@ const userTypes = computed(() =>
 			label: "Log in as doctor",
 			command: () => {
 				userType.value = "doctor";
+				isRegistering.value = false;
 			},
 		},
 		{
 			label: "Log in as admin",
 			command: () => {
 				userType.value = "admin";
+				isRegistering.value = false;
 			},
 		},
 	].filter((item) => !item.label.toLowerCase().includes(userType.value))
@@ -180,6 +145,10 @@ function sendLoginRequest() {
 </script>
 
 <style lang="scss">
+* {
+	padding: 0;
+	margin: 0;
+}
 .btw .p-card,
 .btw .p-card-body {
 	min-height: 24rem;
@@ -191,14 +160,14 @@ function sendLoginRequest() {
 	box-shadow: none;
 }
 .btw .p-card-content {
-    padding-top: 40px;
+	padding-top: 40px;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 }
-.no-margin-top .p-card-content{
-    margin-top: 0;
-    padding-top: 0;
+.no-margin-top .p-card-content {
+	margin-top: 0;
+	padding-top: 0;
 }
 </style>

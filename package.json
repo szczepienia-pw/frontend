@@ -69,5 +69,15 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "prettier": {
+    "bracketSameLine": true,
+    "singleAttributePerLine": false,
+    "tabWidth": 4,
+    "useTabs": true,
+    "semi": true,
+    "printWidth": 120,
+    "jsxBracketSameLine": true,
+    "htmlWhitespaceSensitivity": "ignore"
+  }
 }
