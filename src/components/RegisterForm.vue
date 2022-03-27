@@ -106,7 +106,7 @@
 		<div class="field mb-5 flex justify-content-between">
 			<div class="p-float-label w-7">
 				<div class="p-float-label w-12 pr-1">
-					<InputNumber
+					<InputText
 						id="houseNumber"
 						v-model="v$.address.houseNumber.$model"
 						:class="{ 'p-invalid': v$.address.houseNumber.$invalid && submitted }" />
@@ -126,7 +126,7 @@
 				</small>
 			</div>
 			<div class="p-float-label w-7 pl-1">
-				<InputNumber id="localNumber" v-model="v$.address.localNumber.$model" />
+				<InputText id="localNumber" v-model="v$.address.localNumber.$model" />
 				<label for="localNumber">Local number</label>
 			</div>
 		</div>
@@ -176,7 +176,6 @@ import { email, required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
 import Password from "primevue/password";
 import Divider from "primevue/divider";
 import InputMask from "primevue/inputmask";
@@ -195,8 +194,8 @@ const state = reactive({
 		city: "",
 		zipCode: null,
 		street: "",
-		houseNumber: null,
-		localNumber: null,
+		houseNumber: "",
+		localNumber: "",
 	},
 });
 
@@ -272,23 +271,4 @@ const resetForm = () => {
 </script>
 
 <style lang="scss" scoped>
-.form-demo {
-	.card {
-		min-width: 450px;
-
-		form {
-			margin-top: 2rem;
-		}
-
-		.field {
-			margin-bottom: 1.5rem;
-		}
-	}
-
-	@media screen and (max-width: 960px) {
-		.card {
-			width: 80%;
-		}
-	}
-}
 </style>
