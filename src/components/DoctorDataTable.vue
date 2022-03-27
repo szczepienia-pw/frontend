@@ -2,9 +2,12 @@
     <div>
         <div class="card">
             <DataTable ref="dt" :value="doctors" v-model:selection="selectedDoctors" dataKey="id" 
-                :paginator="true" :rows="10" :filters="filters" :loading="loading"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[5,10,25]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctors" responsiveLayout="scroll">
+                paginator :filters="filters" :loading="loading" lazy
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctors" responsiveLayout="scroll"
+                :first="pagination.currentPage * pagination.currentRecords" :rows="pagination.currentRecords" :totalRecords="pagination.totalRecords"
+                @page="loadDoctors($event.page)"
+            >
                 <template #header>
                     <div class="table-header flex flex-column md:flex-row md:justify-content-between">
                         <div class="flex-start">
@@ -28,10 +31,16 @@
                 <Column field="email" header="Email" :sortable="true" style="min-width:8rem"></Column>
                 <Column :exportable="false" style="min-width:8rem">
                     <template #body="slotProps">
-                        <Button icon="pi pi-pencil" class="p-button-rounded mr-2" @click="editDoctor(slotProps.data)" />
+                        <Button icon="pi pi-pencil" class="p-button-rounded mr-2" @click="startEditingDoctor(slotProps.data)" />
                         <Button icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteDoctor(slotProps.data)" />
                     </template>
                 </Column>
+                <template #paginatorstart>
+                    <Button type="button" icon="pi pi-refresh" class="p-button-text" @click="loadDoctors(pagination.currentPage)"/>
+                </template>
+                <template #paginatorend>
+                    <!-- leave empty for correct margins -->
+                </template>
             </DataTable>
         </div>
 
@@ -60,7 +69,7 @@
 
             <template #footer>
                 <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-                <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveDoctor" />
+                <Button label="Save" icon="pi pi-check" class="p-button-text" @click="() => editingDoctor ? saveEditedDoctor() : saveNewDoctor()" />
             </template>
         </Dialog>
 
@@ -103,18 +112,6 @@ import { FilterMatchMode } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getDoctors, deleteDoctor, createDoctor, editDoctor } from '@/services/api'
 
-const loadDoctors = () => {
-    loading.value = true;
-    getDoctors() //todo
-        .then(response => doctors.value = response.data)
-        .catch(err => console.error(err))
-        .finally(() => loading.value = false)
-}
-
-onMounted(() => {
-    loadDoctors();
-})
-
 const toast = useToast();
 const loading = ref(true)
 const dt = ref();
@@ -129,7 +126,30 @@ const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
 });
 const submitted = ref(false);
+const pagination = ref({
+    currentPage: 0,
+    totalPages: 0,
+    currentRecords: 0,
+    totalRecords: 0
+})
 
+const loadDoctors = (page = 0) => {
+    loading.value = true;
+    getDoctors(page)
+        .then(response => {
+            pagination.value = response.pagination
+            doctors.value = response.data
+        })
+        .catch(err => {
+            console.error(err);
+            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not fetch doctors', life: 3000});
+        })
+        .finally(() => loading.value = false)
+}
+
+onMounted(() => {
+    loadDoctors();
+})
 
 const openNew = () => {
     doctor.value = {};
@@ -140,16 +160,17 @@ const hideDialog = () => {
     doctorDialog.value = false;
     submitted.value = false;
 };
-const saveDoctor = () => {
+const saveNewDoctor = () => {
     submitted.value = true;
     if(!doctor.value.firstName || !doctor.value.lastName || !doctor.value.email || !doctor.value.password) return;
     createDoctor(doctor.value.firstName, doctor.value.lastName, doctor.value.email, doctor.value.password)
         .then(() => {
+            toast.add({severity:'success', summary: 'Success', detail: 'Doctor information saved', life: 3000});
             loadDoctors();
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: 'Error', detail: 'Could not create doctor', life: 3000});
+            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not create doctor', life: 3000});
         })
         .finally(() => {
             doctorDialog.value = false;
@@ -157,16 +178,17 @@ const saveDoctor = () => {
         })
 };
 
-const editDoctor = () => {
+const saveEditedDoctor = () => {
     submitted.value = true;
     if(!doctor.value.firstName || !doctor.value.lastName || !doctor.value.email) return;
-    editDoctor(doctor.value.firstName, doctor.value.lastName, doctor.value.email)
+    editDoctor(doctor.value.id, doctor.value.firstName, doctor.value.lastName, doctor.value.email)
         .then(() => {
+            toast.add({severity:'success', summary: 'Success', detail: 'Doctor information saved', life: 3000});
             loadDoctors();
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: 'Error', detail: 'Could not edit doctor', life: 3000});
+           toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not edit doctor', life: 3000});
         })
         .finally(() => {
             doctorDialog.value = false;
@@ -175,7 +197,7 @@ const editDoctor = () => {
         })
 };
 
-const editDoctor = (doct) => {
+const startEditingDoctor = (doct) => {
     doctor.value = {...doct};
     editingDoctor.value = true;
     doctorDialog.value = true;
@@ -187,11 +209,12 @@ const confirmDeleteDoctor = (doct) => {
 const deleteDoctorCallback = () => {
     deleteDoctor(doctor.value.id)
         .then(() => {
+            toast.add({severity:'success', summary: 'Success', detail: `Doctor ${doctor.value.firstName} ${doctor.value.lastName} removed`, life: 3000});
             loadDoctors();
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: 'Error', detail: 'Could not delete doctor', life: 3000});
+            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not delete doctor', life: 3000});
         })
         .finally(() => {
             deleteDoctorDialog.value = false;
@@ -206,8 +229,9 @@ const deleteSelectedDoctorsCallback = () => {
     selectedDoctors.value.every(async (doctor) => {
         try {
             await deleteDoctor(doctor.id);
-        } catch(err) { // todo
-            toast.add({severity:'error', summary: 'Error', detail: 'Could not delete doctor', life: 3000});
+        } catch(err) {
+            console.error(err);
+            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not delete doctor', life: 3000});
             return false;
         }
         return true;
@@ -230,22 +254,12 @@ const deleteSelectedDoctorsCallback = () => {
 	}
 }
 
-.doctor-image {
-    width: 50px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-
-.p-dialog .doctor-image {
-    width: 50px;
-    margin: 0 auto 2rem auto;
-    display: block;
-}
-
 .confirmation-content {
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 @media screen and (max-width: 960px) {
 	::v-deep(.p-toolbar) {
 		flex-wrap: wrap;
