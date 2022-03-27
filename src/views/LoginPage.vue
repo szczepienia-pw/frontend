@@ -1,6 +1,8 @@
 <template>
-	<div class="flex flex-row justify-content-center align-items-center" style="padding-top: 150px; padding-bottom: 150px; min-height: 100vh; width: 100vw;">
-		<div class="h-auto flex flex-row">
+	<div
+		class="flex flex-row justify-content-center align-items-center"
+		style="padding-top: 150px; padding-bottom: 150px; min-height: 100vh; width: 100vw">
+		<div class="h-auto flex container">
 			<Card class="btw">
 				<template #content>
 					<div class="flex flex-column justify-content-space-between">
@@ -42,8 +44,8 @@
 					</div>
 				</template>
 			</Card>
-			<Divider layout="vertical" />
-			<Card class="w-20rem justify-content-center align-items-center no-margin-top">
+			<Divider layout="vertical" class="divider" />
+			<Card :class="{ hide: !displayForm }" class="w-20rem justify-content-center align-items-center no-margin-top form">
 				<template #content>
 					<div v-if="isRegistering && userType == 'patient'">
 						<div class="flex flex-row justify-content-end" style="height: 40px">
@@ -98,6 +100,8 @@ const toggleMenu = (event) => {
 const register = () => {
 	isRegistering.value = !isRegistering.value;
 };
+
+const displayForm = computed(() => isRegistering.value && userType.value == 'patient');
 
 const userTypes = computed(() =>
 	[
@@ -170,5 +174,19 @@ function sendLoginRequest() {
 .no-margin-top .p-card-content {
 	margin-top: 0;
 	padding-top: 0;
+}
+@media screen and (max-width: 768px) {
+	.container {
+		flex-direction: column;
+	}
+	.divider {
+		display: none;
+	}
+	.hide{
+		display: none;
+	}
+	.form{
+		margin-top: 20px;
+	}
 }
 </style>
