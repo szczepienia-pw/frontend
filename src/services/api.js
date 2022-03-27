@@ -38,6 +38,31 @@ export const getVaccinationSlots = (page = 1, startDate = null, endDate = null, 
         ${onlyReserved ? '&onlyReserved=' + onlyReserved : ''}`);
 }
 
+export const getDoctors = (page = 1) => {
+    return api.get(`/admin/doctors?page=${page}`);
+}
+
+export const createDoctor = (firstName, lastName, email, password) => {
+    return api.post('/admin/doctors', {
+        firstName,
+        lastName,
+        email,
+        password
+    });
+}
+
+export const editDoctor = (id, firstName, lastName, email) => {
+    return api.put(`/admin/doctors/${id}`, {
+        firstName,
+        lastName,
+        email
+    });
+}
+
+export const deleteDoctor = (id) => {
+    return api.delete(`/admin/doctors/${id}`);
+}
+
 export const createVaccinationSlot = (date) => {
     return api.post('/doctor/vaccination-slots', {
         date
