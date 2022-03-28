@@ -32,7 +32,7 @@ describe("loginPage test", () => {
             const passwordInput = screen.getByLabelText('Password');
             await fireEvent.update(emailInput, 'john@patient.com');
             await fireEvent.update(passwordInput, 'password');
-            const button = screen.getByRole('button', { name: 'Patient log in' })
+            const button = screen.getByRole('button', { name: 'Log in' })
 
             await fireEvent.click(button);
             expect(axios.post).toHaveBeenCalledWith("/patient/login", { "email": "john@patient.com", "password": "password" })

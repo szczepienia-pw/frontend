@@ -4,6 +4,7 @@
 		style="padding-top: 150px; padding-bottom: 150px; min-height: 100vh">
 		<div class="h-auto flex container">
 			<Card class="btw">
+				<template #title>{{`${userType[0].toUpperCase() + userType.substring(1)} log in`}}</template>
 				<template #content>
 					<div class="flex flex-column justify-content-space-between">
 						<div class="p-float-label mb-5">
@@ -35,10 +36,7 @@
 							:src="require('@/assets/doctor.png')" />
 					</div>
 					<div class="flex flex-column">
-						<Button
-							:label="`${userType[0].toUpperCase() + userType.substring(1)} log in`"
-							@click="sendLoginRequest"
-							:loading="isLoading" />
+						<Button label="Log in" @click="sendLoginRequest" :loading="isLoading" />
 						<Button
 							v-if="!isRegistering && userType == 'patient'"
 							label="Create an account"
@@ -62,10 +60,7 @@
 						</div>
 						<RegisterForm />
 					</div>
-					<div
-						v-else
-						class="flex flex-column justify-content-center align-items-center"
-						style="height: 100%">
+					<div v-else class="flex flex-column justify-content-center align-items-center" style="height: 100%">
 						<img
 							alt="Doctor"
 							style="object-fit: cover; width: 100%; max-width: 400px; height: auto"
