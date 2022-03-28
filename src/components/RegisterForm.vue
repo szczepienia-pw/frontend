@@ -1,6 +1,6 @@
 <template>
 	<form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
-		<div class="field mb-5">
+		<div class="field">
 			<div class="p-float-label">
 				<InputText
 					id="firstname"
@@ -12,7 +12,7 @@
 				{{ v$.firstname.required.$message.replace("Value", "Firstname") }}
 			</small>
 		</div>
-		<div class="field mb-5">
+		<div class="field">
 			<div class="p-float-label">
 				<InputText
 					id="lastname"
@@ -24,7 +24,7 @@
 				{{ v$.lastname.required.$message.replace("Value", "Lastname") }}
 			</small>
 		</div>
-		<div class="field mb-5">
+		<div class="field">
 			<div class="p-float-label">
 				<InputMask
 					id="pesel"
@@ -37,7 +37,7 @@
 				{{ v$.pesel.required.$message.replace("Value", "Pesel") }}
 			</small>
 		</div>
-		<div class="field mb-5">
+		<div class="field">
 			<div class="p-float-label p-input-icon-right">
 				<i class="pi pi-envelope" />
 				<InputText
@@ -56,7 +56,7 @@
 				{{ v$.email.required.$message.replace("Value", "Email") }}
 			</small>
 		</div>
-		<div class="field mb-5">
+		<div class="field">
 			<div class="p-float-label">
 				<Password
 					id="password"
@@ -84,7 +84,7 @@
 				{{ v$.password.required.$message.replace("Value", "Password") }}
 			</small>
 		</div>
-		<div class="field mb-5">
+		<div class="field">
 			<div class="p-float-label">
 				<InputText
 					id="street"
@@ -103,8 +103,8 @@
 				{{ v$.address.street.required.$message.replace("Value", "Street") }}
 			</small>
 		</div>
-		<div class="field mb-5 flex justify-content-between">
-			<div class="p-float-label w-7">
+		<div class="field flex justify-content-between">
+			<div class="w-7">
 				<div class="p-float-label w-12 pr-1">
 					<InputText
 						id="houseNumber"
@@ -125,12 +125,14 @@
 					{{ v$.address.houseNumber.required.$message.replace("Value", "Value") }}
 				</small>
 			</div>
-			<div class="p-float-label w-7 pl-1">
-				<InputText id="localNumber" v-model="v$.address.localNumber.$model" />
-				<label for="localNumber">Local number</label>
+			<div class="w-7 pl-1">
+				<div class="p-float-label">
+					<InputText id="localNumber" v-model="v$.address.localNumber.$model" />
+					<label for="localNumber">Local number</label>
+				</div>
 			</div>
 		</div>
-		<div class="field mb-5 flex justify-content-between">
+		<div class="field flex justify-content-between">
 			<div class="p-float-label w-10">
 				<div class="p-float-label w-12 pr-1">
 					<InputText
@@ -238,13 +240,11 @@ const handleSubmit = (isFormValid) => {
 		.catch((err) => {
 			console.error(err);
 			toast.add({
-                severity: "error",
-                summary: err?.response?.statusText || "Error",
-                detail:
-                    err?.response?.data?.msg ||
-                    "Something went wrong during registration",
-                life: 3000,
-            });
+				severity: "error",
+				summary: err?.response?.statusText || "Error",
+				detail: err?.response?.data?.msg || "Something went wrong during registration",
+				life: 3000,
+			});
 		})
 		.finally(() => {
 			isLoading.value = false;
@@ -271,4 +271,7 @@ const resetForm = () => {
 </script>
 
 <style lang="scss" scoped>
+.field {
+	margin-bottom: 2rem;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="flex flex-row justify-content-center align-items-center"
-		style="padding-top: 150px; padding-bottom: 150px; min-height: 100vh; width: 100vw">
+		style="padding-top: 150px; padding-bottom: 150px; min-height: 100vh">
 		<div class="h-auto flex container">
 			<Card class="btw">
 				<template #content>
@@ -35,7 +35,10 @@
 							:src="require('@/assets/doctor.png')" />
 					</div>
 					<div class="flex flex-column">
-						<Button label="Log in" @click="sendLoginRequest" :loading="isLoading" />
+						<Button
+							:label="`${userType[0].toUpperCase() + userType.substring(1)} log in`"
+							@click="sendLoginRequest"
+							:loading="isLoading" />
 						<Button
 							v-if="!isRegistering && userType == 'patient'"
 							label="Create an account"
@@ -45,7 +48,9 @@
 				</template>
 			</Card>
 			<Divider layout="vertical" class="divider" />
-			<Card :class="{ hide: !displayForm }" class="w-20rem justify-content-center align-items-center no-margin-top form">
+			<Card
+				:class="{ hide: !displayForm }"
+				class="w-20rem justify-content-center align-items-center no-margin-top form pb-0">
 				<template #content>
 					<div v-if="isRegistering && userType == 'patient'">
 						<div class="flex flex-row justify-content-end" style="height: 40px">
@@ -57,7 +62,10 @@
 						</div>
 						<RegisterForm />
 					</div>
-					<div v-else class="flex justify-content-center align-items-center h-20rem">
+					<div
+						v-else
+						class="flex flex-column justify-content-center align-items-center"
+						style="height: 100%">
 						<img
 							alt="Doctor"
 							style="object-fit: cover; width: 100%; max-width: 400px; height: auto"
@@ -101,7 +109,7 @@ const register = () => {
 	isRegistering.value = !isRegistering.value;
 };
 
-const displayForm = computed(() => isRegistering.value && userType.value == 'patient');
+const displayForm = computed(() => isRegistering.value && userType.value == "patient");
 
 const userTypes = computed(() =>
 	[
@@ -174,7 +182,14 @@ function sendLoginRequest() {
 .no-margin-top .p-card-content {
 	margin-top: 0;
 	padding-top: 0;
+	height: 100%;
 }
+
+.p-card-body,
+.p-card-content {
+	height: 100%;
+}
+
 @media screen and (max-width: 768px) {
 	.container {
 		flex-direction: column;
@@ -182,10 +197,10 @@ function sendLoginRequest() {
 	.divider {
 		display: none;
 	}
-	.hide{
+	.hide {
 		display: none;
 	}
-	.form{
+	.form {
 		margin-top: 20px;
 	}
 }
