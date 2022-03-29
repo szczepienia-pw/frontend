@@ -39,3 +39,14 @@ export const reportBug = (name, description) => {
         description
     })
 }
+
+export const register = (firstName, lastName, pesel, email, password, address) => {
+    return api.post(`/patient/registration`, {
+        firstName, 
+        lastName, 
+        pesel, 
+        email, 
+        password,
+        address
+      })
+}
