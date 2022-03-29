@@ -11,10 +11,11 @@ const api = axios.create({
     }
 })
 
-const setTokenAndCookies = (userType, token) => {
+const setTokenAndCookies = (userType, token, userInfo = {}) => {
     api.defaults.headers['Authorization'] = token;
     userSession.token = token;
     userSession.userType = userType;
+    userSession.userInfo = userInfo;
     saveUserSession();
 }
 
@@ -23,7 +24,7 @@ export const login = (userType, email, password) => {
         email,
         password
     }).then(response => {
-        setTokenAndCookies(userType, response.data.token);
+        setTokenAndCookies(userType, response.data.token, response.data?.patient || {});
     })
 }
 
