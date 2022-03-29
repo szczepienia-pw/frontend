@@ -266,15 +266,6 @@ const onFilter = () => {
     justify-content: center;
 }
 
-.vaccination-status {
-    background-color: red;
-    display: inline;
-    border-radius: 6px;
-    font-weight: bold;
-    color: #fff;
-    padding: 6px;
-}
-
 @media screen and (max-width: 960px) {
 	::v-deep(.p-toolbar) {
 		flex-wrap: wrap;
