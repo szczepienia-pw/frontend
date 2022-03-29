@@ -17,7 +17,7 @@
                 />
             </template>
         </Card>
-        <VaccinationsList class="mb-5" />
+        <DoctorVaccinationsList class="mb-5" />
     </div>
 </template>
 
@@ -25,7 +25,7 @@
 import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 import Card from "primevue/card";
-import VaccinationsList from '@/components/DoctorVaccinationsList'
+import DoctorVaccinationsList from '@/components/DoctorVaccinationsList'
 
 import { ref } from "vue";
 import { useToast } from "primevue/usetoast";

@@ -130,7 +130,6 @@ const loadVaccinations = (page = 0) => {
     getVaccinationSlots(page+1, getFilterStartDate(), getFilterEndDate(), getFilterOnlyReserved())
         .then(response => {
             response = response.data
-            console.log(response)
             pagination.value = response.pagination;
             pagination.value.currentPage--;
             vaccinations.value = vaccinationsBackup.value = response.data.map(item => ({
