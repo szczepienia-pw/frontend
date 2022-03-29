@@ -1,8 +1,6 @@
 <template>
-    <div
-        class="w-screen h-screen flex justify-content-center align-items-center"
-    >
-        <Card>
+    <div>
+        <Card class="my-5">
             <template #title> Add new vaccination slot </template>
             <template #content>
                 <Calendar
@@ -19,6 +17,7 @@
                 />
             </template>
         </Card>
+        <VaccinationsList class="mb-5" />
     </div>
 </template>
 
@@ -26,6 +25,7 @@
 import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 import Card from "primevue/card";
+import VaccinationsList from '@/components/DoctorVaccinationsList'
 
 import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
