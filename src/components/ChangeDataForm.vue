@@ -99,7 +99,7 @@
 					<InputMask v-model="patientData.address.zipCode" mask="99-999" />
 				</template>
 			</Inplace>
-			<Button class="" label="Confirm" @click="compareData" :loading="isLoading" />
+			<Button class="" label="Confirm" @click="compareAndSendData" :loading="isLoading" />
 		</template>
 	</Card>
 </template>
@@ -142,7 +142,7 @@ const compare = (obj1, obj2) => {
 	return res;
 };
 
-const compareData = () => {
+const compareAndSendData = () => {
 	const changes = compare(patientData.value, userData);
 	if (Object.keys(changes).length === 0) {
 		toast.add({
