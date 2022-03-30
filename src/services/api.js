@@ -53,9 +53,9 @@ export const register = (firstName, lastName, pesel, email, password, address) =
 }
 
 export const changeData = (data) => {
-    return api.post(`/patient/account`, {
+    return api.put(`/patient/account`, 
         data
-      })
+      )
 }
 
 export const getAdminSettings = () => {

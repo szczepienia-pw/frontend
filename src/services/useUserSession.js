@@ -22,6 +22,7 @@ export const saveUserSession = () => {
 export const clearUserSession = () => {
     Cookies.remove('user-type');
     Cookies.remove('auth-token');
+    Cookies.remove('user-info');
 	userSession.token = null;
 	userSession.userType = null;
 }
