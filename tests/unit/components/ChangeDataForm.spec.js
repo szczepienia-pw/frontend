@@ -64,7 +64,7 @@ describe("editing user data test", () => {
 
             await fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
 
-            expect(axios.put).toHaveBeenCalledWith("/patient/account", { "data": { "address": { "city": "test", "houseNumber": "15", "localNumber": "6b", "street": "test", "zipCode": "22-222" }, "firstName": "test", "lastName": "test", "password": "test" } });
+            expect(axios.put).toHaveBeenCalledWith("/patient/account", { "address": { "city": "test", "houseNumber": "15", "localNumber": "6b", "street": "test", "zipCode": "22-222" }, "firstName": "test", "lastName": "test", "password": "test" } );
         });
     });
 })
