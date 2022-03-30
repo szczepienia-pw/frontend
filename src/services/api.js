@@ -51,3 +51,9 @@ export const register = (firstName, lastName, pesel, email, password, address) =
         address
       })
 }
+
+export const changeData = (data) => {
+    return api.post(`/patient/account`, {
+        data
+      })
+}
