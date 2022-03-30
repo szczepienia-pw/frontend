@@ -128,23 +128,22 @@ const emit = defineEmits(["hide"]);
 
 const isLoading = ref(false);
 const toast = useToast();
-
-const compare = (obj1, obj2, properties = {}, objKey = null) => {
+ 
+const compare = (obj1, obj2) => {
+    let res = {};
 	Object.keys(obj1).forEach((key) => {
 		if (typeof obj1[key] === "object") {
-			compare(obj1[key], obj2[key], properties, key);
+            let deepCompare = compare(obj1[key], obj2[key]);
+            if(Object.keys(deepCompare).length > 0) res[key] = deepCompare;
 		} else if (obj1[key] != obj2[key]) {
-			if (objKey) {
-				if (!properties[objKey]) properties[objKey] = {};
-				properties[objKey][key] = obj1[key];
-			} else properties[key] = obj1[key];
+			res[key] = obj1[key];
 		}
 	});
-	return properties;
+	return res;
 };
 
 const compareData = () => {
-	const changes = compare(patientData, userData);
+	const changes = compare(patientData.value, userData);
 	if (Object.keys(changes).length === 0) {
 		toast.add({
 			severity: "error",
@@ -153,7 +152,6 @@ const compareData = () => {
 			life: 3000,
 		});
 	} else {
-		console.log(changes);
 		sendData(changes);
 	}
 };
@@ -186,35 +184,35 @@ const sendData = (changes) => {
 		});
 };
 
-const userData = JSON.parse(JSON.stringify(useUserSession().userInfo));
-userData["password"] = "";
+const userData = {...useUserSession().userInfo, password: ""};
+const patientData = ref({...JSON.parse(JSON.stringify(userData)), password: ""});
 
-const patientData = {
-	firstName: userData.firstName,
-	lastName: userData.lastName,
-	password: "",
-	address: {
-		city: userData.address.city,
-		zipCode: userData.address.zipCode,
-		street: userData.address.street,
-		houseNumber: userData.address.houseNumber,
-		localNumber: userData.address.localNumber,
-	},
-};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .data-card.p-card,
-.data-card .p-card-body {
-	min-height: 24rem;
-	height: 100%;
-	width: 20rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
+.data-card ::v-deep {
+    .p-card-header {
+        display: flex;
+        width: 100%;
+        padding-right: 20px;
+        padding-top: 10px;
+        justify-content: flex-end;
+    }
+
+    .p-card-body  {
+        width: 20rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
+        .p-button.p-button-icon-only {
+            margin-left: -3.7px;
+        }
+    }
 }
-.data-card .p-card-content {
+.data-card ::v-deep .p-card-content {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -228,34 +226,37 @@ const patientData = {
 .pi-times:not(.btn):before {
 	content: "\e909";
 }
-.p-inplace .p-inplace-display {
-	padding-bottom: 12px;
-	padding-top: 6px;
-	height: 40px;
-	border: 1px solid #2196f3;
-}
-.p-inplace .p-inplace-display:not(.p-disabled):hover {
-	background-color: #eef7ff;
-}
-.p-button.p-button-icon-only {
-	margin-left: -3px;
-}
-.inplace {
+
+.inplace ::v-deep {
 	padding-top: 8px;
 	padding-bottom: 8px;
 	height: 42px;
 	margin-bottom: 20px;
+
+    .p-password-input {
+        width: 200px;
+    }
+
+    .p-inplace-display {
+        padding-bottom: 12px;
+        padding-top: 8px;
+        height: 40px;
+        border: 1px solid #2196f3;
+    }
+
+    .p-inplace-display:not(.p-disabled):hover {
+        background-color: #eef7ff;
+    }
+
+    .p-inplace-content {
+        position: relative;
+        top: -9px;
+        & > * {
+            height: 41px;
+        }
+    }
 }
-.p-password-input {
-	width: 200px;
-}
-.p-card-header {
-	display: flex;
-	width: 100%;
-	padding-right: 20px;
-	padding-top: 10px;
-	justify-content: flex-end;
-}
+
 .p-inputtext {
 	width: 200px;
 }
