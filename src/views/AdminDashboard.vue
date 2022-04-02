@@ -1,11 +1,16 @@
 <template>
     <div>
-        Lorem ipsum
+        <Button v-if="!settingsDialogVisible" class="my-5" label="Edit settings" @click="settingsDialogVisible = true" />
+        <AdminSettingsForm :visible="settingsDialogVisible" @hide="settingsDialogVisible = false" />
     </div>
 </template>
 
 <script setup>
+import AdminSettingsForm from "@/components/AdminSettingsForm";
+import Button from "primevue/button";
+import { ref } from "vue";
 
+const settingsDialogVisible = ref(false);
 </script>
 
 <style lang="scss">

@@ -57,3 +57,13 @@ export const changeData = (data) => {
         data
       )
 }
+
+export const getAdminSettings = () => {
+    return api.get(`/admin/settings`)
+}
+
+export const changeAdminSettings = (bugEmail) => {
+    return api.put(`/admin/settings`, {
+        bugEmail
+      })
+}
