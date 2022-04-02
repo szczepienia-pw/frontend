@@ -17,6 +17,9 @@ describe("DoctorDashboard test", () => {
                     plugins: [PrimeVue, ToastService],
                     directives: {
                         tooltip() { }
+                    },
+                    stubs: {
+                        DoctorVaccinationsList: true
                     }
                 }
             })
