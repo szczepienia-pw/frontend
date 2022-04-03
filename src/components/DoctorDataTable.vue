@@ -6,7 +6,7 @@
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctors" responsiveLayout="scroll"
                 :rows="10" :totalRecords="pagination.totalRecords"
-                @page="loadDoctors($event.page)"
+                @page="loadDoctors($event.page)" @sort="onSort"
             >
                 <template #header>
                     <div class="table-header flex flex-column md:flex-row md:justify-content-between">
@@ -18,7 +18,7 @@
                             <Button label="Delete" icon="pi pi-trash" class="p-button-danger" @click="confirmDeleteSelected" :disabled="!selectedDoctors || !selectedDoctors.length" />
                             <div class="p-input-icon-left ml-5">
                                 <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Search..." />
+                                <InputText v-model="filters['global'].value" placeholder="Search..." @input="onSearch"/>
                             </div>
                         </div>
 					</div>
@@ -116,6 +116,7 @@ const toast = useToast();
 const loading = ref(true)
 const dt = ref();
 const doctors = ref();
+const doctorsBackup = ref();
 const doctorDialog = ref(false);
 const editingDoctor = ref(false);
 const deleteDoctorDialog = ref(false);
@@ -139,7 +140,7 @@ const loadDoctors = (page = 1) => {
         .then(response => {
             response = response.data
             pagination.value = response.pagination
-            doctors.value = response.data
+            doctors.value = doctorsBackup.value = response.data
         })
         .catch(err => {
             console.error(err);
@@ -158,6 +159,7 @@ const openNew = () => {
     doctorDialog.value = true;
 };
 const hideDialog = () => {
+    editingDoctor.value = false;
     doctorDialog.value = false;
     submitted.value = false;
 };
@@ -241,6 +243,22 @@ const deleteSelectedDoctorsCallback = () => {
     selectedDoctors.value = null;
     loadDoctors();
 };
+
+const onSort = (event) => {
+    const { sortField } = event;
+    doctors.value = doctorsBackup.value.sort((i1, i2) => {
+        return (i1[sortField] < i2[sortField] ? -1 :
+               i1[sortField] > i2[sortField] ? 1 : 0) * event.sortOrder;
+    })
+}
+
+const onSearch = () => {
+    doctors.value = doctorsBackup.value.filter(
+        item => Object.keys(item).some(
+            (property) => item[property].toString().toLowerCase().includes(filters.value.global.value.toLowerCase())
+        )
+    )
+}
 
 </script>
 
