@@ -6,7 +6,7 @@
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vaccinations" responsiveLayout="scroll"
                 :rows="10" :totalRecords="pagination.totalRecords"
-                @page="loadVaccinations($event.page)" @sort="onSort" @filter="onFilter"
+                @page="loadVaccinations($event.page+1)" @sort="onSort" @filter="onFilter"
             >
                 <template #header>
                     <div class="table-header flex flex-column md:flex-row md:justify-content-between">
@@ -125,13 +125,12 @@ const pagination = ref({
     currentRecords: 0,
     totalRecords: 0
 })
-const loadVaccinations = (page = 0) => {
+const loadVaccinations = (page = 1) => {
     loading.value = true;
-    getVaccinationSlots(page+1, getFilterStartDate(), getFilterEndDate(), getFilterOnlyReserved())
+    getVaccinationSlots(page, getFilterStartDate(), getFilterEndDate(), getFilterOnlyReserved())
         .then(response => {
             response = response.data
             pagination.value = response.pagination;
-            pagination.value.currentPage--;
             vaccinations.value = vaccinationsBackup.value = response.data.map(item => ({
                 patient: item.vaccination?.patient ? `${item.vaccination.patient.firstName} ${item.vaccination.patient.lastName}` : '',
                 date: new Date(item.date),
