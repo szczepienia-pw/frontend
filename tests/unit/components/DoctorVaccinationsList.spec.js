@@ -62,8 +62,6 @@ describe("DoctorVaccinationsList test", () => {
 
             await screen.findByText('John Patient');
             await screen.findByText('Planned');
-            await screen.findByText('16:15');
-            await screen.findByText('17:15');
             await screen.findByText('Free');
         });
     });
@@ -79,7 +77,7 @@ describe("DoctorVaccinationsList test", () => {
                 }
             })
 
-            await screen.findByText('17:15');
+            await screen.findByText('John Patient');
             const deleteButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('pi-trash'));
             await fireEvent.click(deleteButtons[1]);
             await fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
