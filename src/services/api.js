@@ -1,33 +1,108 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
+import {
+    saveUserSession,
+    useUserSession
+} from '@/services/useUserSession'
+
+const userSession = useUserSession();
 
 const api = axios.create({
     baseURL: 'https://localhost:7229',
-    timeout: 2000,
+    timeout: 5000,
     headers: {
-        'Authorization': Cookies.get('auth-token')
+        'Authorization': userSession.token
     }
 })
 
-const setTokenAndCookies = (userType, token) => {
-    const cookieOptions = { expires: 1, sameSite: 'strict'};
+const setTokenAndCookies = (userType, token, userInfo = {}) => {
     api.defaults.headers['Authorization'] = token;
-    Cookies.set('logged-in', 'true', cookieOptions);
-    Cookies.set('user-type', userType, cookieOptions);
-    Cookies.set('auth-token', token, cookieOptions);
+    userSession.token = token;
+    userSession.userType = userType;
+    userSession.userInfo = userInfo;
+    saveUserSession();
 }
 
 export const login = (userType, email, password) => {
     return api.post(`/${userType}/login`, {
-        email: email,
-        password: password
+        email,
+        password
     }).then(response => {
-        setTokenAndCookies(userType, response.data.token);
+        setTokenAndCookies(userType, response.data.token, response.data?.patient || {});
     })
+}
+
+export const getVaccinationSlots = (page = 1, startDate = null, endDate = null, onlyReserved = null) => {
+    return api.get(`/doctor/vaccination-slots?page=${page}` +
+        `${startDate ? '&startDate=' + startDate : ''}` +
+        `${endDate ? '&endDate=' + endDate : ''}` +
+        `${onlyReserved ? '&onlyReserved=' + onlyReserved : ''}`);
+}
+
+export const getDoctors = (page = 1) => {
+    return api.get(`/admin/doctors?page=${page}`);
+}
+
+export const createDoctor = (firstName, lastName, email, password) => {
+    return api.post('/admin/doctors', {
+        firstName,
+        lastName,
+        email,
+        password
+    });
+}
+
+export const editDoctor = (id, firstName, lastName, email) => {
+    return api.put(`/admin/doctors/${id}`, {
+        firstName,
+        lastName,
+        email
+    });
+}
+
+export const deleteDoctor = (id) => {
+    return api.delete(`/admin/doctors/${id}`);
 }
 
 export const createVaccinationSlot = (date) => {
     return api.post('/doctor/vaccination-slots', {
-        date: date
+        date
     });
+}
+
+export const deleteVaccinationSlot = (id) => {
+    return api.delete(`/doctor/vaccination-slots/${id}`);
+}
+
+export const reportBug = (name, description) => {
+    return api.post(`/bugs`, {
+        name,
+        description
+    })
+}
+
+export const register = (firstName, lastName, pesel, email, password, address) => {
+    return api.post(`/patient/registration`, {
+        firstName, 
+        lastName, 
+        pesel, 
+        email, 
+        password,
+        address
+      })
+}
+
+export const changeData = (data) => {
+    return api.put(`/patient/account`, 
+        data
+      )
+}
+
+export const getAdminSettings = () => {
+    return api.get(`/admin/settings`)
+}
+
+export const changeAdminSettings = (bugEmail) => {
+    return api.put(`/admin/settings`, {
+        bugEmail
+      })
 }

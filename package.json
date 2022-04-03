@@ -9,6 +9,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vuelidate/core": "^2.0.0-alpha.35",
+    "@vuelidate/validators": "^2.0.0-alpha.27",
     "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "js-cookie": "^3.0.1",
@@ -67,5 +69,15 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "prettier": {
+    "bracketSameLine": true,
+    "singleAttributePerLine": false,
+    "tabWidth": 4,
+    "useTabs": true,
+    "semi": true,
+    "printWidth": 120,
+    "jsxBracketSameLine": true,
+    "htmlWhitespaceSensitivity": "ignore"
+  }
 }
