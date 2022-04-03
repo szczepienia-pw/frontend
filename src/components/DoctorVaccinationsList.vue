@@ -146,6 +146,12 @@ const loadVaccinations = (page = 0) => {
         })
         .finally(() => loading.value = false)
 }
+
+// eslint-disable-next-line
+defineExpose({
+    loadVaccinations
+})
+
 onMounted(() => {
     loadVaccinations();
 })
@@ -192,7 +198,7 @@ const formatDate = (date) => (
 )
 
 const formatTime = (date) => (
-    `${date.getHours()}:${date.getMinutes()}`
+    `${date.getHours()}:${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
 )
 
 const getStatus = (data) => (

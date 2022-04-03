@@ -17,7 +17,7 @@
                 />
             </template>
         </Card>
-        <DoctorVaccinationsList class="mb-5" />
+        <DoctorVaccinationsList ref="vaccinations" class="mb-5" />
     </div>
 </template>
 
@@ -36,6 +36,7 @@ const toast = useToast();
 
 const selectedDate = ref("");
 const isLoading = ref(false);
+const vaccinations = ref();
 
 function submitTimeslot() {
     isLoading.value = true;
@@ -44,6 +45,7 @@ function submitTimeslot() {
     )
         .then(() => {
             successToast(toast, "Successfully added slot");
+            vaccinations.value.loadVaccinations();
         })
         .catch((err) => {
             console.error(err);
