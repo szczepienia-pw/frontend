@@ -30,6 +30,7 @@ import DoctorVaccinationsList from '@/components/DoctorVaccinationsList'
 import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import { createVaccinationSlot } from "@/services/api";
+import { errorToast, successToast } from "@/services/helpers";
 
 const toast = useToast();
 
@@ -42,23 +43,11 @@ function submitTimeslot() {
         new Date(selectedDate.value || new Date().toString()).toISOString()
     )
         .then(() => {
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Successfully added vaccination slot",
-                life: 3000,
-            });
+            successToast(toast, "Successfully added slot");
         })
         .catch((err) => {
             console.error(err);
-            toast.add({
-                severity: "error",
-                summary: err?.response?.statusText || "Error",
-                detail:
-                    err?.response?.data?.msg ||
-                    "Could not add vaccination slot",
-                life: 3000,
-            });
+            errorToast(toast, "Could not add slot", err);
         })
         .finally(() => {
             isLoading.value = false;

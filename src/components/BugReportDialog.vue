@@ -41,17 +41,20 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
-
-import { ref, defineProps, defineEmits } from "vue";
+import { ref } from "vue";
 import { reportBug } from "../services/api";
 import { useToast } from "primevue/usetoast";
+import { errorToast, successToast } from "@/services/helpers";
 
+// eslint-disable-next-line
 defineProps({
     visible: {
         type: Boolean,
         default: false,
     },
 });
+
+// eslint-disable-next-line
 const emit = defineEmits(["hide"]);
 
 const name = ref("");
@@ -63,21 +66,11 @@ function report() {
     loading.value = true;
     reportBug(name.value, description.value)
         .then(() => {
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Successfully reported bug",
-                life: 3000,
-            });
+            successToast(toast, "Successfully reported bug");
         })
         .catch((err) => {
             console.error(err);
-            toast.add({
-                severity: "error",
-                summary: err?.response?.statusText || "Error",
-                detail: err?.response?.data?.msg || "Could not report bug",
-                life: 3000,
-            });
+            errorToast(toast, "Could not report bug", err)
         })
         .finally(() => {
             loading.value = false;

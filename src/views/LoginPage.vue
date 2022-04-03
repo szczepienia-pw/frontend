@@ -80,11 +80,11 @@ import Password from "primevue/password";
 import Menu from "primevue/menu";
 import RegisterForm from "@/components/RegisterForm";
 import Divider from "primevue/divider";
-
 import { computed, ref } from "vue";
 import { login } from "@/services/api";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+import { errorToast } from "@/services/helpers";
 
 const email = ref("");
 const password = ref("");
@@ -139,12 +139,7 @@ function sendLoginRequest() {
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not log in",
-				life: 3000,
-			});
+			errorToast(toast, "Could not log in", err);
 		})
 		.finally(() => {
 			isLoading.value = false;

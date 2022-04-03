@@ -95,11 +95,11 @@ import Column from 'primevue/column'
 import Calendar from 'primevue/calendar'
 import InputText from 'primevue/inputtext'
 import TriStateCheckbox  from 'primevue/tristatecheckbox'
-
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getVaccinationSlots, deleteVaccinationSlot } from '@/services/api'
+import { errorToast, successToast } from '@/services/helpers'
 
 const toast = useToast();
 const loading = ref(true)
@@ -142,7 +142,7 @@ const loadVaccinations = (page = 0) => {
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not fetch vaccinations', life: 3000});
+            errorToast(toast, "Could not fetch vaccinations", err);
         })
         .finally(() => loading.value = false)
 }
@@ -156,12 +156,12 @@ const confirmDeleteVaccination = (doct) => {
 const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
-            toast.add({severity:'success', summary: 'Success', detail: `Vaccination ${vaccination.value.date.toLocaleString()} removed`, life: 3000});
+            successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} removed`);
             loadVaccinations();
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not delete vaccination', life: 3000});
+            errorToast(toast, "Could not delete vaccination", err);
         })
         .finally(() => {
             deleteVaccinationDialog.value = false;
@@ -177,7 +177,7 @@ const deleteSelectedVaccinationsCallback = () => {
             await deleteVaccinationSlot(vaccination.id);
         } catch(err) {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not delete vaccination', life: 3000});
+            errorToast(toast, "Could not delete vaccination", err);
             return false;
         }
         return true;
@@ -266,7 +266,7 @@ const onFilter = () => {
 }
 
 @media screen and (max-width: 960px) {
-	::v-deep(.p-toolbar) {
+	:deep(.p-toolbar) {
 		flex-wrap: wrap;
         
 		.p-button {
