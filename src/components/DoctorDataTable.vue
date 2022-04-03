@@ -5,7 +5,7 @@
                 paginator :filters="filters" :loading="loading" lazy
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctors" responsiveLayout="scroll"
-                :first="pagination.currentPage * pagination.currentRecords" :rows="pagination.currentRecords" :totalRecords="pagination.totalRecords"
+                :rows="10" :totalRecords="pagination.totalRecords"
                 @page="loadDoctors($event.page)"
             >
                 <template #header>
@@ -76,7 +76,7 @@
         <Dialog v-model:visible="deleteDoctorDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                <span v-if="doctor">Are you sure you want to delete <b>{{doctor.name}}</b>?</span>
+                <span v-if="doctor">Are you sure you want to delete <b>{{doctor.firstName}} {{doctor.lastName}}</b>?</span>
             </div>
             <template #footer>
                 <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteDoctorDialog = false"/>
@@ -133,10 +133,11 @@ const pagination = ref({
     totalRecords: 0
 })
 
-const loadDoctors = (page = 0) => {
+const loadDoctors = (page = 1) => {
     loading.value = true;
     getDoctors(page)
         .then(response => {
+            response = response.data
             pagination.value = response.pagination
             doctors.value = response.data
         })
