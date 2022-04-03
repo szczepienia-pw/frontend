@@ -45,7 +45,7 @@ function submitTimeslot() {
     )
         .then(() => {
             successToast(toast, "Successfully added slot");
-            vaccinations.value.loadVaccinations();
+            vaccinations.value.loadVaccinations?.();
         })
         .catch((err) => {
             console.error(err);

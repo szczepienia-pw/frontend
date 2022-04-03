@@ -7,15 +7,15 @@ import axios from 'axios'
 import { useUserSession } from '@/services/useUserSession'
 
 var mockUserInfo = {
-    "firstName": "John",
-    "lastName": "Doe",
-    "password": "Super-Strong-Password#123",
-    "address": {
-        "city": "Warszawa",
-        "zipCode": "01-202",
-        "street": "Jaktorowska",
-        "houseNumber": "14",
-        "localNumber": "5a"
+    firstName: "John",
+    lastName: "Doe",
+    password: "Super-Strong-Password#123",
+    address: {
+        city: "Warszawa",
+        zipCode: "01-202",
+        street: "Jaktorowska",
+        houseNumber: "14",
+        localNumber: "5a"
     }
 }
 

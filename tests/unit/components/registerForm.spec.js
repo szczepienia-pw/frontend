@@ -36,18 +36,18 @@ describe("registration test", () => {
 
             await fireEvent.click(screen.getByRole('button', { name: 'Register' }));
             expect(axios.post).toHaveBeenCalledWith("/patient/registration", {
-                "address": {
-                    "city": "test",
-                    "houseNumber": "22",
-                    "localNumber": "",
-                    "street": "test",
-                    "zipCode": "22-222",
+                address: {
+                    city: "test",
+                    houseNumber: "22",
+                    localNumber: "",
+                    street: "test",
+                    zipCode: "22-222",
                 },
-                "email": "test@test.com",
-                "firstName": "test",
-                "lastName": "test",
-                "password": "test",
-                "pesel": "22222222222"
+                email: "test@test.com",
+                firstName: "test",
+                lastName: "test",
+                password: "test",
+                pesel: "22222222222"
             });
         });
     });

@@ -7,44 +7,44 @@ import { fireEvent } from '@testing-library/dom';
 
 const mockResponse = {
     data: {
-        "pagination": {
-            "currentPage": 1,
-            "totalPages": 1,
-            "currentRecords": 2,
-            "totalRecords": 2
+        pagination: {
+            currentPage: 1,
+            totalPages: 1,
+            currentRecords: 2,
+            totalRecords: 2
         },
-        "data": [{
-            "id": 1,
-            "date": "2019-08-24T14:15:22Z",
-            "vaccination": {
-                "id": 1,
-                "vaccine": {
-                    "id": 1,
-                    "name": "Phizer",
-                    "disease": "COVID-19",
-                    "requiredDoses": 2
+        data: [{
+            id: 1,
+            date: "2019-08-24T14:15:22Z",
+            vaccination: {
+                id: 1,
+                vaccine: {
+                    id: 1,
+                    name: "Phizer",
+                    disease: "COVID-19",
+                    requiredDoses: 2
                 },
-                "status": "Planned",
-                "patient": {
-                    "id": 1,
-                    "firstName": "John",
-                    "lastName": "Patient",
-                    "pesel": "003005039981",
-                    "email": "john.doe@patient.com",
-                    "address": {
-                        "id": 1,
-                        "city": "Biłgoraj",
-                        "zipCode": "23-400",
-                        "street": "Jana Pawła II",
-                        "houseNumber": "20",
-                        "localNumber": "1A"
+                status: "Planned",
+                patient: {
+                    id: 1,
+                    firstName: "John",
+                    lastName: "Patient",
+                    pesel: "003005039981",
+                    email: "john.doe@patient.com",
+                    address: {
+                        id: 1,
+                        city: "Biłgoraj",
+                        zipCode: "23-400",
+                        street: "Jana Pawła II",
+                        houseNumber: "20",
+                        localNumber: "1A"
                     }
                 }
             }
         },
         {
-            "id": 2,
-            "date": "2020-08-24T15:15:22Z",
+            id: 2,
+            date: "2020-08-24T15:15:22Z",
         }]
     }
 }

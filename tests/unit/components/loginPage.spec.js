@@ -35,7 +35,7 @@ describe("loginPage test", () => {
             const button = screen.getByRole('button', { name: 'Log in' })
 
             await fireEvent.click(button);
-            expect(axios.post).toHaveBeenCalledWith("/patient/login", { "email": "john@patient.com", "password": "password" })
+            expect(axios.post).toHaveBeenCalledWith("/patient/login", { email: "john@patient.com", password: "password" })
         })
     })
 })
