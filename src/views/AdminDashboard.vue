@@ -14,7 +14,6 @@ import { ref } from "vue";
 
 const settingsDialogVisible = ref(false);
 
-
 </script>
 
 <style lang="scss">

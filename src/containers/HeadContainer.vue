@@ -24,6 +24,7 @@ function logout() {
 	successToast(toast, "Logged out");
 	router.push({ name: "login" });
 }
+
 </script>
 
 <style lang="scss"></style>

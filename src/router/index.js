@@ -6,8 +6,8 @@ const router = createRouter({
     linkActiveClass: 'is-active',
     routes: [
         {
-            path: '/',
-            redirect: '/login'
+          path: '/',
+          redirect: '/login'
         },
         {
             path: '/login',
