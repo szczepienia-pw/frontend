@@ -22,12 +22,12 @@
 							<label for="password-input">Password</label>
 						</div>
 						<Button
-							:label="`Not ${userType == 'admin' ? 'an' : 'a'} ${
-								userType == 'admin' ? 'administrator' : userType
+							:label="`Not ${userType === userTypes.admin ? 'an' : 'a'} ${
+								userType === userTypes.admin ? 'administrator' : userType
 							}?`"
 							class="p-button-link align-self-end mb-6 p-0"
 							@click="toggleMenu" />
-						<Menu ref="userTypeMenu" :model="userTypes" :popup="true" />
+						<Menu ref="userTypeMenu" :model="computedUserTypes" :popup="true" />
 					</div>
 					<div v-if="isRegistering" class="flex justify-content-center align-items-center h-20rem">
 						<img
@@ -38,7 +38,7 @@
 					<div class="flex flex-column">
 						<Button label="Log in" @click="sendLoginRequest" :loading="isLoading" />
 						<Button
-							v-if="!isRegistering && userType == 'patient'"
+							v-if="!isRegistering && userType === userTypes.patient"
 							label="Create an account"
 							class="p-button-link mt-2 p-0 h-2rem"
 							@click="register" />
@@ -50,7 +50,7 @@
 				:class="{ hide: !displayForm }"
 				class="w-20rem justify-content-center align-items-center no-margin-top form pb-0">
 				<template #content>
-					<div v-if="isRegistering && userType == 'patient'">
+					<div v-if="isRegistering && userType === userTypes.patient">
 						<div class="flex flex-row justify-content-end" style="height: 40px">
 							<Button
 								icon="pi pi-times"
@@ -85,11 +85,12 @@ import { login } from "@/services/api";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { errorToast } from "@/services/helpers";
+import { userTypes } from "@/services/useUserSession"
 
 const email = ref("");
 const password = ref("");
 const isLoading = ref(false);
-const userType = ref("patient");
+const userType = ref(userTypes.patient);
 const userTypeMenu = ref();
 const isRegistering = ref(false);
 
@@ -104,27 +105,27 @@ const register = () => {
 	isRegistering.value = !isRegistering.value;
 };
 
-const displayForm = computed(() => isRegistering.value && userType.value == "patient");
+const displayForm = computed(() => isRegistering.value && userType.value == userTypes.patient);
 
-const userTypes = computed(() =>
+const computedUserTypes = computed(() =>
 	[
 		{
 			label: "Log in as patient",
 			command: () => {
-				userType.value = "patient";
+				userType.value = userTypes.patient;
 			},
 		},
 		{
 			label: "Log in as doctor",
 			command: () => {
-				userType.value = "doctor";
+				userType.value = userTypes.doctor;
 				isRegistering.value = false;
 			},
 		},
 		{
 			label: "Log in as admin",
 			command: () => {
-				userType.value = "admin";
+				userType.value = userTypes.admin;
 				isRegistering.value = false;
 			},
 		},

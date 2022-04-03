@@ -114,8 +114,7 @@ import Password from "primevue/password";
 import Divider from "primevue/divider";
 import { changeData } from "@/services/api";
 import { useToast } from "primevue/usetoast";
-import { useUserSession } from "@/services/useUserSession";
-import Cookies from "js-cookie";
+import { useUserSession, saveUserSession } from "@/services/useUserSession";
 import { ref } from "vue";
 import { errorToast, objectDiff, successToast } from "@/services/helpers";
 
@@ -148,7 +147,7 @@ const sendData = (changes) => {
 	changeData(changes)
 		.then((response) => {
 			useUserSession().userInfo = response;
-			Cookies.set("user-info", JSON.stringify(response));
+			saveUserSession();
             emit("hide");
 			successToast(toast, "Successfully changed data");
 		})

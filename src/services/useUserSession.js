@@ -1,9 +1,20 @@
 import { computed, reactive, ref } from 'vue'
 import Cookies from 'js-cookie'
 
-const token = ref(Cookies.get('auth-token'))
-const userType = ref(Cookies.get('user-type'))
-const userInfo = ref(JSON.parse(Cookies.get('user-info') || '{}'));
+export const tokenCookie = 'auth-token';
+export const userTypeCookie = 'user-type';
+export const userInfoCookie = 'user-info';
+
+export const userTypes = {
+    patient: 'patient',
+    doctor: 'doctor',
+    admin: 'admin'
+}
+
+const token = ref(Cookies.get(tokenCookie))
+const userType = ref(Cookies.get(userTypeCookie))
+const userInfo = ref(JSON.parse(Cookies.get(userInfoCookie) || '{}'));
+const cookieApi = Cookies.withAttributes({ expires: 1, sameSite: 'lax' })
 
 const userSession = reactive({
     token,
@@ -13,16 +24,15 @@ const userSession = reactive({
 })
 
 export const saveUserSession = () => {
-    const cookieOptions = { expires: 1, sameSite: 'strict' };
-    Cookies.set('user-type', userSession.userType, cookieOptions);
-    Cookies.set('auth-token', userSession.token, cookieOptions);
-    Cookies.set('user-info', JSON.stringify(userSession.userInfo));
+    cookieApi.set(userTypeCookie, userSession.userType);
+    cookieApi.set(tokenCookie, userSession.token);
+    cookieApi.set(userInfoCookie, JSON.stringify(userSession.userInfo));
 }
 
 export const clearUserSession = () => {
-    Cookies.remove('user-type');
-    Cookies.remove('auth-token');
-    Cookies.remove('user-info');
+    cookieApi.remove(userTypeCookie);
+    cookieApi.remove(tokenCookie);
+    cookieApi.remove(userInfoCookie);
 	userSession.token = null;
 	userSession.userType = null;
 }
