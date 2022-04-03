@@ -15,8 +15,11 @@ describe("changing bug email test", () => {
 
             render(AdminDashboard, {
                 global: {
-                    plugins: [PrimeVue, ToastService]
-                }
+                    plugins: [PrimeVue, ToastService],
+                    stubs: {
+                        DoctorDataTable: true
+                    }
+                },
             })
 
             await fireEvent.click(screen.getByRole('button', { name: 'Edit settings' }));
