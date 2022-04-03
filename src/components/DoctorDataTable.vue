@@ -6,7 +6,7 @@
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctors" responsiveLayout="scroll"
                 :rows="10" :totalRecords="pagination.totalRecords"
-                @page="loadDoctors($event.page)" @sort="onSort"
+                @page="loadDoctors($event.page+1)" @sort="onSort"
             >
                 <template #header>
                     <div class="table-header flex flex-column md:flex-row md:justify-content-between">
@@ -131,9 +131,9 @@ const pagination = ref({
     totalRecords: 0
 })
 
-const loadDoctors = (page = 0) => {
+const loadDoctors = (page = 1) => {
     loading.value = true;
-    getDoctors(page+1)
+    getDoctors(page)
         .then(response => {
             response = response.data
             pagination.value = response.pagination
