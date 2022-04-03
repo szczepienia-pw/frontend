@@ -173,16 +173,17 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
-import { email, required } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Divider from "primevue/divider";
 import InputMask from "primevue/inputmask";
+import { reactive, ref } from "vue";
+import { email, required } from "@vuelidate/validators";
+import { useVuelidate } from "@vuelidate/core";
 import { register } from "@/services/api";
 import { useToast } from "primevue/usetoast";
+import { errorToast, successToast } from "@/services/helpers";
 
 const toast = useToast();
 
@@ -230,21 +231,11 @@ const handleSubmit = (isFormValid) => {
 	register(state.firstname, state.lastname, state.pesel, state.email, state.password, state.address)
 		.then(() => {
 			resetForm();
-			toast.add({
-				severity: "success",
-				summary: "Success",
-				detail: "Successfully registered",
-				life: 3000,
-			});
+			successToast(toast, "Successfully registered");
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Something went wrong during registration",
-				life: 3000,
-			});
+			errorToast(toast, "Could not register", err);
 		})
 		.finally(() => {
 			isLoading.value = false;

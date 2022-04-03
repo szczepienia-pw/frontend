@@ -14,4 +14,5 @@ import FooterContainer from "./containers/FooterContainer";
 
 <style lang="scss" scoped>
 @import "../node_modules/primeflex/primeflex.css";
+@import "styles/main.scss";
 </style>

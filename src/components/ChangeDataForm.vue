@@ -105,52 +105,38 @@
 </template>
 
 <script setup>
-import { useUserSession } from "@/services/useUserSession";
 import Inplace from "primevue/inplace";
 import InputText from "primevue/inputtext";
 import Card from "primevue/card";
 import InputMask from "primevue/inputmask";
 import Button from "primevue/button";
-import { changeData } from "@/services/api";
-import { useToast } from "primevue/usetoast";
 import Password from "primevue/password";
 import Divider from "primevue/divider";
-import Cookies from "js-cookie";
-import { ref, defineProps, defineEmits } from "vue";
+import { changeData } from "@/services/api";
+import { useToast } from "primevue/usetoast";
+import { useUserSession, saveUserSession } from "@/services/useUserSession";
+import { ref } from "vue";
+import { errorToast, objectDiff, successToast } from "@/services/helpers";
 
+// eslint-disable-next-line
 defineProps({
 	visible: {
 		type: Boolean,
 		default: false,
 	},
 });
+
+// eslint-disable-next-line
 const emit = defineEmits(["hide"]);
-
-const isLoading = ref(false);
 const toast = useToast();
+const userData = {...useUserSession().userInfo, password: ""};
+const patientData = ref({...JSON.parse(JSON.stringify(userData)), password: ""});
+const isLoading = ref(false);
  
-const compare = (obj1, obj2) => {
-    let res = {};
-	Object.keys(obj1).forEach((key) => {
-		if (typeof obj1[key] === "object") {
-            let deepCompare = compare(obj1[key], obj2[key]);
-            if(Object.keys(deepCompare).length > 0) res[key] = deepCompare;
-		} else if (obj1[key] != obj2[key]) {
-			res[key] = obj1[key];
-		}
-	});
-	return res;
-};
-
 const compareAndSendData = () => {
-	const changes = compare(patientData.value, userData);
+	const changes = objectDiff(patientData.value, userData);
 	if (Object.keys(changes).length === 0) {
-		toast.add({
-			severity: "error",
-			summary: "Error",
-			detail: "No changes made",
-			life: 3000,
-		});
+		errorToast(toast, "No changes were made");
 	} else {
 		sendData(changes);
 	}
@@ -161,37 +147,24 @@ const sendData = (changes) => {
 	changeData(changes)
 		.then((response) => {
 			useUserSession().userInfo = response;
-			Cookies.set("user-info", JSON.stringify(response));
+			saveUserSession();
             emit("hide");
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Successfully changed your data",
-                life: 3000,
-            });
+			successToast(toast, "Successfully changed data");
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not process your request",
-				life: 3000,
-			});
+			errorToast(toast, "Could not change data", err);
 		})
 		.finally(() => {
 			isLoading.value = false;
 		});
 };
 
-const userData = {...useUserSession().userInfo, password: ""};
-const patientData = ref({...JSON.parse(JSON.stringify(userData)), password: ""});
-
 </script>
 
 <style lang="scss" scoped>
 .data-card.p-card,
-.data-card ::v-deep {
+.data-card :deep() {
     .p-card-header {
         display: flex;
         width: 100%;
@@ -212,7 +185,7 @@ const patientData = ref({...JSON.parse(JSON.stringify(userData)), password: ""})
         }
     }
 }
-.data-card ::v-deep .p-card-content {
+.data-card :deep(.p-card-content) {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -225,36 +198,6 @@ const patientData = ref({...JSON.parse(JSON.stringify(userData)), password: ""})
 }
 .pi-times:not(.btn):before {
 	content: "\e909";
-}
-
-.inplace ::v-deep {
-	padding-top: 8px;
-	padding-bottom: 8px;
-	height: 42px;
-	margin-bottom: 20px;
-
-    .p-password-input {
-        width: 200px;
-    }
-
-    .p-inplace-display {
-        padding-bottom: 12px;
-        padding-top: 8px;
-        height: 40px;
-        border: 1px solid #2196f3;
-    }
-
-    .p-inplace-display:not(.p-disabled):hover {
-        background-color: #eef7ff;
-    }
-
-    .p-inplace-content {
-        position: relative;
-        top: -9px;
-        & > * {
-            height: 41px;
-        }
-    }
 }
 
 .p-inputtext {

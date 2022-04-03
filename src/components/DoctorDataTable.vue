@@ -103,10 +103,7 @@ import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-
 import InputText from 'primevue/inputtext'
-
-
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
@@ -134,9 +131,9 @@ const pagination = ref({
     totalRecords: 0
 })
 
-const loadDoctors = (page = 1) => {
+const loadDoctors = (page = 0) => {
     loading.value = true;
-    getDoctors(page)
+    getDoctors(page+1)
         .then(response => {
             response = response.data
             pagination.value = response.pagination

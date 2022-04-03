@@ -17,7 +17,7 @@
                 />
             </template>
         </Card>
-        <DoctorVaccinationsList class="mb-5" />
+        <DoctorVaccinationsList ref="vaccinations" class="mb-5" />
     </div>
 </template>
 
@@ -30,11 +30,13 @@ import DoctorVaccinationsList from '@/components/DoctorVaccinationsList'
 import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import { createVaccinationSlot } from "@/services/api";
+import { errorToast, successToast } from "@/services/helpers";
 
 const toast = useToast();
 
 const selectedDate = ref("");
 const isLoading = ref(false);
+const vaccinations = ref();
 
 function submitTimeslot() {
     isLoading.value = true;
@@ -42,23 +44,12 @@ function submitTimeslot() {
         new Date(selectedDate.value || new Date().toString()).toISOString()
     )
         .then(() => {
-            toast.add({
-                severity: "success",
-                summary: "Success",
-                detail: "Successfully added vaccination slot",
-                life: 3000,
-            });
+            successToast(toast, "Successfully added slot");
+            vaccinations.value.loadVaccinations?.();
         })
         .catch((err) => {
             console.error(err);
-            toast.add({
-                severity: "error",
-                summary: err?.response?.statusText || "Error",
-                detail:
-                    err?.response?.data?.msg ||
-                    "Could not add vaccination slot",
-                life: 3000,
-            });
+            errorToast(toast, "Could not add slot", err);
         })
         .finally(() => {
             isLoading.value = false;

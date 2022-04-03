@@ -32,10 +32,10 @@ export const login = (userType, email, password) => {
 }
 
 export const getVaccinationSlots = (page = 1, startDate = null, endDate = null, onlyReserved = null) => {
-    return api.get(`/doctor/vaccination-slots?page=${page}
-        ${startDate ? '&startDate=' + startDate : ''}
-        ${endDate ? '&endDate=' + endDate : ''}
-        ${onlyReserved ? '&onlyReserved=' + onlyReserved : ''}`);
+    return api.get(`/doctor/vaccination-slots?page=${page}` +
+        `${startDate ? '&startDate=' + startDate : ''}` +
+        `${endDate ? '&endDate=' + endDate : ''}` +
+        `${onlyReserved ? '&onlyReserved=' + onlyReserved : ''}`);
 }
 
 export const getDoctors = (page = 1) => {

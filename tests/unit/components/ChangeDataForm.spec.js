@@ -7,20 +7,21 @@ import axios from 'axios'
 import { useUserSession } from '@/services/useUserSession'
 
 var mockUserInfo = {
-    "firstName": "John",
-    "lastName": "Doe",
-    "password": "Super-Strong-Password#123",
-    "address": {
-        "city": "Warszawa",
-        "zipCode": "01-202",
-        "street": "Jaktorowska",
-        "houseNumber": "14",
-        "localNumber": "5a"
+    firstName: "John",
+    lastName: "Doe",
+    password: "Super-Strong-Password#123",
+    address: {
+        city: "Warszawa",
+        zipCode: "01-202",
+        street: "Jaktorowska",
+        houseNumber: "14",
+        localNumber: "5a"
     }
 }
 
 jest.mock('@/services/useUserSession', () => ({
-    useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true, userInfo: mockUserInfo })
+    useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true, userInfo: mockUserInfo }),
+    saveUserSession: jest.fn()
 }))
 
 jest.mock('vue-router', () => ({
