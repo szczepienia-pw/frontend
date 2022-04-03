@@ -117,7 +117,7 @@ import { useToast } from "primevue/usetoast";
 import { useUserSession } from "@/services/useUserSession";
 import Cookies from "js-cookie";
 import { ref } from "vue";
-import { errorToast, successToast } from "@/services/helpers";
+import { errorToast, objectDiff, successToast } from "@/services/helpers";
 
 // eslint-disable-next-line
 defineProps({
@@ -134,21 +134,8 @@ const userData = {...useUserSession().userInfo, password: ""};
 const patientData = ref({...JSON.parse(JSON.stringify(userData)), password: ""});
 const isLoading = ref(false);
  
-const compare = (obj1, obj2) => {
-    let res = {};
-	Object.keys(obj1).forEach((key) => {
-		if (typeof obj1[key] === "object") {
-            let deepCompare = compare(obj1[key], obj2[key]);
-            if(Object.keys(deepCompare).length > 0) res[key] = deepCompare;
-		} else if (obj1[key] != obj2[key]) {
-			res[key] = obj1[key];
-		}
-	});
-	return res;
-};
-
 const compareAndSendData = () => {
-	const changes = compare(patientData.value, userData);
+	const changes = objectDiff(patientData.value, userData);
 	if (Object.keys(changes).length === 0) {
 		errorToast(toast, "No changes were made");
 	} else {
