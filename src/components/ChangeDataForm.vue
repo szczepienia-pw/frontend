@@ -201,36 +201,6 @@ const sendData = (changes) => {
 	content: "\e909";
 }
 
-.inplace :deep() {
-	padding-top: 8px;
-	padding-bottom: 8px;
-	height: 42px;
-	margin-bottom: 20px;
-
-    .p-password-input {
-        width: 200px;
-    }
-
-    .p-inplace-display {
-        padding-bottom: 12px;
-        padding-top: 8px;
-        height: 40px;
-        border: 1px solid #2196f3;
-    }
-
-    .p-inplace-display:not(.p-disabled):hover {
-        background-color: #eef7ff;
-    }
-
-    .p-inplace-content {
-        position: relative;
-        top: -9px;
-        & > * {
-            height: 41px;
-        }
-    }
-}
-
 .p-inputtext {
 	width: 200px;
 }
