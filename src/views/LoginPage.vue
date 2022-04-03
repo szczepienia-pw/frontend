@@ -22,9 +22,7 @@
 							<label for="password-input">Password</label>
 						</div>
 						<Button
-							:label="`Not ${userType === userTypes.admin ? 'an' : 'a'} ${
-								userType === userTypes.admin ? 'administrator' : userType
-							}?`"
+							:label="`Not ${userType === userTypes.admin ? 'an' : 'a'} ${userType}?`"
 							class="p-button-link align-self-end mb-6 p-0"
 							@click="toggleMenu" />
 						<Menu ref="userTypeMenu" :model="computedUserTypes" :popup="true" />

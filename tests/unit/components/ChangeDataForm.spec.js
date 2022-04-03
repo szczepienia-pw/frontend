@@ -20,7 +20,8 @@ var mockUserInfo = {
 }
 
 jest.mock('@/services/useUserSession', () => ({
-    useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true, userInfo: mockUserInfo })
+    useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true, userInfo: mockUserInfo }),
+    saveUserSession: jest.fn()
 }))
 
 jest.mock('vue-router', () => ({

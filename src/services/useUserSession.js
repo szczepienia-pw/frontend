@@ -11,10 +11,10 @@ export const userTypes = {
     admin: 'admin'
 }
 
-const token = ref(Cookies.get(tokenCookie))
-const userType = ref(Cookies.get(userTypeCookie))
-const userInfo = ref(JSON.parse(Cookies.get(userInfoCookie) || '{}'));
 const cookieApi = Cookies.withAttributes({ expires: 1, sameSite: 'lax' })
+const token = ref(cookieApi.get(tokenCookie))
+const userType = ref(cookieApi.get(userTypeCookie))
+const userInfo = ref(JSON.parse(cookieApi.get(userInfoCookie) || '{}'));
 
 const userSession = reactive({
     token,

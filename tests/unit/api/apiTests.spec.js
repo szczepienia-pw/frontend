@@ -1,12 +1,15 @@
 import { login, createVaccinationSlot, reportBug, getVaccinationSlots, register, deleteVaccinationSlot, changeData, changeAdminSettings, getAdminSettings } from '@/services/api'
-import Cookies from 'js-cookie'
 import axios from 'axios'
+import { saveUserSession } from '@/services/useUserSession'
 
-jest.mock('js-cookie')
+jest.mock('@/services/useUserSession', () => ({
+    useUserSession: () => ({ token: 'mock' }),
+    saveUserSession: jest.fn()
+}));
 
 describe("api tests", () => {
     describe("when login() call is successful", () => {
-        it("should put auth token in cookies", async () => {
+        it("should correctly post data and save cookies", async () => {
             const response = {
                 data: {
                     token: 'mocked-token'
@@ -21,7 +24,7 @@ describe("api tests", () => {
                 email: "email",
                 password: "password"
             });
-            expect(Cookies.set).toHaveBeenCalledWith('auth-token', 'mocked-token', { expires: 1, sameSite: 'strict' })
+            expect(saveUserSession).toHaveBeenCalled();
         });
     });
 
