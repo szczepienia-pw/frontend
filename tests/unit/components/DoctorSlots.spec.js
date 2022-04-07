@@ -1,10 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/vue'
-import DoctorDashboard from '@/views/DoctorDashboard'
+import Slots from '@/views/doctor/Slots'
 import PrimeVue from 'primevue/config';
 import axios from 'axios'
 import ToastService from "primevue/toastservice";
 
-describe("DoctorDashboard test", () => {
+describe("Doctor slots test", () => {
     describe("when submit button is pressed", () => {
         it("should send request with inputted date", async () => {
             const response = {
@@ -12,7 +12,7 @@ describe("DoctorDashboard test", () => {
             }
             axios.post.mockResolvedValue(response);
 
-            render(DoctorDashboard, {
+            render(Slots, {
                 global: {
                     plugins: [PrimeVue, ToastService],
                     directives: {

@@ -1,4 +1,6 @@
 :deep() { 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
     .inplace {
         padding-top: 8px;
         padding-bottom: 8px;
@@ -27,5 +29,10 @@
                 height: 41px;
             }
         }
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
     }
 }
