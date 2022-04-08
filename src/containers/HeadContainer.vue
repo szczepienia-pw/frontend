@@ -1,32 +1,34 @@
 <template>
-    <div class="wrapper">
-        <nav v-if="userSession.isLoggedIn">
-            <div class="username">
-                <i class="pi pi-user mr-3"/>
-                {{ userSession.userInfo.firstName + ' ' + userSession.userInfo.lastName}}
-            </div>
-            <Button
-                v-for="item in menuItems"
-                :key="item.text"
-                class="p-button-text p-button-plain"
-                :icon="`pi ${item.icon}`"
-                :label="item.label"
-                :disabled="item.disabled"
-                @click="$router.push(`${item.page}`)"
-            />
-            <div class="mt-8">
-                <Button class="p-button-text p-button-plain" icon="pi pi-exclamation-circle" label="Report a bug" @click="bugReportDialogVisible = true" />
-                <Button class="p-button-text p-button-plain" icon="pi pi-sign-out" label="Log out" @click="logout" />
-            </div>
-        </nav>
-    </div>
+	<div class="wrapper">
+		<nav v-if="userSession.isLoggedIn">
+			<div class="username">
+				<i class="pi pi-user mr-3" />
+				{{ userSession.userInfo.firstName + " " + userSession.userInfo.lastName }}
+			</div>
+			<Button
+				v-for="item in menuItems"
+				:key="item.text"
+				class="p-button-text p-button-plain"
+				:icon="`pi ${item.icon}`"
+				:label="item.label"
+				:disabled="item.disabled"
+				@click="$router.push(item.page)" />
+			<div class="mt-8">
+				<Button
+					class="p-button-text p-button-plain"
+					icon="pi pi-exclamation-circle"
+					label="Report a bug"
+					@click="bugReportDialogVisible = true" />
+				<Button class="p-button-text p-button-plain" icon="pi pi-sign-out" label="Log out" @click="logout" />
+			</div>
+		</nav>
+	</div>
 	<Toast />
-    <BugReportDialog
-        modal
-        :draggable="false"
-        :visible="bugReportDialogVisible"
-        @hide="bugReportDialogVisible = false"
-    />
+	<BugReportDialog
+		modal
+		:draggable="false"
+		:visible="bugReportDialogVisible"
+		@hide="bugReportDialogVisible = false" />
 </template>
 
 <script setup>
@@ -45,115 +47,109 @@ const router = useRouter();
 const toast = useToast();
 
 const menuItems = computed(() => {
-    if(userSession.userType === userTypes.patient) return patientMenuItems;
-    else if(userSession.userType === userTypes.doctor) return doctorMenuItems;
-    else return adminMenuItems;
-})
-
-const doctorMenuItems = [
-    {
-        label: 'Time slots',
-        icon: 'pi-calendar',
-        page: 'slots'
-    },
-    {
-        label: 'Vaccination',
-        icon: 'pi-book',
-        disabled: true
-    }
-]
-
-const patientMenuItems = [
-    {
-        label: 'New appointment',
-        icon: 'pi-calendar',
-        disabled: true
-    },
-    {
-        label: 'Visit history',
-        icon: 'pi-book',
-        disabled: true
-    },
-    {
-        label: 'Personal data',
-        icon: 'pi-id-card',
-        page: 'personal'
-    }
-]
-
-const adminMenuItems = [
-    {
-        label: 'Doctors',
-        icon: 'pi-copy',
-        page: 'doctors'
-    },
-    {
-        label: 'Users',
-        icon: 'pi-users',
-        disabled: true
-    },
-    {
-        label: 'Vaccinations',
-        icon: 'pi-list',
-        disabled: true
-    },
-    {
-        label: 'Settings',
-        icon: 'pi-cog',
-        page: 'settings'
-    },
-]
+	return {
+		[userTypes.doctor]: [
+			{
+				label: "Time slots",
+				icon: "pi-calendar",
+				page: "slots",
+			},
+			{
+				label: "Vaccination",
+				icon: "pi-book",
+				disabled: true,
+			},
+		],
+		[userTypes.patient]: [
+			{
+				label: "New appointment",
+				icon: "pi-calendar",
+				disabled: true,
+			},
+			{
+				label: "Visit history",
+				icon: "pi-book",
+				disabled: true,
+			},
+			{
+				label: "Personal data",
+				icon: "pi-id-card",
+				page: "personal",
+			},
+		],
+		[userTypes.admin]: [
+			{
+				label: "Doctors",
+				icon: "pi-copy",
+				page: "doctors",
+			},
+			{
+				label: "Users",
+				icon: "pi-users",
+				disabled: true,
+			},
+			{
+				label: "Vaccinations",
+				icon: "pi-list",
+				disabled: true,
+			},
+			{
+				label: "Settings",
+				icon: "pi-cog",
+				page: "settings",
+			},
+		],
+	}[userSession.userType];
+});
 
 function logout() {
 	clearUserSession();
 	successToast(toast, "Logged out");
 	router.push({ name: "login" });
 }
-
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+	position: absolute;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
-    .wrapper {
-        position: absolute;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+nav :deep() {
+	color: #fff;
+	position: fixed;
+	width: 15rem;
+	left: 5rem;
+	margin: auto;
+	background: var(--primary-color);
+	padding: 1rem;
+	border-radius: 8px;
 
-    nav :deep() {
-        color: #fff;
-        position: fixed;
-        width: 15rem;
-        left: 5rem;
-        margin: auto;
-        background: var(--primary-color);
-        padding: 1rem;
-        border-radius: 8px;
+	&,
+	& > div {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
 
-        &, & > div {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+	.username {
+		align-items: center;
+		font-size: 1.25rem;
+		margin-bottom: 2rem;
+		display: flex;
+		flex-direction: row;
+	}
 
-        .username {
-            align-items: center;
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            display: flex;
-            flex-direction: row;
-        }
-        
-        .p-button.p-button-plain {
-            margin: 0.5rem 0;
-            color: #fff !important;
+	.p-button.p-button-plain {
+		margin: 0.5rem 0;
+		color: #fff !important;
 
-            &:hover {
-                background-color: rgba(0, 0, 0, 0.1) !important;
-            }
-        }
-    }
-
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1) !important;
+		}
+	}
+}
 </style>
