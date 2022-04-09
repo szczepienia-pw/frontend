@@ -1,28 +1,20 @@
 <template>
-	<Card v-if="visible" :visible="visible" @update:visible="$emit('hide')" class="data-card">
-		<template #title>Edit settings</template>
-		<template #header>
-			<Button
-				icon="pi pi-times btn"
-				class="p-button-text p-button-rounded"
-				style="width: 20px; align-self: flex-end"
-                @update:visible="$emit('hide')"
-				@click="$emit('hide')" />
-		</template>
-		<template #content>
-			<Inplace :closable="true" class="inplace">
-				<template #display>
-					<span class="label">{{ adminSettings.bugEmail }}</span>
-					<span class="pi pi-pencil" style="vertical-align: middle"></span>
-				</template>
-				<template #content>
-					<InputText v-model="adminSettings.bugEmail" autoFocus />
-				</template>
-			</Inplace>
-			
-			<Button class="" label="Confirm" @click="sendData" :loading="isLoading" />
-		</template>
-	</Card>
+    <Card class="data-card">
+        <template #title>Edit settings</template>
+        <template #content>
+            <Inplace :closable="true" class="inplace">
+                <template #display>
+                    <span class="label">{{ adminSettings.bugEmail }}</span>
+                    <span class="pi pi-pencil" style="vertical-align: middle"></span>
+                </template>
+                <template #content>
+                    <InputText v-model="adminSettings.bugEmail" autoFocus />
+                </template>
+            </Inplace>
+            
+            <Button class="" label="Confirm" @click="sendData" :loading="isLoading" />
+        </template>
+    </Card>
 </template>
 
 <script setup>
@@ -35,16 +27,6 @@ import { errorToast, successToast } from "@/services/helpers";
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
 
-// eslint-disable-next-line
-defineProps({
-	visible: {
-		type: Boolean,
-		default: false,
-	},
-});
-
-// eslint-disable-next-line
-const emit = defineEmits(["hide"]);
 const toast = useToast();
 const isLoading = ref(false);
 const adminSettings = ref({})
@@ -68,7 +50,6 @@ const sendData = () => {
 	isLoading.value = true;
 	changeAdminSettings(adminSettings.value?.bugEmail)
 		.then(() => {
-            emit("hide");
 			successToast(toast, "Successfully changed settings");
 		})
 		.catch((err) => {

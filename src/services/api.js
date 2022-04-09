@@ -27,7 +27,7 @@ export const login = (userType, email, password) => {
         email,
         password
     }).then(response => {
-        setTokenAndCookies(userType, response.data.token, response.data?.patient || {});
+        setTokenAndCookies(userType, response.data.token, response.data?.[userType]);
     })
 }
 

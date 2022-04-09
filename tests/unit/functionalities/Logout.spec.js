@@ -5,9 +5,9 @@ import ToastService from "primevue/toastservice";
 import { clearUserSession } from '@/services/useUserSession'
 
 jest.mock('@/services/useUserSession', () => ({
-    useUserSession: () => ({ token: 'mock', isLoggedIn: true }),
+    useUserSession: () => ({ token: 'mock', isLoggedIn: true, userInfo: { firstName: 'test', lastName: 'test' } }),
     clearUserSession: jest.fn(),
-    userTypes: { doctor: 'doctor' }
+    userTypes: { doctor: 'doctor' },
 }));
 
 jest.mock('vue-router', () => ({

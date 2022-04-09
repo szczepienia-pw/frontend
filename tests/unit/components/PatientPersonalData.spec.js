@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/vue';
-import PatientDashboard from '@/views/PatientDashboard';
+import PersonalData from '@/views/patient/PersonalData';
 import PrimeVue from 'primevue/config';
 import ToastService from "primevue/toastservice";
 import Cookies from 'js-cookie'
@@ -39,13 +39,12 @@ describe("editing user data test", () => {
             axios.post.mockResolvedValue(response);
             axios.put.mockResolvedValue(response);
 
-            render(PatientDashboard, {
+            render(PersonalData, {
                 global: {
                     plugins: [PrimeVue, ToastService]
                 }
             })
 
-            await fireEvent.click(screen.getByRole('button', { name: 'Edit personal data' }));
             await fireEvent.click(screen.getByText('John'));
             await fireEvent.update(screen.getByRole('textbox'), 'test');
             await fireEvent.click(screen.getByText('Doe'), 'test');

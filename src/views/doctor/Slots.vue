@@ -59,6 +59,6 @@ function submitTimeslot() {
 
 <style lang="scss" scoped>
 .p-card {
-    width: 28rem;
+    width: 25rem;
 }
 </style>
