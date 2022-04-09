@@ -12,7 +12,7 @@
 				:icon="`pi ${item.icon}`"
 				:label="item.label"
 				:disabled="item.disabled"
-				@click="$router.replace('/patient/' + item.page)" />
+				@click="$router.replace(`/${userSession.userType}/${item.page}`)" />
 			<div class="mt-8">
 				<Button
 					class="p-button-text p-button-plain"
