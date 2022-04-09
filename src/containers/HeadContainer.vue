@@ -64,7 +64,7 @@ const menuItems = computed(() => {
 			{
 				label: "New appointment",
 				icon: "pi-calendar",
-				disabled: true,
+				page: "registration",
 			},
 			{
 				label: "Visit history",

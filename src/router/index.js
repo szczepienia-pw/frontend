@@ -35,6 +35,24 @@ const router = createRouter({
                 {
                     path: 'personal',
                     component: () => import("@/views/patient/PersonalData.vue"),
+                },
+                {
+                    path: 'registration',
+                    component: () => import("@/views/registration/RegistrationPage.vue"),
+                    children: [
+                        {
+                            path: 'slots',
+                            component: () => import("@/views/registration/VaccinationSlots.vue"),
+                        },
+                        {
+                            path: 'vaccines',
+                            component: () => import("@/views/registration/VaccineTypes.vue"),
+                        },
+                        {
+                            path: 'confirm',
+                            component: () => import("@/views/registration/ConfirmPage.vue"),
+                        }
+                    ]
                 }
             ]
         },
