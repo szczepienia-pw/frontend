@@ -32,15 +32,15 @@ const toast = useToast();
 const items = ref([
 	{
 		label: "Time slot",
-		to: "/slots",
+		to: "/patient/registration/slots",
 	},
 	{
 		label: "Vaccine type",
-		to: "/vaccines",
+		to: "/patient/registration/vaccines",
 	},
 	{
 		label: "Confirmation",
-		to: "/confirm",
+		to: "/patient/registration/confirm",
 	}
 ]);
 const formObject = ref({});
