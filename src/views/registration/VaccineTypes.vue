@@ -1,6 +1,6 @@
 <template>
 types
-	<Button label="Send" icon="pi pi-check" @click="$emit('next-page', {'formData': {}, pageIndex: 1})" :loading="loading" />
+	<Button label="Send" icon="pi pi-check" @click="$router.push('confirm')" :loading="loading" />
 </template>
 
 <script setup>

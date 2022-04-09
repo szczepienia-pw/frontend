@@ -44,7 +44,7 @@ const items = ref([
 	}
 ]);
 const formObject = ref({});
-router.push('registration/slots');
+
 const nextPage = (event) => {
 	console.log(event);
 	// for (let field in event.formData) {

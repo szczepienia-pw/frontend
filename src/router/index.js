@@ -38,6 +38,7 @@ const router = createRouter({
                 },
                 {
                     path: 'registration',
+                    redirect: '/patient/registration/slots',
                     component: () => import("@/views/registration/RegistrationPage.vue"),
                     children: [
                         {
