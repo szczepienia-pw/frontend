@@ -1,23 +1,32 @@
 <template>
-	<div style="height: 450px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 20px;">
-		<Toast />
-		<div class="w-30rem flex flex-row flex-justify-center">
-			<div class="card w-30rem pb-4">
-				<Steps :model="items" />
-			</div>
-		</div>
+	<Card>
+		<template #content>
+			<div class="w-30rem flex flex-column justify-content-between align-items-center" style="gap: 20px">
+				<Toast />
+				<div class="w-30rem flex flex-row flex-justify-center">
+					<div class="card w-30rem pb-4">
+						<Steps :model="items" />
+					</div>
+				</div>
 
-		<router-view
-			v-slot="{ Component }"
-			:formData="formObject"
-			@prevPage="prevPage($event)"
-			@nextPage="nextPage($event)"
-			@complete="complete">
-			<keep-alive>
-				<component :is="Component" />
-			</keep-alive>
-		</router-view>
-	</div>
+				<router-view
+					v-slot="{ Component }"
+					:formData="formObject"
+					@prevPage="prevPage($event)"
+					@nextPage="nextPage($event)"
+					@complete="complete">
+					<keep-alive>
+						<component
+							:is="Component"
+                            :selectedVaccine="selectedVaccine"
+							@selectVaccine="(vaccine) => (selectedVaccine = vaccine)"
+							:selectedDisease="selectedDisease"
+							@selectDisease="(disease) => (selectedDisease = disease)" />
+					</keep-alive>
+				</router-view>
+			</div>
+		</template>
+	</Card>
 </template>
 
 <script setup>
@@ -26,15 +35,17 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import Steps from "primevue/steps";
 import Toast from "primevue/toast";
+import Card from "primevue/card";
 
 const router = useRouter();
 const toast = useToast();
+const selectedDisease = ref();
 const items = ref([
 	{
 		label: "Time slot",
 		to: "/patient/registration/slots",
 	},
-    {
+	{
 		label: "Choose disease",
 		to: "/patient/registration/diseases",
 	},
@@ -75,5 +86,9 @@ const complete = () => {
 
 ::v-deep(.p-card-body) {
 	padding: 2rem;
+}
+
+.p-card {
+	width: unset;
 }
 </style>

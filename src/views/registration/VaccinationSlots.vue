@@ -1,6 +1,11 @@
 <template>
-slots
-	<Button label="Next" icon-pos="right" icon="pi pi-angle-right" @click="$router.push('diseases')" :loading="loading" />
+	slots
+	<Button
+		label="Next"
+		icon-pos="right"
+		icon="pi pi-angle-right"
+		@click="$router.push('diseases')"
+		:loading="loading" class="mt-5"/>
 </template>
 
 <script setup>
