@@ -1,6 +1,6 @@
 <template>
 confirm
-	<Button label="Send" icon="pi pi-check" @click="$emit('next-page', {'formData': {}, pageIndex: 2})" :loading="loading" />
+	<Button label="Confirm" icon-pos="right" icon="pi pi-angle-right" @click="$emit('next-page', {'formData': {}, pageIndex: 2})" :loading="loading" />
 </template>
 
 <script setup>

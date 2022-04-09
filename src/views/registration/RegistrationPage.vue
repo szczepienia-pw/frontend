@@ -1,10 +1,10 @@
 <template>
-	???
-	<div>
+	<div style="height: 450px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 20px;">
 		<Toast />
-
-		<div class="card">
-			<Steps :model="items"/>
+		<div class="w-30rem flex flex-row flex-justify-center">
+			<div class="card w-30rem pb-4">
+				<Steps :model="items" />
+			</div>
 		</div>
 
 		<router-view
@@ -34,6 +34,10 @@ const items = ref([
 		label: "Time slot",
 		to: "/patient/registration/slots",
 	},
+    {
+		label: "Choose disease",
+		to: "/patient/registration/diseases",
+	},
 	{
 		label: "Vaccine type",
 		to: "/patient/registration/vaccines",
@@ -41,7 +45,7 @@ const items = ref([
 	{
 		label: "Confirmation",
 		to: "/patient/registration/confirm",
-	}
+	},
 ]);
 const formObject = ref({});
 

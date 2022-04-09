@@ -1,6 +1,6 @@
 <template>
 slots
-	<Button label="Send" icon="pi pi-check" @click="$router.push('vaccines')" :loading="loading" />
+	<Button label="Next" icon-pos="right" icon="pi pi-angle-right" @click="$router.push('diseases')" :loading="loading" />
 </template>
 
 <script setup>

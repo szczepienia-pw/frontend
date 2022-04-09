@@ -46,6 +46,10 @@ const router = createRouter({
                             component: () => import("@/views/registration/VaccinationSlots.vue"),
                         },
                         {
+                            path: 'diseases',
+                            component: () => import("@/views/registration/DiseaseType.vue"),
+                        },
+                        {
                             path: 'vaccines',
                             component: () => import("@/views/registration/VaccineTypes.vue"),
                         },

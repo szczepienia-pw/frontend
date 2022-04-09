@@ -1,6 +1,6 @@
 <template>
-types
-	<Button label="Next" icon-pos="right" icon="pi pi-angle-right" @click="$router.push('confirm')" :loading="loading" />
+disease
+	<Button label="Next" icon-pos="right" icon="pi pi-angle-right" @click="$router.push('vaccines')" :loading="loading" />
 </template>
 
 <script setup>
