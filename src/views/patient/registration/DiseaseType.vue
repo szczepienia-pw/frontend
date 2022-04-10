@@ -16,18 +16,10 @@
 import Button from "primevue/button";
 import { ref } from "vue";
 import SelectButton from "primevue/selectbutton";
-import { getDiseases } from "../../services/api";
+import { getDiseases } from "@/services/api";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
-// eslint-disable-next-line
-defineProps({
-	visible: {
-		type: Boolean,
-		default: false,
-	},
-});
 
 let selectedDisease = ref();
 const diseases = getDiseases();
@@ -35,11 +27,11 @@ const diseases = getDiseases();
 const loading = ref(false);
 
 // eslint-disable-next-line
-const emit = defineEmits(["selectDisease"]);
+const emit = defineEmits(["select-option"]);
 
 const nextStep = () => {
 	router.push("vaccines");
-	emit("selectDisease", selectedDisease.value);
+	emit("select-option", { option: 'disease', value: selectedDisease.value });
 };
 </script>
 

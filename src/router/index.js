@@ -39,23 +39,23 @@ const router = createRouter({
                 {
                     path: 'registration',
                     redirect: '/patient/registration/slots',
-                    component: () => import("@/views/registration/RegistrationPage.vue"),
+                    component: () => import("@/views/patient/registration/RegistrationPage.vue"),
                     children: [
                         {
                             path: 'slots',
-                            component: () => import("@/views/registration/VaccinationSlots.vue"),
+                            component: () => import("@/views/patient/registration/VaccinationSlots.vue"),
                         },
                         {
                             path: 'diseases',
-                            component: () => import("@/views/registration/DiseaseType.vue"),
+                            component: () => import("@/views/patient/registration/DiseaseType.vue"),
                         },
                         {
                             path: 'vaccines',
-                            component: () => import("@/views/registration/VaccineTypes.vue"),
+                            component: () => import("@/views/patient/registration/VaccineTypes.vue"),
                         },
                         {
                             path: 'confirm',
-                            component: () => import("@/views/registration/ConfirmPage.vue"),
+                            component: () => import("@/views/patient/registration/ConfirmPage.vue"),
                         }
                     ]
                 }

@@ -17,7 +17,7 @@
 import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
-import { getVaccines } from "../../services/api";
+import { getVaccines } from "@/services/api";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -35,12 +35,12 @@ const props = defineProps({
 });
 
 // eslint-disable-next-line
-const emit = defineEmits(["selectVaccine"]);
+const emit = defineEmits(["select-option"]);
 const loading = ref(false);
 
 const nextStep = () => {
 	router.push("confirm");
-	emit("selectVaccine", selectedVaccine.value);
+	emit("select-option", { option: 'vaccine', value: selectedVaccine.value });
 };
 </script>
 
