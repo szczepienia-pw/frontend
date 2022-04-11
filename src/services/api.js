@@ -97,6 +97,10 @@ export const changeData = (data) => {
       )
 }
 
+export const getVaccinationHistory = (page = 1) => {
+    return api.get(`/patient/vaccinations?page=${page}`)
+}
+
 export const getAdminSettings = () => {
     return api.get(`/admin/settings`)
 }

@@ -69,7 +69,7 @@ const menuItems = computed(() => {
 			{
 				label: "Visit history",
 				icon: "pi-book",
-				disabled: true,
+				page: "visits"
 			},
 			{
 				label: "Personal data",

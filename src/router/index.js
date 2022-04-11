@@ -33,6 +33,10 @@ const router = createRouter({
             component: () => import("@/views/patient/PatientIndex.vue"),
             children: [
                 {
+                    path: 'visits',
+                    component: () => import("@/views/patient/VisitHistory.vue"),
+                },
+                {
                     path: 'personal',
                     component: () => import("@/views/patient/PersonalData.vue"),
                 }
