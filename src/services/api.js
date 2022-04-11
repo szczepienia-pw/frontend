@@ -96,6 +96,10 @@ export const changeData = (data) => {
 	return api.put(`/patient/account`, data);
 };
 
+export const getVaccinationHistory = (page = 1) => {
+    return api.get(`/patient/vaccinations?page=${page}`)
+}
+
 export const getAdminSettings = () => {
 	return api.get(`/admin/settings`);
 };
