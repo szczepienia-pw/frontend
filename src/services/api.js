@@ -112,22 +112,6 @@ export const getDiseases = () => {
 
 export const getVaccines = (disease) => {
 	return api.get(`/patient/vaccines?disease=${disease}`);
-	// console.log(api.get(`/patient/vaccines?disease=${disease}`))
-	// console.log(disease);
-	// return [
-	// 	{
-	// 		id: 1,
-	// 		name: "Phizer",
-	// 		disease: "COVID-19",
-	// 		requiredDoses: 2,
-	// 	},
-	// 	{
-	// 		id: 2,
-	// 		name: "rbgtrfer",
-	// 		disease: "COVID-19",
-	// 		requiredDoses: 2,
-	// 	},
-	// ];
 };
 
 export const getSlots = () => {
@@ -135,6 +119,7 @@ export const getSlots = () => {
 };
 
 export const reserveSlot = (vaccinationSlotId, vaccineId) => {
+	console.log(vaccinationSlotId, vaccineId)
 	return api.put(`/patient/vaccination-slots/${vaccinationSlotId}`, {
 		vaccineId,
 	});

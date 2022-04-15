@@ -10,12 +10,10 @@
 				</div>
 
 				<router-view v-slot="{ Component }">
-					<keep-alive>
-						<component
+					<component
 							:is="Component"
 							:selectedOptions="selectedOptions"
-							@select-option="({ option, value }) => (selectedOptions[option] = value)" />
-					</keep-alive>
+							@select-option="({ option, value }) => (selectedOptions[option] = value)"/>
 				</router-view>
 			</div>
 		</template>
@@ -33,7 +31,7 @@ import Card from "primevue/card";
 //const router = useRouter();
 //const toast = useToast();
 const selectedOptions = ref({
-	vaccine: "",
+	vaccine: {},
 	slot: {},
 	disease: "",
 });

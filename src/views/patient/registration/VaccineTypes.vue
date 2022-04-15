@@ -9,7 +9,7 @@
 			@click="nextStep"
 			:loading="loading"
 			class="ml-1"
-			:disabled="selectedVaccine == ''" />
+			:disabled="selectedVaccine == {}" />
 	</div>
 </template>
 
@@ -29,7 +29,7 @@ const props = defineProps({
 	},
 });
 
-let selectedVaccine = ref("");
+let selectedVaccine = ref({});
 const vaccines = ref([]);
 
 getVaccines(props.selectedOptions.disease)
