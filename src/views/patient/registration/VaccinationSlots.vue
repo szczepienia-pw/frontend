@@ -26,6 +26,7 @@
 		icon="pi pi-angle-right"
 		@click="nextStep"
 		:loading="loading" class="mt-5"
+		:disabled="selectedSlot.date == ''"
 	/>
 </template>
 

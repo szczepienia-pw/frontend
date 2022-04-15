@@ -6,9 +6,10 @@
 			label="Next"
 			icon-pos="right"
 			icon="pi pi-angle-right"
-			@click="nextStep"
+			@click="() => nextStep()"
 			:loading="loading"
-			class="ml-1" />
+			class="ml-1"
+			:disabled="selectedDisease == ''" />
 	</div>
 </template>
 
@@ -20,18 +21,16 @@ import { getDiseases } from "@/services/api";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
-let selectedDisease = ref();
-const diseases = getDiseases();
-
+const selectedDisease = ref("");
+const diseases = ref(getDiseases());
 const loading = ref(false);
 
 // eslint-disable-next-line
 const emit = defineEmits(["select-option"]);
 
 const nextStep = () => {
+	emit("select-option", { option: "disease", value: selectedDisease });
 	router.push("vaccines");
-	emit("select-option", { option: 'disease', value: selectedDisease.value });
 };
 </script>
 
