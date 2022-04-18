@@ -35,6 +35,29 @@ const router = createRouter({
                 {
                     path: 'personal',
                     component: () => import("@/views/patient/PersonalData.vue"),
+                },
+                {
+                    path: 'registration',
+                    redirect: '/patient/registration/slots',
+                    component: () => import("@/views/patient/registration/RegistrationPage.vue"),
+                    children: [
+                        {
+                            path: 'slots',
+                            component: () => import("@/views/patient/registration/VaccinationSlots.vue"),
+                        },
+                        {
+                            path: 'diseases',
+                            component: () => import("@/views/patient/registration/DiseaseType.vue"),
+                        },
+                        {
+                            path: 'vaccines',
+                            component: () => import("@/views/patient/registration/VaccineTypes.vue"),
+                        },
+                        {
+                            path: 'confirm',
+                            component: () => import("@/views/patient/registration/ConfirmPage.vue"),
+                        }
+                    ]
                 }
             ]
         },

@@ -12,7 +12,7 @@
 				:icon="`pi ${item.icon}`"
 				:label="item.label"
 				:disabled="item.disabled"
-				@click="$router.push(item.page)" />
+				@click="$router.replace(`/${userSession.userType}/${item.page}`)" />
 			<div class="mt-8">
 				<Button
 					class="p-button-text p-button-plain"
@@ -64,7 +64,7 @@ const menuItems = computed(() => {
 			{
 				label: "New appointment",
 				icon: "pi-calendar",
-				disabled: true,
+				page: "registration",
 			},
 			{
 				label: "Visit history",
