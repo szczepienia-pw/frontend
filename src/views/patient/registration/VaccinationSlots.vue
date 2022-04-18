@@ -1,14 +1,14 @@
 <template>
 	<div class="flex flex-row">
-		<Calendar inline v-model="date">
+		<Calendar inline v-model="date" @click="selectedSlot = { date: '', id: '' }">
 			<template #date="{ date }">
 				<strong
 					v-if="
 						slots.some(
 							(s) =>
-								(new Date(s.date)).getFullYear() == date.year &&
-								(new Date(s.date)).getMonth() == date.month &&
-								(new Date(s.date)).getDate() == date.day
+								new Date(s.date).getFullYear() == date.year &&
+								new Date(s.date).getMonth() == date.month &&
+								new Date(s.date).getDate() == date.day
 						)
 					"
 					class="highlighted-day">
@@ -29,7 +29,7 @@
 				@click="selectedSlot = slot" />
 		</div>
 	</div>
-	Selected slot: {{ selectedSlot.date.toLocaleString() }}
+	Selected slot: {{ format(selectedSlot.date) }}
 	<Button
 		label="Next"
 		icon-pos="right"
@@ -50,41 +50,37 @@ import { getSlots } from "@/services/api";
 const router = useRouter();
 
 const date = ref(new Date());
-const selectedSlot = ref({date: '', id: ''});
+const selectedSlot = ref({ date: "", id: "" });
+const slots = ref([]);
 
-const slots = ref([]
-	// [...Array(30).keys()].map(id => {
-	// 	let date = new Date();
-	// 	date.setDate(id % 15);
-	// 	date.setHours(id);
-	// 	//date = date.toISOString();
-	// 	return {
-	// 		id,
-	// 		date
-	// 	}
-	// })
-)
 getSlots()
 	.then((response) => {
 		response = response.data;
-		console.log(response);
 		slots.value = response;
-		console.log((new Date(slots.value[0].date)).getFullYear())
 	})
 	.catch((err) => {
 		console.error(err);
 	});
 
-const chosenDay = computed(() => (
-	slots.value.filter(s => (new Date(s.date)).getFullYear() == date.value.getFullYear() && (new Date(s.date)).getMonth() == date.value.getMonth() && (new Date(s.date)).getDate() == date.value.getDate())
-))
+const chosenDay = computed(() =>
+	slots.value.filter(
+		(s) =>
+			new Date(s.date).getFullYear() == date.value.getFullYear() &&
+			new Date(s.date).getMonth() == date.value.getMonth() &&
+			new Date(s.date).getDate() == date.value.getDate()
+	)
+);
 
 const formatTime = (date) => {
-	console.log(date)
-	const hours = (new Date(date)).getHours();
-	const minutes = (new Date(date)).getMinutes();
-	return `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-}
+	console.log(date);
+	const hours = new Date(date).getHours();
+	const minutes = new Date(date).getMinutes();
+	return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+};
+
+const format = (date) => {
+	return date.replace("T", "   ").slice(0, -3);
+};
 
 // eslint-disable-next-line
 defineProps({
@@ -99,10 +95,9 @@ const emit = defineEmits(["select-option"]);
 const loading = ref(false);
 
 const nextStep = () => {
-	console.log(selectedSlot)
-	router.push('diseases');
-	emit('select-option', { option: 'slot', value: { id: selectedSlot.value.id, date: selectedSlot.value.date} });
-}
+	router.push("diseases");
+	emit("select-option", { option: "slot", value: { id: selectedSlot.value.id, date: selectedSlot.value.date } });
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-	<h3>Date: {{ selectedOptions.slot.date.replace('T', '   ').slice(0,-3) }}</h3>
+	<h3>Date: {{ format(selectedOptions.slot.date) }}</h3>
 	<h3>Disease: {{ selectedOptions.disease }}</h3>
 	<h3>Vaccine: {{ selectedOptions.vaccine.name }}</h3>
 
@@ -40,6 +40,10 @@ const reserve = () => {
 		loading.value = false;
 		router.replace({ name: "patient"})
 	});
+}
+
+const format = (date) => {
+	return date.replace('T', '   ').slice(0,-3)
 }
 
 const loading = ref(false);
