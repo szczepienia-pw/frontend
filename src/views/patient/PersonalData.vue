@@ -148,6 +148,7 @@ const sendData = (changes) => {
 	isLoading.value = true;
 	changeData(changes)
 		.then((response) => {
+			response = response.data
 			useUserSession().userInfo = response;
 			saveUserSession();
 			emit("hide");
