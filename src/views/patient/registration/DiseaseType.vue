@@ -1,15 +1,17 @@
 <template>
-	<SelectButton v-model="selectedDisease" :options="diseases" />
-	<div class="mt-5">
-		<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" :loading="loading" class="mr-1" />
-		<Button
-			label="Next"
-			icon-pos="right"
-			icon="pi pi-angle-right"
-			@click="() => nextStep()"
-			:loading="loading"
-			class="ml-1"
-			:disabled="selectedDisease == ''" />
+	<div class="flex flex-column align-items-center">
+		<SelectButton v-model="selectedDisease" :options="diseases" />
+		<div class="mt-5">
+			<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" :loading="loading" class="mr-1" />
+			<Button
+				label="Next"
+				icon-pos="right"
+				icon="pi pi-angle-right"
+				@click="() => nextStep()"
+				:loading="loading"
+				class="ml-1"
+				:disabled="selectedDisease == ''" />
+		</div>
 	</div>
 </template>
 

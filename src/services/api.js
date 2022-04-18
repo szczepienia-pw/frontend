@@ -119,7 +119,6 @@ export const getSlots = () => {
 };
 
 export const reserveSlot = (vaccinationSlotId, vaccineId) => {
-	console.log(vaccinationSlotId, vaccineId)
 	return api.put(`/patient/vaccination-slots/${vaccinationSlotId}`, {
 		vaccineId,
 	});

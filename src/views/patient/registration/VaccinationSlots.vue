@@ -1,43 +1,45 @@
 <template>
-	<div class="flex flex-row">
-		<Calendar inline v-model="date" @click="selectedSlot = { date: '', id: '' }">
-			<template #date="{ date }">
-				<strong
-					v-if="
-						slots.some(
-							(s) =>
-								new Date(s.date).getFullYear() == date.year &&
-								new Date(s.date).getMonth() == date.month &&
-								new Date(s.date).getDate() == date.day
-						)
-					"
-					class="highlighted-day">
-					{{ date.day }}
-				</strong>
-				<template v-else>{{ date.day }}</template>
-			</template>
-		</Calendar>
-		<div class="flex flex-column justify-content-center">
-			<Button
-				v-for="slot in chosenDay"
-				:key="slot"
-				:class="{
-					'p-button-outlined': slot != selectedSlot,
-					'm-2': true,
-				}"
-				:label="formatTime(slot.date)"
-				@click="selectedSlot = slot" />
+	<div class="flex flex-column align-items-center">
+		<div class="flex flex-row mb-2">
+			<Calendar inline v-model="date" @click="selectedSlot = { date: '', id: '' }">
+				<template #date="{ date }">
+					<strong
+						v-if="
+							slots.some(
+								(s) =>
+									new Date(s.date).getFullYear() == date.year &&
+									new Date(s.date).getMonth() == date.month &&
+									new Date(s.date).getDate() == date.day
+							)
+						"
+						class="highlighted-day">
+						{{ date.day }}
+					</strong>
+					<template v-else>{{ date.day }}</template>
+				</template>
+			</Calendar>
+			<div class="flex flex-column justify-content-center">
+				<Button
+					v-for="slot in chosenDay"
+					:key="slot"
+					:class="{
+						'p-button-outlined': slot != selectedSlot,
+						'm-2': true,
+					}"
+					:label="formatTime(slot.date)"
+					@click="selectedSlot = slot" />
+			</div>
 		</div>
+		<h3>Selected slot: {{ format(selectedSlot.date) }}</h3>
+		<Button
+			label="Next"
+			icon-pos="right"
+			icon="pi pi-angle-right"
+			@click="nextStep"
+			:loading="loading"
+			class="mt-5"
+			:disabled="selectedSlot.date == ''" />
 	</div>
-	Selected slot: {{ format(selectedSlot.date) }}
-	<Button
-		label="Next"
-		icon-pos="right"
-		icon="pi pi-angle-right"
-		@click="nextStep"
-		:loading="loading"
-		class="mt-5"
-		:disabled="selectedSlot.date == ''" />
 </template>
 
 <script setup>
@@ -72,7 +74,6 @@ const chosenDay = computed(() =>
 );
 
 const formatTime = (date) => {
-	console.log(date);
 	const hours = new Date(date).getHours();
 	const minutes = new Date(date).getMinutes();
 	return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;

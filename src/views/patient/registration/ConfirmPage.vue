@@ -1,11 +1,19 @@
 <template>
-	<h3>Date: {{ format(selectedOptions.slot.date) }}</h3>
-	<h3>Disease: {{ selectedOptions.disease }}</h3>
-	<h3>Vaccine: {{ selectedOptions.vaccine.name }}</h3>
+	<div class="flex flex-column align-items-center">
+		<h3>Date: {{ format(selectedOptions.slot.date) }}</h3>
+		<h3>Disease: {{ selectedOptions.disease }}</h3>
+		<h3>Vaccine: {{ selectedOptions.vaccine.name }}</h3>
 
-	<div class="mt-5">
-		<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" class="mr-1" />
-		<Button label="Confirm" icon-pos="right" icon="pi pi-angle-right" :loading="loading" class="ml-1" @click="reserve"/>
+		<div class="mt-5">
+			<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" class="mr-1" />
+			<Button
+				label="Confirm"
+				icon-pos="right"
+				icon="pi pi-angle-right"
+				:loading="loading"
+				class="ml-1"
+				@click="reserve" />
+		</div>
 	</div>
 </template>
 
@@ -31,20 +39,21 @@ const props = defineProps({
 const reserve = () => {
 	loading.value = true;
 	reserveSlot(props.selectedOptions.slot.id, props.selectedOptions.vaccine.id)
-	.then(() => {
-		successToast(toast, "Successfully reserved vaccination slot");
-	})
-	.catch((err) => {
-		errorToast(toast, "Could not reserve vaccination slot", err)
-	}).finally(()=>{
-		loading.value = false;
-		router.replace({ name: "patient"})
-	});
-}
+		.then(() => {
+			successToast(toast, "Successfully reserved vaccination slot");
+		})
+		.catch((err) => {
+			errorToast(toast, "Could not reserve vaccination slot", err);
+		})
+		.finally(() => {
+			loading.value = false;
+			router.replace({ name: "patient" });
+		});
+};
 
 const format = (date) => {
-	return date.replace('T', '   ').slice(0,-3)
-}
+	return date.replace("T", "   ").slice(0, -3);
+};
 
 const loading = ref(false);
 </script>

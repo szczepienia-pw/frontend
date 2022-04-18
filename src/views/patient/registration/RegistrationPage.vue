@@ -22,14 +22,10 @@
 
 <script setup>
 import { ref } from "vue";
-//import { useRouter } from "vue-router";
-//import { useToast } from "primevue/usetoast";
 import Steps from "primevue/steps";
 import Toast from "primevue/toast";
 import Card from "primevue/card";
 
-//const router = useRouter();
-//const toast = useToast();
 const selectedOptions = ref({
 	vaccine: {},
 	slot: {},
