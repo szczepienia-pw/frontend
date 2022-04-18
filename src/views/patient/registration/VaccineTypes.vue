@@ -18,7 +18,7 @@
 <script setup>
 import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { getVaccines } from "@/services/api";
 import { useRouter } from "vue-router";
 
@@ -34,14 +34,16 @@ const props = defineProps({
 let selectedVaccine = ref({});
 const vaccines = ref([]);
 
-getVaccines(props.selectedOptions.disease)
-	.then((response) => {
-		response = response.data;
-		vaccines.value = response.vaccines;
-	})
-	.catch((err) => {
-		console.error(err);
-	});
+onMounted(() => {
+	getVaccines(props.selectedOptions.disease)
+		.then((response) => {
+			response = response.data;
+			vaccines.value = response.vaccines;
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+});
 
 // eslint-disable-next-line
 const emit = defineEmits(["select-option"]);

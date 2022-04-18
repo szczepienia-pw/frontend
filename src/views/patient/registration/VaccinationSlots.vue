@@ -45,7 +45,7 @@
 <script setup>
 import Button from "primevue/button";
 import Calendar from "primevue/calendar";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getSlots } from "@/services/api";
 
@@ -55,14 +55,16 @@ const date = ref(new Date());
 const selectedSlot = ref({ date: "", id: "" });
 const slots = ref([]);
 
-getSlots()
-	.then((response) => {
-		response = response.data;
-		slots.value = response;
-	})
-	.catch((err) => {
-		console.error(err);
-	});
+onMounted(() => {
+	getSlots()
+		.then((response) => {
+			response = response.data;
+			slots.value = response;
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+});
 
 const chosenDay = computed(() =>
 	slots.value.filter(
