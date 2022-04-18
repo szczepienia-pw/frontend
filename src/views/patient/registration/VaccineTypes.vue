@@ -35,8 +35,7 @@ const vaccines = ref([]);
 getVaccines(props.selectedOptions.disease)
 	.then((response) => {
 		response = response.data;
-		console.log(response);
-		vaccines.value = response;
+		vaccines.value = response.vaccines;
 	})
 	.catch((err) => {
 		console.error(err);
