@@ -6,7 +6,7 @@
       </template>
 			<template #title>History of vaccinations</template>
 			<template #content>
-				<Dropdown v-model="selectedDisease" :options="diseases" placeholder="Filter by disease" class="mb-5" />
+				<Dropdown v-model="selectedDisease" :options="diseases" placeholder="Filter by disease" class="mb-5" disabled/>
 				<Timeline :value="vaccinations" v-if="!loading">
 					<template #opposite="{ item }">
 						<small class="p-text-secondary">
@@ -42,7 +42,7 @@
             <Skeleton width="8rem" height="4rem" borderRadius="16px" class="mb-4"/>
 					</template>
 				</Timeline>
-				<Paginator :rows="3" :totalRecords="pagination.totalRecords" @page="loadVaccinationHistory($event.page+1)" />
+				<Paginator :rows="pagination.currentRecords" :totalRecords="pagination.totalRecords" @page="loadVaccinationHistory($event.page+1)" />
 			</template>
 		</Card>
       <Dialog v-model:visible="vaccinationDetailsDialog" header="Vaccination details" modal :draggable="false" :style="{width: '600px'}">
@@ -130,7 +130,7 @@ import { ref, onMounted } from "vue";
 import { useToast } from 'primevue/usetoast';
 import { errorToast, successToast } from '@/services/helpers'
 
-const vaccinationsSkeleton = [ 1, 2 ]
+const vaccinationsSkeleton = [ 1, 2, 3 ]
 
 const toast = useToast();
 import { getVaccinationHistory, cancelVaccinationSlot } from '@/services/api'
@@ -175,7 +175,8 @@ const cancelVaccinationCallback = () => {
     cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
         .then(() => {
             successToast(toast, `Visit ${new Date(selectedVaccination.value.vaccinationSlot.date).toLocaleString()} canceled`);
-            loadVaccinationHistory(pagination.value.currentPage)
+            loadVaccinationHistory(pagination.value.currentPage);
+            vaccinationDetailsDialog.value = false;
         })
         .catch(err => {
             console.error(err);
