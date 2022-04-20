@@ -17,17 +17,69 @@ const router = createRouter({
         {
             path: '/doctor',
             name: 'doctor',
-            component: () => import("@/views/DoctorDashboard.vue")
+            redirect: '/doctor/slots',
+            component: () => import("@/views/doctor/DoctorIndex.vue"),
+            children: [
+                {
+                    path: 'slots',
+                    component: () => import("@/views/doctor/Slots.vue"),
+                }
+            ]
         },
         {
             path: '/patient',
             name: 'patient',
-            component: () => import("@/views/PatientDashboard.vue")
+            redirect: '/patient/personal',
+            component: () => import("@/views/patient/PatientIndex.vue"),
+            children: [
+                {
+                    path: 'visits',
+                    component: () => import("@/views/patient/VisitHistory.vue"),
+                },
+                {
+                    path: 'personal',
+                    component: () => import("@/views/patient/PersonalData.vue"),
+                },
+                {
+                    path: 'registration',
+                    redirect: '/patient/registration/slots',
+                    component: () => import("@/views/patient/registration/RegistrationPage.vue"),
+                    children: [
+                        {
+                            path: 'slots',
+                            component: () => import("@/views/patient/registration/VaccinationSlots.vue"),
+                        },
+                        {
+                            path: 'diseases',
+                            component: () => import("@/views/patient/registration/DiseaseType.vue"),
+                        },
+                        {
+                            path: 'vaccines',
+                            component: () => import("@/views/patient/registration/VaccineTypes.vue"),
+                        },
+                        {
+                            path: 'confirm',
+                            component: () => import("@/views/patient/registration/ConfirmPage.vue"),
+                        }
+                    ]
+                }
+            ]
         },
         {
             path: '/admin',
             name: 'admin',
-            component: () => import("@/views/AdminDashboard.vue")
+            redirect: '/admin/doctors',
+            component: () => import("@/views/admin/AdminIndex.vue"),
+            children: [
+                {
+                    path: 'doctors',
+                    component: () => import("@/views/admin/Doctors.vue"),
+                },
+                {
+                    path: 'settings',
+                    component: () => import("@/views/admin/Settings.vue"),
+                }
+            ]
         },
     ]
 });

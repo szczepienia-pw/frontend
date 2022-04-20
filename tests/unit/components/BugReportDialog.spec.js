@@ -1,14 +1,21 @@
 import { render, screen, fireEvent } from '@testing-library/vue';
-import FooterContainer from '@/containers/FooterContainer';
+import HeadContainer from '@/containers/HeadContainer';
 import PrimeVue from 'primevue/config';
 import ToastService from "primevue/toastservice";
 import axios from 'axios';
 import { useUserSession } from '@/services/useUserSession'
 
 jest.mock('@/services/useUserSession', () => ({
-    useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true }),
-    saveUserSession: () => { }
+    useUserSession: () => ({ token: 'mock token', userType: 'patient', isLoggedIn: true, userInfo: { firstName: 'test', lastName: 'test' } }),
+    saveUserSession: () => { },
+    userTypes: { patient: 'patient', doctor: 'doctor', admin: 'admin' }
 }))
+
+jest.mock('vue-router', () => ({
+    useRouter: () => ({
+        push: () => mockfn,
+    }),
+}));
 
 describe("reporting bugs test", () => {
     describe("when a bug is submitted", () => {
@@ -18,7 +25,7 @@ describe("reporting bugs test", () => {
             }
             axios.post.mockResolvedValue(response);
 
-            render(FooterContainer, {
+            render(HeadContainer, {
                 global: {
                     plugins: [PrimeVue, ToastService]
                 }

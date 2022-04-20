@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/vue';
-import AdminDashboard from '@/views/AdminDashboard';
+import Settings from '@/views/admin/Settings';
 import PrimeVue from 'primevue/config';
 import ToastService from "primevue/toastservice";
 import axios from 'axios';
@@ -13,7 +13,7 @@ describe("changing bug email test", () => {
             axios.put.mockResolvedValue(response);
             axios.get.mockResolvedValue({ data: { bugEmail: 'placeholder@email.com' } })
 
-            render(AdminDashboard, {
+            render(Settings, {
                 global: {
                     plugins: [PrimeVue, ToastService],
                     stubs: {
@@ -22,7 +22,7 @@ describe("changing bug email test", () => {
                 },
             })
 
-            await fireEvent.click(screen.getByRole('button', { name: 'Edit settings' }));
+            await screen.findByText('placeholder@email.com');
             await fireEvent.click(screen.getByText('placeholder@email.com'));
             await fireEvent.update(screen.getByRole('textbox'), 'test2@test.com');
             await fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
