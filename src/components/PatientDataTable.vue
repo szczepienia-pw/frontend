@@ -264,9 +264,7 @@ const hideDialog = () => {
 
 const saveEditedPatient = () => {
 	submitted.value = true;
-    console.log(patient.value, oldPatient.value)
 	const changes = objectDiff(patient.value, oldPatient.value);
-	console.log(changes);
 	if (Object.keys(changes).length === 0) {
 		errorToast(toast, "No changes were made");
 		return;
