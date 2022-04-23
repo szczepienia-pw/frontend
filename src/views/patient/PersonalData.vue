@@ -1,9 +1,9 @@
 <template>
-	<Card class="data-card">
+	<Card class="data-card" :key="key">
 		<template #title>Edit your personal data</template>
 		<template #content>
 			<div class="flex flex-column">
-				<div class="flex flex-row">
+				<div class="flex flex-row" ref="row">
 					<div>
 						<Inplace :closable="true" class="inplace">
 							<template #display>
@@ -134,6 +134,7 @@ const toast = useToast();
 const userData = { ...useUserSession().userInfo, password: "" };
 const patientData = ref({ ...JSON.parse(JSON.stringify(userData)), password: "" });
 const isLoading = ref(false);
+const key = ref(0);
 
 const compareAndSendData = () => {
 	const changes = objectDiff(patientData.value, userData);
@@ -142,6 +143,8 @@ const compareAndSendData = () => {
 	} else {
 		sendData(changes);
 	}
+    // force re-render
+    key.value++;
 };
 
 const sendData = (changes) => {

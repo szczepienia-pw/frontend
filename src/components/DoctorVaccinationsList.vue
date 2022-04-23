@@ -5,7 +5,7 @@
                 paginator v-model:filters="filters" :loading="loading" lazy filterDisplay="menu"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vaccinations" responsiveLayout="scroll"
-                :rows="10" :totalRecords="pagination.totalRecords"
+                :rows="pageSize" :totalRecords="pagination.totalRecords"
                 @page="loadVaccinations($event.page+1)" @sort="onSort" @filter="onFilter"
             >
                 <template #header>
@@ -125,12 +125,14 @@ const pagination = ref({
     currentRecords: 0,
     totalRecords: 0
 })
+const pageSize = ref(0);
 const loadVaccinations = (page = 1) => {
     loading.value = true;
     getVaccinationSlots(page, getFilterStartDate(), getFilterEndDate(), getFilterOnlyReserved())
         .then(response => {
             response = response.data
             pagination.value = response.pagination;
+            pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
             vaccinations.value = vaccinationsBackup.value = response.data.map(item => ({
                 patient: item.vaccination?.patient ? `${item.vaccination.patient.firstName} ${item.vaccination.patient.lastName}` : '',
                 date: new Date(item.date),
@@ -162,7 +164,7 @@ const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
             successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} removed`);
-            loadVaccinations();
+            loadVaccinations(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
@@ -189,7 +191,7 @@ const deleteSelectedVaccinationsCallback = () => {
     })
     deleteVaccinationsDialog.value = false;
     selectedVaccinations.value = null;
-    loadVaccinations();
+    loadVaccinations(pagination.value.currentPage);
 };
 
 const formatDate = (date) => (

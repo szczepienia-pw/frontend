@@ -30,7 +30,9 @@
 					@click="selectedSlot = slot" />
 			</div>
 		</div>
-		<h3>Selected slot: {{ format(selectedSlot.date) }}</h3>
+		<h3 v-if="selectedSlot.date">
+            Selected slot: {{ new Date(selectedSlot.date).toLocaleString().slice(0, -3) }}
+        </h3>
 		<Button
 			label="Next"
 			icon-pos="right"
@@ -79,10 +81,6 @@ const formatTime = (date) => {
 	const hours = new Date(date).getHours();
 	const minutes = new Date(date).getMinutes();
 	return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-};
-
-const format = (date) => {
-	return date.replace("T", "   ").slice(0, -3);
 };
 
 // eslint-disable-next-line
