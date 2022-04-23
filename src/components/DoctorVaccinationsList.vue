@@ -52,6 +52,7 @@
                 <Column style="min-width:8rem">
                     <template #body="{ data }">
                         <Button v-if="data.status === 'Free'" icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
+                        <Button v-if="data.status === 'Planned'" icon="pi pi-check" class="p-button-success p-button-rounded" @click="confirmVaccination(data)" />
                     </template>
                 </Column>
                 <template #paginatorstart>
@@ -84,6 +85,17 @@
                 <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteSelectedVaccinationsCallback" />
             </template>
         </Dialog>
+
+        <Dialog v-model:visible="confirmVaccinationDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+            <div class="confirmation-content">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                <span v-if="vaccination">Are you sure you want to mark this vaccination as completed <b>{{vaccination.date.toLocaleString()}}</b>?</span>
+            </div>
+            <template #footer>
+                <Button label="No" icon="pi pi-times" class="p-button-text" @click="confirmVaccinationDialog = false"/>
+                <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="confirmVaccinationCallback" />
+            </template>
+        </Dialog>
 	</div>
 </template>
 
@@ -98,7 +110,7 @@ import TriStateCheckbox  from 'primevue/tristatecheckbox'
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
-import { getVaccinationSlots, deleteVaccinationSlot } from '@/services/api'
+import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot } from '@/services/api'
 import { errorToast, successToast } from '@/services/helpers'
 
 const toast = useToast();
@@ -108,6 +120,7 @@ const vaccinations = ref();
 const vaccinationsBackup = ref();
 const deleteVaccinationDialog = ref(false);
 const deleteVaccinationsDialog = ref(false);
+const confirmVaccinationDialog = ref(false);
 const vaccination = ref({});
 const selectedVaccinations = ref();
 const filters = ref({
@@ -158,6 +171,10 @@ const confirmDeleteVaccination = (doct) => {
     vaccination.value = {...doct};
     deleteVaccinationDialog.value = true;
 };
+const confirmVaccination = (doct) => {
+    vaccination.value = {...doct};
+    confirmVaccinationDialog.value = true;
+};
 const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
@@ -170,6 +187,21 @@ const deleteVaccinationCallback = () => {
         })
         .finally(() => {
             deleteVaccinationDialog.value = false;
+            vaccination.value = {};
+        })
+};
+const confirmVaccinationCallback = () => {
+    confirmVaccinationSlot(vaccination.value.id)
+        .then(() => {
+            successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} completed`);
+            loadVaccinations();
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, "Could not complete vaccination", err);
+        })
+        .finally(() => {
+            confirmVaccinationDialog.value = false;
             vaccination.value = {};
         })
 };

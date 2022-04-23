@@ -74,6 +74,12 @@ export const deleteVaccinationSlot = (id) => {
 	return api.delete(`/doctor/vaccination-slots/${id}`);
 };
 
+export const confirmVaccinationSlot = (id) => {
+	return api.put(`/doctor/vaccination-slots/${id}`, {
+		status: "COMPLETED",
+	});
+};
+
 export const reportBug = (name, description) => {
 	return api.post(`/bugs`, {
 		name,
@@ -97,12 +103,12 @@ export const changeData = (data) => {
 };
 
 export const getVaccinationHistory = (page = 1) => {
-    return api.get(`/patient/vaccinations?page=${page}`)
-}
+	return api.get(`/patient/vaccinations?page=${page}`);
+};
 
 export const cancelVaccinationSlot = (id) => {
-    return api.delete(`/patient/vaccination-slots/${id}`);
-}
+	return api.delete(`/patient/vaccination-slots/${id}`);
+};
 
 export const getAdminSettings = () => {
 	return api.get(`/admin/settings`);
