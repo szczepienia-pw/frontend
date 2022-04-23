@@ -3,7 +3,7 @@
 		<template #title>Edit your personal data</template>
 		<template #content>
 			<div class="flex flex-column">
-				<div class="flex flex-row" ref="row">
+				<div class="flex flex-row">
 					<div>
 						<Inplace :closable="true" class="inplace">
 							<template #display>
