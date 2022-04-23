@@ -136,12 +136,8 @@ export const getPatients = (page = 1) => {
 	return api.get(`/admin/patients?page=${page}`);
 };
 
-export const editPatient = (id, firstName, lastName, email) => {
-	return api.put(`/admin/patients/${id}`, {
-		firstName,
-		lastName,
-		email,
-	});
+export const editPatient = (id, data) => {
+	return api.put(`/admin/patients/${id}`, data);
 };
 
 export const deletePatient = (id) => {
