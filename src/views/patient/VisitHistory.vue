@@ -61,7 +61,7 @@
                     <Button label="Register for a visit" @click="$router.push('registration')"/>
                 </div>
 				<Paginator
-					:rows="pagination.currentRecords"
+					:rows="pageSize"
 					:totalRecords="pagination.totalRecords"
 					@page="loadVaccinationHistory($event.page + 1)" />
 			</template>
@@ -166,6 +166,7 @@ const selectedVaccination = ref();
 const vaccinationDetailsDialog = ref();
 const vaccinationCancelDialog = ref();
 const loading = ref(false);
+const pageSize = ref(0);
 
 const pagination = ref({
 	currentPage: 0,
@@ -175,11 +176,13 @@ const pagination = ref({
 });
 
 const loadVaccinationHistory = (page) => {
+	console.log(page)
 	loading.value = true;
 	getVaccinationHistory(page)
 		.then((response) => {
 			response = response.data;
 			pagination.value = response.pagination;
+			pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
 			vaccinations.value = response.data;
 		})
 		.catch((err) => {
