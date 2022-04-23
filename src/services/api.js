@@ -131,3 +131,7 @@ export const reserveSlot = (vaccinationSlotId, vaccineId) => {
 		vaccineId,
 	});
 };
+
+export const downloadCertificate = (vaccinationId) => {
+	return api.get(`/patient/vaccinations/${vaccinationId}/certificate`);
+}

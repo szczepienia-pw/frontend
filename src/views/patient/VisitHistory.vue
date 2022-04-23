@@ -102,6 +102,7 @@
         </div>
         <template #footer>
             <Button v-if="selectedVaccination.status === 'Planned'" label="Cancel visit" icon="pi pi-times" class="p-button-danger" @click="vaccinationCancelDialog = true" />
+            <Button v-else label="Download certificate" icon="pi pi-download" class="p-button-success" @click="download" />
         </template>
     </Dialog>
     <Dialog v-model:visible="vaccinationCancelDialog" :style="{width: '450px'}" header="Confirm" modal :draggable="false">
@@ -133,7 +134,7 @@ import { errorToast, successToast } from '@/services/helpers'
 const vaccinationsSkeleton = [ 1, 2, 3 ]
 
 const toast = useToast();
-import { getVaccinationHistory, cancelVaccinationSlot } from '@/services/api'
+import { getVaccinationHistory, cancelVaccinationSlot, downloadCertificate } from '@/services/api'
 
 const diseases = ["Covid-19", "Covid-21", "Flu", "Other"];
 
@@ -170,6 +171,18 @@ const loadVaccinationHistory = (page) => {
 onMounted(() => {
   loadVaccinationHistory(1);
 });
+
+const download = () => {
+  console.log(selectedVaccination.value)
+  downloadCertificate(selectedVaccination.value.id).then(() => {
+            successToast(toast, `Certificate downloaded`);
+            loadVaccinationHistory(pagination.value.currentPage);
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, "Could not download certificate", err);
+        })
+}
 
 const cancelVaccinationCallback = () => {
     cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
