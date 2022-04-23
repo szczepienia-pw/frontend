@@ -29,7 +29,7 @@
                 </Column>
                 <Column field="date" filterField="date" dataType="date" header="Date" :sortable="true" :filterMatchModeOptions="matchModes" :showFilterOperator="false">
                     <template #body="{ data }">
-                        {{ formatDate(data.date) }}
+                        {{ new Date(data.date).toLocaleDateString() }}
                     </template>
                     <template #filter="{filterModel}">
                         <Calendar v-model="filterModel.value" dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" />
@@ -66,7 +66,7 @@
         <Dialog v-model:visible="deleteVaccinationDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                <span v-if="vaccination">Are you sure you want to delete slot <b>{{vaccination.date.toLocaleString()}}</b>?</span>
+                <span v-if="vaccination">Are you sure you want to delete slot <b>{{formatDate(vaccination.date)}}</b>?</span>
             </div>
             <template #footer>
                 <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteVaccinationDialog = false"/>
@@ -99,7 +99,7 @@ import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getVaccinationSlots, deleteVaccinationSlot } from '@/services/api'
-import { errorToast, successToast } from '@/services/helpers'
+import { errorToast, successToast, formatDate, formatTime } from '@/services/helpers'
 
 const toast = useToast();
 const loading = ref(true)
@@ -163,7 +163,7 @@ const confirmDeleteVaccination = (doct) => {
 const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
-            successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} removed`);
+            successToast(toast, `Vaccination ${formatDate(vaccination.value.date)} removed`);
             loadVaccinations(pagination.value.currentPage);
         })
         .catch(err => {
@@ -193,14 +193,6 @@ const deleteSelectedVaccinationsCallback = () => {
     selectedVaccinations.value = null;
     loadVaccinations(pagination.value.currentPage);
 };
-
-const formatDate = (date) => (
-    date.toDateString()
-)
-
-const formatTime = (date) => (
-    `${date.getHours()}:${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
-)
 
 const getStatus = (data) => (
     data.vaccination?.status ? data.vaccination.status : 'Free'

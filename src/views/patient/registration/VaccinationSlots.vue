@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		<h3 v-if="selectedSlot.date">
-            Selected slot: {{ new Date(selectedSlot.date).toLocaleString().slice(0, -3) }}
+            Selected slot: {{ formatDate(selectedSlot.date) }}
         </h3>
 		<Button
 			label="Next"
@@ -50,9 +50,10 @@ import Calendar from "primevue/calendar";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { getSlots } from "@/services/api";
+import { formatDate, formatTime } from "@/services/helpers"
+import { setVisitRegistration } from "@/services/useVisitRegistration"
 
 const router = useRouter();
-
 const date = ref(new Date());
 const selectedSlot = ref({ date: "", id: "" });
 const slots = ref([]);
@@ -77,27 +78,11 @@ const chosenDay = computed(() =>
 	)
 );
 
-const formatTime = (date) => {
-	const hours = new Date(date).getHours();
-	const minutes = new Date(date).getMinutes();
-	return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-};
-
-// eslint-disable-next-line
-defineProps({
-	visible: {
-		type: Boolean,
-		default: false,
-	},
-});
-
-// eslint-disable-next-line
-const emit = defineEmits(["select-option"]);
 const loading = ref(false);
 
 const nextStep = () => {
+	setVisitRegistration('slot', selectedSlot.value);
 	router.push("diseases");
-	emit("select-option", { option: "slot", value: { id: selectedSlot.value.id, date: selectedSlot.value.date } });
 };
 </script>
 

@@ -16,7 +16,7 @@
 					<template #opposite="{ item }">
 						<div>
 							<small class="p-text-secondary">
-								{{ new Date(item.vaccinationSlot.date).toLocaleString().slice(0, -3) }}
+								{{ formatDate(item.vaccinationSlot.date) }}
 							</small>
 						</div>
 					</template>
@@ -94,7 +94,7 @@
 				<div class="flex-1">
 					<div class="vaccination-details__field">
 						<div class="field-label">Date</div>
-						{{ new Date(selectedVaccination.vaccinationSlot.date).toLocaleString() }}
+						{{ formatDate(selectedVaccination.vaccinationSlot.date) }}
 					</div>
 					<div class="vaccination-details__field">
 						<div class="field-label">Status</div>
@@ -129,7 +129,7 @@
 				<i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
 				<span>
 					Are you sure you want to cancel visit
-					<b>{{ new Date(selectedVaccination.vaccinationSlot.date).toLocaleString() }}</b>
+					<b>{{ formatDate(selectedVaccination.vaccinationSlot.date) }}</b>
 					?
 				</span>
 			</div>
@@ -152,7 +152,7 @@ import Timeline from "primevue/timeline";
 import Paginator from "primevue/paginator";
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
-import { errorToast, successToast } from "@/services/helpers";
+import { errorToast, formatDate, successToast } from "@/services/helpers";
 
 const vaccinationsSkeleton = [1, 2, 3];
 
@@ -200,7 +200,7 @@ const cancelVaccinationCallback = () => {
 		.then(() => {
 			successToast(
 				toast,
-				`Visit ${new Date(selectedVaccination.value.vaccinationSlot.date).toLocaleString()} canceled`
+				`Visit ${formatDate(selectedVaccination.value.vaccinationSlot.date)} canceled`
 			);
 			loadVaccinationHistory(pagination.value.currentPage);
 			vaccinationDetailsDialog.value = false;
