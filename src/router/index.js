@@ -29,7 +29,7 @@ const router = createRouter({
         {
             path: '/patient',
             name: 'patient',
-            redirect: '/patient/personal',
+            redirect: '/patient/visits',
             component: () => import("@/views/patient/PatientIndex.vue"),
             children: [
                 {

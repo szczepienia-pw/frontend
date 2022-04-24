@@ -16,12 +16,10 @@ import Button from "primevue/button";
 import SlotCalendar from "@/components/SlotCalendar.vue"
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { setVisitRegistration } from "@/services/useVisitRegistration"
 
 const router = useRouter();
 const selectedSlot = ref({ date: "", id: "" });
-
-// eslint-disable-next-line
-const emit = defineEmits(["select-option"]);
 
 const nextStep = () => {
 	setVisitRegistration('slot', selectedSlot.value);

@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		<h3 v-if="modelValue.date">
-            Selected slot: {{ new Date(modelValue.date).toLocaleString().slice(0, -3) }}
+            Selected slot: {{ formatDate(modelValue.date) }}
         </h3>
 	</div>
 </template>
@@ -41,6 +41,7 @@ import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 import { computed, ref, onMounted } from "vue";
 import { getSlots } from "@/services/api";
+import { formatDate } from "@/services/helpers"
 
 const date = ref(new Date());
 const selectedSlot = ref({ date: "", id: "" });

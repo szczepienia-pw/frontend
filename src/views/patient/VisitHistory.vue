@@ -3,20 +3,20 @@
 		<Card>
 			<template #header>
 				<ProgressBar v-if="loading" mode="indeterminate" />
-        <h1 class="m-3">History of vaccinations</h1>
-        <Dropdown
-						v-model="selectedDisease"
-						:options="diseases"
-						placeholder="Filter by disease"
-						class="my-2 mx-5"
-						disabled />
+				<h1 class="m-3">History of vaccinations</h1>
+				<Dropdown
+					v-model="selectedDisease"
+					:options="diseases"
+					placeholder="Filter by disease"
+					class="my-2 mx-5"
+					disabled />
 			</template>
 			<template #content>
-				<ScrollPanel style="height: 50vh; width: 100%;">
+				<ScrollPanel style="height: 50vh; width: 100%">
 					<Timeline :value="vaccinations" v-if="!loading">
 						<template #opposite="{ item }">
 							<small class="p-text-secondary">
-								{{ new Date(item.vaccinationSlot.date).toLocaleString() }}
+								{{ formatDate(item.vaccinationSlot.date) }}
 							</small>
 						</template>
 						<template #content="{ item }">
@@ -55,10 +55,10 @@
 							<Skeleton width="8rem" height="4rem" borderRadius="16px" class="mb-4" />
 						</template>
 					</Timeline>
-          <div class="no-visits-info" v-if="!loading && !vaccinations.length">
-            <div class="no-visits-text">No visits to display</div>
-            <Button label="Register for a visit" @click="$router.push('registration')"/>
-          </div>
+					<div class="no-visits-info" v-if="!loading && !vaccinations.length">
+						<div class="no-visits-text">No visits to display</div>
+						<Button label="Register for a visit" @click="$router.push('registration')" />
+					</div>
 				</ScrollPanel>
 			</template>
 			<template #footer>
@@ -96,7 +96,7 @@
 				<div class="flex-1">
 					<div class="vaccination-details__field">
 						<div class="field-label">Date</div>
-						{{ new Date(selectedVaccination.vaccinationSlot.date).toLocaleString() }}
+						{{ formatDate(selectedVaccination.vaccinationSlot.date) }}
 					</div>
 					<div class="vaccination-details__field">
 						<div class="field-label">Status</div>
@@ -233,7 +233,7 @@ const cancelVaccinationCallback = (showToast = true) => {
 			if (showToast)
 				successToast(
 					toast,
-					`Visit ${new Date(selectedVaccination.value.vaccinationSlot.date).toLocaleString()} canceled`
+					`Visit ${formatDate(selectedVaccination.value.vaccinationSlot.date)} canceled`
 				);
 			loadVaccinationHistory(pagination.value.currentPage);
 			vaccinationDetailsDialog.value = false;
@@ -305,13 +305,15 @@ const vaccinations = ref([]);
 		top: 0;
 		width: 100%;
 	}
-	.p-card-content, .p-card-header {
+	.p-card-content,
+	.p-card-header {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 
 		.p-timeline-event-opposite {
 			flex: unset;
+			width: 130px;
 		}
 	}
 }
@@ -379,15 +381,15 @@ const vaccinations = ref([]);
 }
 
 .no-visits-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
 
-    .no-visits-text {
-        opacity: 0.5;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
+	.no-visits-text {
+		opacity: 0.5;
+		text-align: center;
+		margin-bottom: 1rem;
+	}
 }
 </style>
