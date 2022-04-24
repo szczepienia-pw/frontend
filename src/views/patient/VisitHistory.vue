@@ -114,7 +114,7 @@
 			</div>
 			<template #footer>
 				<Button
-					v-if="selectedVaccination.status === 'Planned'"
+					v-if="selectedVaccination.status === VaccinationStatuses.planned"
 					label="Reschedule visit"
 					icon="pi pi-pencil"
 					@click="
@@ -124,7 +124,7 @@
 						}
 					" />
 				<Button
-					v-if="selectedVaccination.status === 'Planned'"
+					v-if="selectedVaccination.status === VaccinationStatuses.planned"
 					label="Cancel visit"
 					icon="pi pi-times"
 					class="p-button-danger"

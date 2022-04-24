@@ -111,7 +111,7 @@ import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot } from '@/services/api'
-import { errorToast, successToast, formatDate, formatTime } from '@/services/helpers'
+import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from '@/services/helpers'
 
 const toast = useToast();
 const loading = ref(true)
