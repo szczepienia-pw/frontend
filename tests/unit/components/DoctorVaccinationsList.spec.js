@@ -78,8 +78,8 @@ describe("DoctorVaccinationsList test", () => {
             })
 
             await screen.findByText('John Patient');
-            const deleteButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('pi-trash'));
-            await fireEvent.click(deleteButtons[1]);
+            const deleteButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('delete'));
+            await fireEvent.click(deleteButtons[0]);
             await fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
             expect(axios.delete).toHaveBeenCalledWith("/doctor/vaccination-slots/2");
         });
