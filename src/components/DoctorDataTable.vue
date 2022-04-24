@@ -5,7 +5,7 @@
                 paginator :filters="filters" :loading="loading" lazy
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctors" responsiveLayout="scroll"
-                :rows="10" :totalRecords="pagination.totalRecords"
+                :rows="pageSize" :totalRecords="pagination.totalRecords"
                 @page="loadDoctors($event.page+1)" @sort="onSort"
             >
                 <template #header>
@@ -130,6 +130,7 @@ const pagination = ref({
     currentRecords: 0,
     totalRecords: 0
 })
+const pageSize = ref(0);
 
 const loadDoctors = (page = 1) => {
     loading.value = true;
@@ -137,6 +138,7 @@ const loadDoctors = (page = 1) => {
         .then(response => {
             response = response.data
             pagination.value = response.pagination
+            pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
             doctors.value = doctorsBackup.value = response.data
         })
         .catch(err => {
@@ -184,7 +186,7 @@ const saveEditedDoctor = () => {
     editDoctor(doctor.value.id, doctor.value.firstName, doctor.value.lastName, doctor.value.email)
         .then(() => {
             toast.add({severity:'success', summary: 'Success', detail: 'Doctor information saved', life: 3000});
-            loadDoctors();
+            loadDoctors(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
@@ -210,7 +212,7 @@ const deleteDoctorCallback = () => {
     deleteDoctor(doctor.value.id)
         .then(() => {
             toast.add({severity:'success', summary: 'Success', detail: `Doctor ${doctor.value.firstName} ${doctor.value.lastName} removed`, life: 3000});
-            loadDoctors();
+            loadDoctors(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);

@@ -5,7 +5,7 @@
                 paginator v-model:filters="filters" :loading="loading" lazy filterDisplay="menu"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vaccinations" responsiveLayout="scroll"
-                :rows="10" :totalRecords="pagination.totalRecords"
+                :rows="pageSize" :totalRecords="pagination.totalRecords"
                 @page="loadVaccinations($event.page+1)" @sort="onSort" @filter="onFilter"
             >
                 <template #header>
@@ -29,7 +29,7 @@
                 </Column>
                 <Column field="date" filterField="date" dataType="date" header="Date" :sortable="true" :filterMatchModeOptions="matchModes" :showFilterOperator="false">
                     <template #body="{ data }">
-                        {{ formatDate(data.date) }}
+                        {{ new Date(data.date).toLocaleDateString() }}
                     </template>
                     <template #filter="{filterModel}">
                         <Calendar v-model="filterModel.value" dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" />
@@ -66,7 +66,7 @@
         <Dialog v-model:visible="deleteVaccinationDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-                <span v-if="vaccination">Are you sure you want to delete slot <b>{{vaccination.date.toLocaleString()}}</b>?</span>
+                <span v-if="vaccination">Are you sure you want to delete slot <b>{{formatDate(vaccination.date)}}</b>?</span>
             </div>
             <template #footer>
                 <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteVaccinationDialog = false"/>
@@ -99,7 +99,7 @@ import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getVaccinationSlots, deleteVaccinationSlot } from '@/services/api'
-import { errorToast, successToast } from '@/services/helpers'
+import { errorToast, successToast, formatDate, formatTime } from '@/services/helpers'
 
 const toast = useToast();
 const loading = ref(true)
@@ -125,12 +125,14 @@ const pagination = ref({
     currentRecords: 0,
     totalRecords: 0
 })
+const pageSize = ref(0);
 const loadVaccinations = (page = 1) => {
     loading.value = true;
     getVaccinationSlots(page, getFilterStartDate(), getFilterEndDate(), getFilterOnlyReserved())
         .then(response => {
             response = response.data
             pagination.value = response.pagination;
+            pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
             vaccinations.value = vaccinationsBackup.value = response.data.map(item => ({
                 patient: item.vaccination?.patient ? `${item.vaccination.patient.firstName} ${item.vaccination.patient.lastName}` : '',
                 date: new Date(item.date),
@@ -161,8 +163,8 @@ const confirmDeleteVaccination = (doct) => {
 const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
-            successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} removed`);
-            loadVaccinations();
+            successToast(toast, `Vaccination ${formatDate(vaccination.value.date)} removed`);
+            loadVaccinations(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
@@ -189,16 +191,8 @@ const deleteSelectedVaccinationsCallback = () => {
     })
     deleteVaccinationsDialog.value = false;
     selectedVaccinations.value = null;
-    loadVaccinations();
+    loadVaccinations(pagination.value.currentPage);
 };
-
-const formatDate = (date) => (
-    date.toDateString()
-)
-
-const formatTime = (date) => (
-    `${date.getHours()}:${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
-)
 
 const getStatus = (data) => (
     data.vaccination?.status ? data.vaccination.status : 'Free'
