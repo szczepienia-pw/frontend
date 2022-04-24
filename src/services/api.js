@@ -135,11 +135,23 @@ export const getVaccines = (disease) => {
 };
 
 export const getSlots = () => {
-	return api.get("/patient/vaccination-slots");
+	return api.get("/vaccination-slots");
 };
 
 export const reserveSlot = (vaccinationSlotId, vaccineId) => {
 	return api.put(`/patient/vaccination-slots/${vaccinationSlotId}`, {
 		vaccineId,
 	});
+};
+
+export const getPatients = (page = 1) => {
+	return api.get(`/admin/patients?page=${page}`);
+};
+
+export const editPatient = (id, data) => {
+	return api.put(`/admin/patients/${id}`, data);
+};
+
+export const deletePatient = (id) => {
+	return api.delete(`/admin/patients/${id}`);
 };
