@@ -123,7 +123,7 @@ export const getVaccines = (disease) => {
 };
 
 export const getSlots = () => {
-	return api.get("/patient/vaccination-slots");
+	return api.get("/vaccination-slots");
 };
 
 export const reserveSlot = (vaccinationSlotId, vaccineId) => {
