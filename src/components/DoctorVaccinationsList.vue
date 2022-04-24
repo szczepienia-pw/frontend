@@ -51,8 +51,8 @@
                 </Column>
                 <Column style="min-width:8rem">
                     <template #body="{ data }">
-                        <Button v-if="data.status === STATUS.free" icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
-                        <Button v-else-if="data.status === STATUS.planned" icon="pi pi-check" class="p-button-success p-button-rounded" @click="confirmVaccination(data)" />
+                        <Button v-if="data.status === VaccinationStatuses.free" icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
+                        <Button v-else-if="data.status === VaccinationStatuses.planned" icon="pi pi-check" class="p-button-success p-button-rounded" @click="confirmVaccination(data)" />
                     </template>
                 </Column>
                 <template #paginatorstart>
@@ -111,7 +111,7 @@ import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot } from '@/services/api'
-import { errorToast, successToast, STATUS } from '@/services/helpers'
+import { errorToast, successToast, VaccinationStatuses } from '@/services/helpers'
 
 const toast = useToast();
 const loading = ref(true)
@@ -179,7 +179,7 @@ const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
             successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} removed`);
-            loadVaccinations();
+            loadVaccinations(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
@@ -194,7 +194,7 @@ const confirmVaccinationCallback = () => {
     confirmVaccinationSlot(vaccination.value.id)
         .then(() => {
             successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} completed`);
-            loadVaccinations();
+            loadVaccinations(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
@@ -221,7 +221,7 @@ const deleteSelectedVaccinationsCallback = () => {
     })
     deleteVaccinationsDialog.value = false;
     selectedVaccinations.value = null;
-    loadVaccinations();
+    loadVaccinations(pagination.value.currentPage);
 };
 
 const formatDate = (date) => (
@@ -233,24 +233,24 @@ const formatTime = (date) => (
 )
 
 const getStatus = (data) => (
-    data.vaccination?.status ? data.vaccination.status : STATUS.free
+    data.vaccination?.status ? data.vaccination.status : VaccinationStatuses.free
 )
 
 const getStatusColor = (status) => (
     'text-' + {
-        Planned: 'blue-500',
-        Completed: 'green-500',
-        Canceled: 'pink-500',
-        Free: 'gray-500'
+        [VaccinationStatuses.planned]: 'blue-500',
+        [VaccinationStatuses.completed]: 'green-500',
+        [VaccinationStatuses.canceled]: 'pink-500',
+        [VaccinationStatuses.free]: 'gray-500'
     }[status]
 )
 
 const getStatusIcon = (status) => (
     'pi-' + {
-        Planned: 'calendar',
-        Completed: 'check-circle',
-        Canceled: 'times-circle',
-        Free: 'lock-open'
+        [VaccinationStatuses.planned]: 'calendar',
+        [VaccinationStatuses.completed]: 'check-circle',
+        [VaccinationStatuses.canceled]: 'times-circle',
+        [VaccinationStatuses.free]: 'lock-open'
     }[status]
 )
 
@@ -283,7 +283,7 @@ const getFilterOnlyReserved = () => (
 )
 
 const onFilter = () => {
-    loadVaccinations();
+    loadVaccinations(pagination.value.currentPage);
 }
 
 </script>

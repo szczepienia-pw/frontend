@@ -101,7 +101,7 @@
           </div>
         </div>
         <template #footer>
-            <Button v-if="selectedVaccination.status === 'Planned'" label="Cancel visit" icon="pi pi-times" class="p-button-danger" @click="vaccinationCancelDialog = true" />
+            <Button v-if="selectedVaccination.status === VaccinationStatuses.planned" label="Cancel visit" icon="pi pi-times" class="p-button-danger" @click="vaccinationCancelDialog = true" />
         </template>
     </Dialog>
     <Dialog v-model:visible="vaccinationCancelDialog" :style="{width: '450px'}" header="Confirm" modal :draggable="false">
@@ -128,7 +128,7 @@ import Timeline from "primevue/timeline";
 import Paginator from "primevue/paginator";
 import { ref, onMounted } from "vue";
 import { useToast } from 'primevue/usetoast';
-import { errorToast, successToast } from '@/services/helpers'
+import { errorToast, successToast, VaccinationStatuses } from '@/services/helpers'
 
 const vaccinationsSkeleton = [ 1, 2, 3 ]
 

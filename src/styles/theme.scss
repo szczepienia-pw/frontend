@@ -1,5 +1,6 @@
 $borderRadius: 8px;
 $success: #3ac793;
+$success-hover: #1a966d;
 $danger: #D32F2F;
 $info: #0288D1;
 
@@ -1910,9 +1911,9 @@ $info: #0288D1;
   border: 1px solid $success;
 }
 .p-button.p-button-success:enabled:hover, .p-buttonset.p-button-success > .p-button:enabled:hover, .p-splitbutton.p-button-success > .p-button:enabled:hover {
-  background: #5e8f32;
+  background: $success-hover;
   color: #ffffff;
-  border-color: #5e8f32;
+  border-color: $success-hover;
 }
 .p-button.p-button-success:enabled:focus, .p-buttonset.p-button-success > .p-button:enabled:focus, .p-splitbutton.p-button-success > .p-button:enabled:focus {
   box-shadow: 0 0 0 0.2rem #c2e0a8;

@@ -31,7 +31,7 @@ export const objectDiff = (obj1, obj2) => {
 	return res;
 };
 
-export const STATUS = {
+export const VaccinationStatuses = {
     planned: 'Planned',
     completed: 'Completed',
     canceled: 'Canceled',
