@@ -114,7 +114,7 @@
 			</div>
 			<template #footer>
 				<Button
-					v-if="selectedVaccination.status === 'Planned'"
+					v-if="selectedVaccination.status === VaccinationStatuses.planned"
 					label="Reschedule visit"
 					icon="pi pi-pencil"
 					@click="
@@ -124,7 +124,7 @@
 						}
 					" />
 				<Button
-					v-if="selectedVaccination.status === 'Planned'"
+					v-if="selectedVaccination.status === VaccinationStatuses.planned"
 					label="Cancel visit"
 					icon="pi pi-times"
 					class="p-button-danger"
@@ -184,7 +184,7 @@ import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
 import { getVaccinationHistory, cancelVaccinationSlot, reserveSlot } from "@/services/api";
-import { errorToast, formatDate, successToast } from "@/services/helpers";
+import { errorToast, formatDate, successToast, VaccinationStatuses } from "@/services/helpers";
 
 const vaccinationsSkeleton = [1, 2, 3];
 const toast = useToast();

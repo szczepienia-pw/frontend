@@ -31,6 +31,13 @@ export const objectDiff = (obj1, obj2) => {
 	return res;
 };
 
+export const VaccinationStatuses = {
+    planned: 'Planned',
+    completed: 'Completed',
+    canceled: 'Canceled',
+    free: 'Free'
+ };
+
 export const formatTime = (date) => {
 	const hours = new Date(date).getHours();
 	const minutes = new Date(date).getMinutes();
@@ -40,4 +47,4 @@ export const formatTime = (date) => {
 export const formatDate = (date) => {
 	const d = new Date(date);
 	return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${formatTime(date)}`;
-}
+};
