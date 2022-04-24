@@ -3,63 +3,65 @@
 		<Card>
 			<template #header>
 				<ProgressBar v-if="loading" mode="indeterminate" />
+        <h1 class="m-3">History of vaccinations</h1>
+        <Dropdown
+						v-model="selectedDisease"
+						:options="diseases"
+						placeholder="Filter by disease"
+						class="my-2 mx-5"
+						disabled />
 			</template>
-			<template #title>History of vaccinations</template>
 			<template #content>
-				<Dropdown
-					v-model="selectedDisease"
-					:options="diseases"
-					placeholder="Filter by disease"
-					class="mb-5"
-					disabled />
-				<Timeline :value="vaccinations" v-if="!loading">
-					<template #opposite="{ item }">
-						<div>
+				<ScrollPanel style="height: 50vh; width: 100%;">
+					<Timeline :value="vaccinations" v-if="!loading">
+						<template #opposite="{ item }">
 							<small class="p-text-secondary">
-								{{ formatDate(item.vaccinationSlot.date) }}
+								{{ new Date(item.vaccinationSlot.date).toLocaleString() }}
 							</small>
-						</div>
-					</template>
-					<template #content="{ item }">
-						<div
-							class="history-item"
-							@click="
-								() => {
-									selectedVaccination = item;
-									vaccinationDetailsDialog = true;
-								}
-							">
-							<div class="history-item__icon">
-								<i
-									:class="`pi ${getItemIcon(item.status)}`"
-									:style="`color: ${getItemColor(item.status)}`" />
-							</div>
-							<div class="history-item__title">
-								{{ item.vaccine.name }}
-								<div class="history-item__subtitle">
-									{{ item.vaccine.disease }}
+						</template>
+						<template #content="{ item }">
+							<div
+								class="history-item"
+								@click="
+									() => {
+										selectedVaccination = item;
+										vaccinationDetailsDialog = true;
+									}
+								">
+								<div class="history-item__icon">
+									<i
+										:class="`pi ${getItemIcon(item.status)}`"
+										:style="`color: ${getItemColor(item.status)}`" />
+								</div>
+								<div class="history-item__title">
+									{{ item.vaccine.name }}
+									<div class="history-item__subtitle">
+										{{ item.vaccine.disease }}
+									</div>
+								</div>
+								<div class="history-item__details">
+									<i class="pi pi-ellipsis-v" />
 								</div>
 							</div>
-							<div class="history-item__details">
-								<i class="pi pi-ellipsis-v" />
-							</div>
-						</div>
-					</template>
-				</Timeline>
-				<Timeline :value="vaccinationsSkeleton" v-else>
-					<template #opposite>
-						<small class="p-text-secondary">
-							<Skeleton width="10rem" height="1rem" />
-						</small>
-					</template>
-					<template #content>
-						<Skeleton width="8rem" height="4rem" borderRadius="16px" class="mb-4" />
-					</template>
-				</Timeline>
-                <div class="no-visits-info" v-if="!loading && !vaccinations.length">
-                    <div class="no-visits-text">No visits to display</div>
-                    <Button label="Register for a visit" @click="$router.push('registration')"/>
-                </div>
+						</template>
+					</Timeline>
+					<Timeline :value="vaccinationsSkeleton" v-else>
+						<template #opposite>
+							<small class="p-text-secondary">
+								<Skeleton width="10rem" height="1rem" />
+							</small>
+						</template>
+						<template #content>
+							<Skeleton width="8rem" height="4rem" borderRadius="16px" class="mb-4" />
+						</template>
+					</Timeline>
+          <div class="no-visits-info" v-if="!loading && !vaccinations.length">
+            <div class="no-visits-text">No visits to display</div>
+            <Button label="Register for a visit" @click="$router.push('registration')"/>
+          </div>
+				</ScrollPanel>
+			</template>
+			<template #footer>
 				<Paginator
 					:rows="pageSize"
 					:totalRecords="pagination.totalRecords"
@@ -94,7 +96,7 @@
 				<div class="flex-1">
 					<div class="vaccination-details__field">
 						<div class="field-label">Date</div>
-						{{ formatDate(selectedVaccination.vaccinationSlot.date) }}
+						{{ new Date(selectedVaccination.vaccinationSlot.date).toLocaleString() }}
 					</div>
 					<div class="vaccination-details__field">
 						<div class="field-label">Status</div>
@@ -111,6 +113,16 @@
 				</div>
 			</div>
 			<template #footer>
+				<Button
+					v-if="selectedVaccination.status === 'Planned'"
+					label="Reschedule visit"
+					icon="pi pi-pencil"
+					@click="
+						() => {
+							vaccinationRescheduleDialog = true;
+							newVaccinationDate = { date: '', id: '' };
+						}
+					" />
 				<Button
 					v-if="selectedVaccination.status === 'Planned'"
 					label="Cancel visit"
@@ -138,10 +150,28 @@
 				<Button label="Yes" icon="pi pi-check" class="p-button-text" @click="cancelVaccinationCallback" />
 			</template>
 		</Dialog>
+		<Dialog v-model:visible="vaccinationRescheduleDialog" header="Choose new date" modal :draggable="false">
+			<div class="confirmation-content">
+				<SlotCalendar v-model="newVaccinationDate" />
+			</div>
+			<template #footer>
+				<Button
+					label="Cancel"
+					icon="pi pi-times"
+					class="p-button-text"
+					@click="vaccinationRescheduleDialog = false" />
+				<Button
+					label="Reschedule"
+					icon="pi pi-pencil"
+					class="p-button-text"
+					@click="rescheduleVaccinationCallback" />
+			</template>
+		</Dialog>
 	</div>
 </template>
 
 <script setup>
+import ScrollPanel from "primevue/scrollpanel";
 import Skeleton from "primevue/skeleton";
 import ProgressBar from "primevue/progressbar";
 import Button from "primevue/button";
@@ -150,22 +180,22 @@ import Dropdown from "primevue/dropdown";
 import Card from "primevue/card";
 import Timeline from "primevue/timeline";
 import Paginator from "primevue/paginator";
+import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
+import { getVaccinationHistory, cancelVaccinationSlot, reserveSlot } from "@/services/api";
 import { errorToast, formatDate, successToast } from "@/services/helpers";
 
 const vaccinationsSkeleton = [1, 2, 3];
-
 const toast = useToast();
-import { getVaccinationHistory, cancelVaccinationSlot } from "@/services/api";
-
 const diseases = ["Covid-19", "Covid-21", "Flu", "Other"];
-
 const selectedDisease = ref();
 const selectedVaccination = ref();
 const vaccinationDetailsDialog = ref();
 const vaccinationCancelDialog = ref();
+const vaccinationRescheduleDialog = ref();
 const loading = ref(false);
+const newVaccinationDate = ref({ date: "", id: "" });
 const pageSize = ref(0);
 
 const pagination = ref({
@@ -176,7 +206,6 @@ const pagination = ref({
 });
 
 const loadVaccinationHistory = (page) => {
-	console.log(page)
 	loading.value = true;
 	getVaccinationHistory(page)
 		.then((response) => {
@@ -198,13 +227,14 @@ onMounted(() => {
 	loadVaccinationHistory(1);
 });
 
-const cancelVaccinationCallback = () => {
+const cancelVaccinationCallback = (showToast = true) => {
 	cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
 		.then(() => {
-			successToast(
-				toast,
-				`Visit ${formatDate(selectedVaccination.value.vaccinationSlot.date)} canceled`
-			);
+			if (showToast)
+				successToast(
+					toast,
+					`Visit ${new Date(selectedVaccination.value.vaccinationSlot.date).toLocaleString()} canceled`
+				);
 			loadVaccinationHistory(pagination.value.currentPage);
 			vaccinationDetailsDialog.value = false;
 		})
@@ -214,6 +244,22 @@ const cancelVaccinationCallback = () => {
 		})
 		.finally(() => {
 			vaccinationCancelDialog.value = false;
+		});
+};
+
+const rescheduleVaccinationCallback = () => {
+	reserveSlot(newVaccinationDate.value.id, selectedVaccination.value.vaccine.id)
+		.then(() => {
+			successToast(toast, "Successfully rescheduled vaccination slot");
+			cancelVaccinationCallback(false);
+			loadVaccinationHistory(pagination.value.currentPage);
+		})
+		.catch((err) => {
+			console.error(err);
+			errorToast(toast, "Could not reschedule vaccination slot", err);
+		})
+		.finally(() => {
+			vaccinationRescheduleDialog.value = false;
 		});
 };
 
@@ -259,7 +305,7 @@ const vaccinations = ref([]);
 		top: 0;
 		width: 100%;
 	}
-	.p-card-content {
+	.p-card-content, .p-card-header {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -343,6 +389,5 @@ const vaccinations = ref([]);
         text-align: center;
         margin-bottom: 1rem;
     }
-    
 }
 </style>

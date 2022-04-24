@@ -1,44 +1,11 @@
 <template>
 	<div class="flex flex-column align-items-center">
-		<div class="flex flex-row mb-2">
-			<Calendar inline v-model="date" @click="selectedSlot = { date: '', id: '' }">
-				<template #date="{ date }">
-					<strong
-						v-if="
-							slots.some(
-								(s) =>
-									new Date(s.date).getFullYear() == date.year &&
-									new Date(s.date).getMonth() == date.month &&
-									new Date(s.date).getDate() == date.day
-							)
-						"
-						class="highlighted-day">
-						{{ date.day }}
-					</strong>
-					<template v-else>{{ date.day }}</template>
-				</template>
-			</Calendar>
-			<div class="flex flex-column justify-content-center">
-				<Button
-					v-for="slot in chosenDay"
-					:key="slot"
-					:class="{
-						'p-button-outlined': slot != selectedSlot,
-						'm-2': true,
-					}"
-					:label="formatTime(slot.date)"
-					@click="selectedSlot = slot" />
-			</div>
-		</div>
-		<h3 v-if="selectedSlot.date">
-            Selected slot: {{ formatDate(selectedSlot.date) }}
-        </h3>
+		<SlotCalendar v-model="selectedSlot"/>
 		<Button
 			label="Next"
 			icon-pos="right"
 			icon="pi pi-angle-right"
 			@click="nextStep"
-			:loading="loading"
 			class="mt-5"
 			:disabled="selectedSlot.date == ''" />
 	</div>
@@ -46,39 +13,15 @@
 
 <script setup>
 import Button from "primevue/button";
-import Calendar from "primevue/calendar";
-import { computed, ref, onMounted } from "vue";
+import SlotCalendar from "@/components/SlotCalendar.vue"
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { getSlots } from "@/services/api";
-import { formatDate, formatTime } from "@/services/helpers"
-import { setVisitRegistration } from "@/services/useVisitRegistration"
 
 const router = useRouter();
-const date = ref(new Date());
 const selectedSlot = ref({ date: "", id: "" });
-const slots = ref([]);
 
-onMounted(() => {
-	getSlots()
-		.then((response) => {
-			response = response.data;
-			slots.value = response;
-		})
-		.catch((err) => {
-			console.error(err);
-		});
-});
-
-const chosenDay = computed(() =>
-	slots.value.filter(
-		(s) =>
-			new Date(s.date).getFullYear() == date.value.getFullYear() &&
-			new Date(s.date).getMonth() == date.value.getMonth() &&
-			new Date(s.date).getDate() == date.value.getDate()
-	)
-);
-
-const loading = ref(false);
+// eslint-disable-next-line
+const emit = defineEmits(["select-option"]);
 
 const nextStep = () => {
 	setVisitRegistration('slot', selectedSlot.value);
