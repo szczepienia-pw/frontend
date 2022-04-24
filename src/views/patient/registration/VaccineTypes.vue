@@ -10,7 +10,7 @@
 				@click="nextStep"
 				:loading="loading"
 				class="ml-1"
-				:disabled="selectedVaccine == {}" />
+				:disabled="!selectedVaccine" />
 		</div>
 	</div>
 </template>
@@ -21,21 +21,16 @@ import Dropdown from "primevue/dropdown";
 import { ref, onMounted } from "vue";
 import { getVaccines } from "@/services/api";
 import { useRouter } from "vue-router";
+import { useVisitRegistration, setVisitRegistration } from "@/services/useVisitRegistration"
 
+const registrationInfo = useVisitRegistration();
 const router = useRouter();
-// eslint-disable-next-line
-const props = defineProps({
-	selectedOptions: {
-		type: Object,
-		required: true,
-	},
-});
 
-let selectedVaccine = ref({});
+let selectedVaccine = ref(null);
 const vaccines = ref([]);
 
 onMounted(() => {
-	getVaccines(props.selectedOptions.disease)
+	getVaccines(registrationInfo.disease)
 		.then((response) => {
 			response = response.data;
 			vaccines.value = response.vaccines;
@@ -50,8 +45,8 @@ const emit = defineEmits(["select-option"]);
 const loading = ref(false);
 
 const nextStep = () => {
+	setVisitRegistration('vaccine', selectedVaccine.value);
 	router.push("confirm");
-	emit("select-option", { option: "vaccine", value: selectedVaccine.value });
 };
 </script>
 

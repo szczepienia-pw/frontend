@@ -10,10 +10,7 @@
 				</div>
 
 				<router-view v-slot="{ Component }">
-					<component
-							:is="Component"
-							:selectedOptions="selectedOptions"
-							@select-option="({ option, value }) => (selectedOptions[option] = value)"/>
+					<component :is="Component" />
 				</router-view>
 			</div>
 		</template>
@@ -26,11 +23,6 @@ import Steps from "primevue/steps";
 import Toast from "primevue/toast";
 import Card from "primevue/card";
 
-const selectedOptions = ref({
-	vaccine: {},
-	slot: {},
-	disease: "",
-});
 const path = "/patient/registration";
 const items = ref([
 	{

@@ -1,8 +1,8 @@
 <template>
 	<div class="flex flex-column align-items-center">
-		<h3>Date: {{ format(selectedOptions.slot.date) }}</h3>
-		<h3>Disease: {{ selectedOptions.disease }}</h3>
-		<h3>Vaccine: {{ selectedOptions.vaccine.name }}</h3>
+		<h3>Date: {{ formatDate(registrationInfo.slot.date) }}</h3>
+		<h3>Disease: {{ registrationInfo.disease }}</h3>
+		<h3>Vaccine: {{ registrationInfo.vaccine.name }}</h3>
 
 		<div class="mt-5">
 			<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" class="mr-1" />
@@ -22,23 +22,17 @@ import Button from "primevue/button";
 import { ref } from "vue";
 import { reserveSlot } from "@/services/api";
 import { useToast } from "primevue/usetoast";
-import { errorToast, successToast } from "@/services/helpers";
+import { errorToast, successToast, formatDate } from "@/services/helpers";
 import { useRouter } from "vue-router";
+import { useVisitRegistration } from "@/services/useVisitRegistration"
 
+const registrationInfo = useVisitRegistration();
 const toast = useToast();
 const router = useRouter();
 
-// eslint-disable-next-line
-const props = defineProps({
-	selectedOptions: {
-		type: Object,
-		required: true,
-	},
-});
-
 const reserve = () => {
 	loading.value = true;
-	reserveSlot(props.selectedOptions.slot.id, props.selectedOptions.vaccine.id)
+	reserveSlot(registrationInfo.slot.id, registrationInfo.vaccine.id)
 		.then(() => {
 			successToast(toast, "Successfully reserved vaccination slot");
 		})
@@ -49,10 +43,6 @@ const reserve = () => {
 			loading.value = false;
 			router.replace({ name: "patient" });
 		});
-};
-
-const format = (date) => {
-	return date.replace("T", "   ").slice(0, -3);
 };
 
 const loading = ref(false);

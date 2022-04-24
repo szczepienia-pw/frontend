@@ -38,3 +38,13 @@ export const VaccinationStatuses = {
     free: 'Free'
  };
 
+export const formatTime = (date) => {
+	const hours = new Date(date).getHours();
+	const minutes = new Date(date).getMinutes();
+	return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
+};
+
+export const formatDate = (date) => {
+	const d = new Date(date);
+	return `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${formatTime(date)}`;
+}
