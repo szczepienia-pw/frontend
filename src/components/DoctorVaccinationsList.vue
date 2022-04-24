@@ -51,8 +51,12 @@
                 </Column>
                 <Column style="min-width:8rem">
                     <template #body="{ data }">
-                        <Button v-if="data.status === VaccinationStatuses.free" icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
-                        <Button v-else-if="data.status === VaccinationStatuses.planned" icon="pi pi-check" class="p-button-success p-button-rounded" @click="confirmVaccination(data)" />
+                        <Button v-if="data.status === VaccinationStatuses.free" icon="pi pi-trash delete" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
+                        <div v-else-if="data.status === VaccinationStatuses.planned">
+                            <Button  icon="pi pi-trash cancel" class="p-button-danger p-button-rounded" @click="confirmCancelVaccination(data)" />
+                            <Button  icon="pi pi-check" class="ml-2 p-button-success p-button-rounded" @click="confirmVaccination(data)" />
+                        </div>
+                        
                     </template>
                 </Column>
                 <template #paginatorstart>
@@ -96,6 +100,17 @@
                 <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="confirmVaccinationCallback" />
             </template>
         </Dialog>
+
+        <Dialog v-model:visible="cancelVaccinationDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
+            <div class="confirmation-content">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                <span v-if="vaccination">Are you sure you want to cancel this vaccination <b>{{vaccination.date.toLocaleString()}}</b>?</span>
+            </div>
+            <template #footer>
+                <Button label="No" icon="pi pi-times" class="p-button-text" @click="cancelVaccinationDialog = false"/>
+                <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="cancelVaccinationCallback" />
+            </template>
+        </Dialog>
 	</div>
 </template>
 
@@ -110,7 +125,7 @@ import TriStateCheckbox  from 'primevue/tristatecheckbox'
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
-import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot } from '@/services/api'
+import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot, cancelPlannedVaccinationSlot } from '@/services/api'
 import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from '@/services/helpers'
 
 const toast = useToast();
@@ -121,6 +136,7 @@ const vaccinationsBackup = ref();
 const deleteVaccinationDialog = ref(false);
 const deleteVaccinationsDialog = ref(false);
 const confirmVaccinationDialog = ref(false);
+const cancelVaccinationDialog = ref(false);
 const vaccination = ref({});
 const selectedVaccinations = ref();
 const filters = ref({
@@ -177,6 +193,10 @@ const confirmVaccination = (doct) => {
     vaccination.value = {...doct};
     confirmVaccinationDialog.value = true;
 };
+const confirmCancelVaccination = (doct) => {
+    vaccination.value = {...doct};
+    cancelVaccinationDialog.value = true;
+};
 const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {
@@ -204,6 +224,21 @@ const confirmVaccinationCallback = () => {
         })
         .finally(() => {
             confirmVaccinationDialog.value = false;
+            vaccination.value = {};
+        })
+};
+const cancelVaccinationCallback = () => {
+    cancelPlannedVaccinationSlot(vaccination.value.id)
+        .then(() => {
+            successToast(toast, `Vaccination ${vaccination.value.date.toLocaleString()} canceled`);
+            loadVaccinations(pagination.value.currentPage);
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, "Could not cancel vaccination", err);
+        })
+        .finally(() => {
+            cancelVaccinationDialog.value = false;
             vaccination.value = {};
         })
 };

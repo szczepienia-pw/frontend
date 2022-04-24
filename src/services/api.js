@@ -80,6 +80,12 @@ export const confirmVaccinationSlot = (id) => {
 	});
 };
 
+export const cancelPlannedVaccinationSlot = (id) => {
+	return api.put(`/doctor/vaccination-slots/${id}`, {
+		status: "CANCELED",
+	});
+};
+
 export const reportBug = (name, description) => {
 	return api.post(`/bugs`, {
 		name,
