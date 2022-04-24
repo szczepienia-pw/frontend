@@ -131,3 +131,15 @@ export const reserveSlot = (vaccinationSlotId, vaccineId) => {
 		vaccineId,
 	});
 };
+
+export const getPatients = (page = 1) => {
+	return api.get(`/admin/patients?page=${page}`);
+};
+
+export const editPatient = (id, data) => {
+	return api.put(`/admin/patients/${id}`, data);
+};
+
+export const deletePatient = (id) => {
+	return api.delete(`/admin/patients/${id}`);
+};

@@ -84,9 +84,9 @@ const menuItems = computed(() => {
 				page: "doctors",
 			},
 			{
-				label: "Users",
+				label: "Patients",
 				icon: "pi-users",
-				disabled: true,
+				page: "patients"
 			},
 			{
 				label: "Vaccinations",
