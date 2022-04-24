@@ -123,7 +123,8 @@
 			</div>
 			<div class="field">
 				<label for="zipCode">Zip code</label>
-				<InputText
+				<InputMask
+					mask="99-999"
 					id="zipCode"
 					v-model.trim="patient.address.zipCode"
 					required="true"
@@ -141,7 +142,7 @@
 					:class="{ 'p-invalid': submitted && !patient.address.street }" />
 				<small class="p-error" v-if="submitted && !patient.address.street">Street is required.</small>
 			</div>
-            <div class="field">
+			<div class="field">
 				<label for="houseNumber">House number</label>
 				<InputText
 					id="houseNumber"
@@ -151,7 +152,7 @@
 					:class="{ 'p-invalid': submitted && !patient.address.houseNumber }" />
 				<small class="p-error" v-if="submitted && !patient.address.houseNumber">City is required.</small>
 			</div>
-            <div class="field">
+			<div class="field">
 				<label for="localNumber">Local number</label>
 				<InputText
 					id="localNumber"
@@ -201,6 +202,7 @@ import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
+import InputMask from "primevue/inputmask";
 import { ref, onMounted } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
@@ -237,7 +239,7 @@ const loadPatients = (page = 1) => {
 		.then((response) => {
 			response = response.data;
 			pagination.value = response.pagination;
-            pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
+			pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
 			patients.value = patientsBackup.value = response.data;
 		})
 		.catch((err) => {
