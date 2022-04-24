@@ -52,7 +52,7 @@
                 <Column style="min-width:8rem">
                     <template #body="{ data }">
                         <Button v-if="data.status === 'Free'" icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
-                        <Button v-if="data.status === 'Planned'" icon="pi pi-check" class="p-button-success p-button-rounded" @click="confirmVaccination(data)" />
+                        <Button v-else-if="data.status === 'Planned'" icon="pi pi-check" class="p-button-success p-button-rounded" @click="confirmVaccination(data)" />
                     </template>
                 </Column>
                 <template #paginatorstart>
