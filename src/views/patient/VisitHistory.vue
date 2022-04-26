@@ -174,14 +174,22 @@ onMounted(() => {
 
 const download = () => {
   console.log(selectedVaccination.value)
-  downloadCertificate(selectedVaccination.value.id).then(() => {
-            successToast(toast, `Certificate downloaded`);
-            loadVaccinationHistory(pagination.value.currentPage);
-        })
-        .catch(err => {
-            console.error(err);
-            errorToast(toast, "Could not download certificate", err);
-        })
+  downloadCertificate(selectedVaccination.value.id)
+    .then(certificate => {
+      const fileUrl = URL.createObjectURL(certificate.data);
+      const link = document.createElement('a');
+      link.href = fileUrl;
+      link.download = 'Vaccination certificate';
+      link.click();
+      URL.revokeObjectURL(link.href);
+      link.remove();
+      successToast(toast, `Certificate downloaded`);
+      loadVaccinationHistory(pagination.value.currentPage);
+    })
+    .catch(err => {
+      console.error(err);
+      errorToast(toast, "Could not download certificate", err);
+    })
 }
 
 const cancelVaccinationCallback = () => {
