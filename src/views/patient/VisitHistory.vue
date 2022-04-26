@@ -227,25 +227,25 @@ onMounted(() => {
 	loadVaccinationHistory(1);
 });
 
-const cancelVaccinationCallback = (showToast = true) => {
-	cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
-		.then(() => {
-			if (showToast)
-				successToast(
-					toast,
-					`Visit ${formatDate(selectedVaccination.value.vaccinationSlot.date)} canceled`
-				);
-			loadVaccinationHistory(pagination.value.currentPage);
-			vaccinationDetailsDialog.value = false;
-		})
-		.catch((err) => {
-			console.error(err);
-			errorToast(toast, "Could not cancel vaccination", err);
-		})
-		.finally(() => {
-			vaccinationCancelDialog.value = false;
-		});
-};
+const download = () => {
+  console.log(selectedVaccination.value)
+  downloadCertificate(selectedVaccination.value.id)
+    .then(certificate => {
+      const fileUrl = URL.createObjectURL(certificate.data);
+      const link = document.createElement('a');
+      link.href = fileUrl;
+      link.download = 'Vaccination certificate';
+      link.click();
+      URL.revokeObjectURL(link.href);
+      link.remove();
+      successToast(toast, `Certificate downloaded`);
+      loadVaccinationHistory(pagination.value.currentPage);
+    })
+    .catch(err => {
+      console.error(err);
+      errorToast(toast, "Could not download certificate", err);
+    })
+}
 
 const rescheduleVaccinationCallback = () => {
 	reserveSlot(newVaccinationDate.value.id, selectedVaccination.value.vaccine.id)
