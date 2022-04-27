@@ -267,6 +267,7 @@ const rescheduleVaccinationCallback = () => {
 		.finally(() => {
 			vaccinationRescheduleDialog.value = false;
 		});
+}
 
 const download = () => {
 	console.log(selectedVaccination.value)
