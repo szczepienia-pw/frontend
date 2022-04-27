@@ -234,7 +234,6 @@ onMounted(() => {
 });
 
 const download = () => {
-  console.log(selectedVaccination.value)
   downloadCertificate(selectedVaccination.value.id)
     .then(certificate => {
       const fileUrl = URL.createObjectURL(certificate.data);
@@ -244,12 +243,9 @@ const download = () => {
       link.click();
       URL.revokeObjectURL(link.href);
       link.remove();
-      successToast(toast, `Certificate downloaded`);
-      loadVaccinationHistory(pagination.value.currentPage);
     })
     .catch(err => {
       console.error(err);
-      errorToast(toast, "Could not download certificate", err);
     })
 }
 
@@ -269,20 +265,24 @@ const rescheduleVaccinationCallback = () => {
 		});
 }
 
-const cancelVaccinationCallback = () => {
-    cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
-        .then(() => {
-            successToast(toast, `Visit ${new Date(selectedVaccination.value.vaccinationSlot.date).toLocaleString()} canceled`);
-            loadVaccinationHistory(pagination.value.currentPage);
-            vaccinationDetailsDialog.value = false;
-        })
-        .catch(err => {
-            console.error(err);
-            errorToast(toast, "Could not cancel vaccination", err);
-        })
-        .finally(() => {
-            vaccinationCancelDialog.value = false;
-        })
+const cancelVaccinationCallback = (showToast = true) => {
+	cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
+		.then(() => {
+			if (showToast)
+				successToast(
+					toast,
+					`Visit ${formatDate(selectedVaccination.value.vaccinationSlot.date)} canceled`
+				);
+			loadVaccinationHistory(pagination.value.currentPage);
+			vaccinationDetailsDialog.value = false;
+		})
+		.catch((err) => {
+			console.error(err);
+			errorToast(toast, "Could not cancel vaccination", err);
+		})
+		.finally(() => {
+			vaccinationCancelDialog.value = false;
+		});
 };
 
 const getItemIcon = (status) =>
