@@ -129,6 +129,12 @@
 					icon="pi pi-times"
 					class="p-button-danger"
 					@click="vaccinationCancelDialog = true" />
+				<Button
+					v-else
+					label="Download certificate"
+					icon="pi pi-download"
+					class="p-button-success"
+					@click="download" />
 			</template>
 		</Dialog>
 		<Dialog
@@ -183,7 +189,7 @@ import Paginator from "primevue/paginator";
 import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
-import { getVaccinationHistory, cancelVaccinationSlot, reserveSlot } from "@/services/api";
+import { getVaccinationHistory, cancelVaccinationSlot, reserveSlot, downloadCertificate } from "@/services/api";
 import { errorToast, formatDate, successToast, VaccinationStatuses } from "@/services/helpers";
 
 const vaccinationsSkeleton = [1, 2, 3];
@@ -261,6 +267,41 @@ const rescheduleVaccinationCallback = () => {
 		.finally(() => {
 			vaccinationRescheduleDialog.value = false;
 		});
+
+const download = () => {
+	console.log(selectedVaccination.value)
+	downloadCertificate(selectedVaccination.value.id)
+    	.then(certificate => {
+      		const fileUrl = URL.createObjectURL(certificate.data);
+      		const link = document.createElement('a');
+      		link.href = fileUrl;
+      		link.download = 'Vaccination certificate';
+      		link.click();
+      		URL.revokeObjectURL(link.href);
+      		link.remove();
+      		successToast(toast, `Certificate downloaded`);
+      		loadVaccinationHistory(pagination.value.currentPage);
+    	})
+		.catch(err => {
+		console.error(err);
+		errorToast(toast, "Could not download certificate", err);
+		})
+}
+
+const cancelVaccinationCallback = () => {
+    cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
+        .then(() => {
+            successToast(toast, `Visit ${new Date(selectedVaccination.value.vaccinationSlot.date).toLocaleString()} canceled`);
+            loadVaccinationHistory(pagination.value.currentPage);
+            vaccinationDetailsDialog.value = false;
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, "Could not cancel vaccination", err);
+        })
+        .finally(() => {
+            vaccinationCancelDialog.value = false;
+        })
 };
 
 const getItemIcon = (status) =>
