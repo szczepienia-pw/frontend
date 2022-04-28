@@ -51,7 +51,7 @@ const slots = ref([]);
 defineProps({
 	modelValue: {
 		type: Object,
-		default: { date: '', id: '' },
+		default: () => ({ date: '', id: '' }),
 	},
 });
 
