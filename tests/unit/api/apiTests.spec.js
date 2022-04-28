@@ -1,4 +1,4 @@
-import { login, createVaccinationSlot, reportBug, getVaccinationSlots, register, deleteVaccinationSlot, changeData, changeAdminSettings, getAdminSettings } from '@/services/api'
+import { login, createVaccinationSlot, reportBug, getVaccinationSlots, register, deleteVaccinationSlot, changeData, changeAdminSettings, getAdminSettings, confirmVaccinationSlot, cancelPlannedVaccinationSlot, getVaccinationHistory, cancelVaccinationSlot, getDiseases, getVaccines, getSlots, reserveSlot, getPatients, editPatient, deletePatient } from '@/services/api'
 import axios from 'axios'
 import { saveUserSession } from '@/services/useUserSession'
 
@@ -111,5 +111,91 @@ describe("api tests", () => {
                 bugEmail: 'test'
             });
         });
+    });
+});
+
+describe("when confirmVaccinationSlot() is called", () => {
+    it("should correctly send request", async () => {
+        await confirmVaccinationSlot(1);
+        expect(axios.put).toHaveBeenCalledWith(`/doctor/vaccination-slots/1`, {
+            status: "COMPLETED",
+        });
+    });
+});
+
+describe("when cancelPlannedVaccinationSlot() is called", () => {
+    it("should correctly send request", async () => {
+        await cancelPlannedVaccinationSlot(1);
+        expect(axios.put).toHaveBeenCalledWith(`/doctor/vaccination-slots/1`, {
+            status: "CANCELED",
+        });
+    });
+});
+
+describe("when cancelVaccinationSlot() is called", () => {
+    it("should correctly send request", async () => {
+        await cancelVaccinationSlot(1);
+        expect(axios.delete).toHaveBeenCalledWith(`/patient/vaccination-slots/1`)
+    });
+});
+
+describe("when getVaccinationHistory() is called", () => {
+    it("should correctly send request", async () => {
+        await getVaccinationHistory(2);
+        expect(axios.get).toHaveBeenCalledWith(`/patient/vaccinations?page=2`)
+    });
+});
+
+describe("when getDiseases() is called", () => {
+    it("should correctly send request", async () => {
+        const response = getDiseases();
+        expect(response).toContain("COVID-19")
+        expect(response).toContain("COVID-21")
+        expect(response).toContain("Flu")
+        expect(response).toContain("OTHER")
+    });
+});
+
+describe("when getVaccines() is called", () => {
+    it("should correctly send request", async () => {
+        await getVaccines("OTHER");
+        expect(axios.get).toHaveBeenCalledWith(`/patient/vaccines?disease=OTHER`);
+    });
+});
+
+describe("when getSlots() is called", () => {
+    it("should correctly send request", async () => {
+        await getSlots();
+        expect(axios.get).toHaveBeenCalledWith("/vaccination-slots");
+    });
+});
+
+describe("when reserveSlot() is called", () => {
+    it("should correctly send request", async () => {
+        await reserveSlot(1,1);
+        expect(axios.put).toHaveBeenCalledWith(`/patient/vaccination-slots/1`, {
+            vaccineId: 1,
+        });
+    });
+});
+
+describe("when getPatients() is called", () => {
+    it("should correctly send request", async () => {
+        await getPatients(1);
+        expect(axios.get).toHaveBeenCalledWith(`/admin/patients?page=1`)
+    });
+});
+
+describe("when editPatient() is called", () => {
+    it("should correctly send request", async () => {
+        await editPatient(1, {address:{street: "test"}});
+        expect(axios.put).toHaveBeenCalledWith(`/admin/patients/1`, {address:{street: "test"}})
+    });
+});
+
+describe("when deletePatient() is called", () => {
+    it("should correctly send request", async () => {
+        await deletePatient(1);
+        expect(axios.delete).toHaveBeenCalledWith(`/admin/patients/1`)
     });
 });

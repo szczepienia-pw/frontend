@@ -15,10 +15,10 @@ const mockResponse = {
 		data: [
 			{
 				id: 1,
-				firstName: "Patient",
+				firstName: "Ben",
 				lastName: "Patient",
 				pesel: "003005039981",
-				email: "john.doe@patient.com",
+				email: "ben@patient.com",
 				address: {
 					id: 1,
 					city: "Biłgoraj",
@@ -58,12 +58,12 @@ describe("PatientDataTable test", () => {
 				},
 			});
 
-			await screen.findByText("John");
+			await screen.findByText("Ben");
 			await screen.findByText("Patient");
-			await screen.findByText("john@patient.com");
-			await screen.findByText("Peter");
-			await screen.findByText("Test");
-			await screen.findByText("peter@test.com");
+			await screen.findByText("ben@patient.com");
+			await screen.findByText("John");
+			await screen.findByText("Green");
+			await screen.findByText("john.grn@patient.com");
 		});
 	});
 
@@ -78,7 +78,7 @@ describe("PatientDataTable test", () => {
 				},
 			});
 
-			await screen.findByText("John");
+			await screen.findByText("Ben");
 			const deleteButtons = screen
 				.getAllByRole("button")
 				.filter((el) => el.children[0]?.classList.contains("pi-trash"));
@@ -99,7 +99,7 @@ describe("PatientDataTable test", () => {
 				},
 			});
 
-			await screen.findByText("John");
+			await screen.findByText("Ben");
 			const editButtons = screen
 				.getAllByRole("button")
 				.filter((el) => el.children[0]?.classList.contains("pi-pencil"));
