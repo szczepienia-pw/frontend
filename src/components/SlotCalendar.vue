@@ -41,7 +41,7 @@ import Button from "primevue/button";
 import Calendar from "primevue/calendar";
 import { computed, ref, onMounted } from "vue";
 import { getSlots } from "@/services/api";
-import { formatDate } from "@/services/helpers"
+import { formatDate, formatTime } from "@/services/helpers"
 
 const date = ref(new Date());
 const selectedSlot = ref({ date: "", id: "" });
@@ -51,7 +51,7 @@ const slots = ref([]);
 defineProps({
 	modelValue: {
 		type: Object,
-		default: null,
+		default: { date: '', id: '' },
 	},
 });
 
@@ -81,12 +81,6 @@ const chosenDay = computed(() =>
 			new Date(s.date).getDate() == date.value.getDate()
 	)
 );
-
-const formatTime = (date) => {
-	const hours = new Date(date).getHours();
-	const minutes = new Date(date).getMinutes();
-	return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}`;
-};
 
 </script>
 
