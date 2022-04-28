@@ -246,6 +246,7 @@ const download = () => {
     })
     .catch(err => {
       console.error(err);
+      errorToast(toast, "Could not download certificate", err);
     })
 }
 
