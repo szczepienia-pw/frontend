@@ -15,7 +15,7 @@ const mockResponse = {
         },
         data: [{
             id: 1,
-            date: "2019-08-24T14:15:22Z",
+            date: "2022-06-24T14:15:22Z",
             vaccination: {
                 id: 1,
                 vaccine: {
@@ -82,6 +82,28 @@ describe("DoctorVaccinationsList test", () => {
             await fireEvent.click(deleteButtons[0]);
             await fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
             expect(axios.delete).toHaveBeenCalledWith("/doctor/vaccination-slots/2");
+        });
+    });
+
+    describe("when planned visit is canceled", () => {
+        it("should correctly send api request", async () => {
+            axios.get.mockResolvedValue(mockResponse);
+            axios.delete.mockResolvedValue({ msg: 'mock' });
+
+            render(DoctorVaccinationsList, {
+                global: {
+                    plugins: [PrimeVue, ToastService]
+                }
+            })
+
+            await screen.findByText('John Patient');
+            const deleteButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('check'));
+            expect(deleteButtons.length).toBe(1)
+            await fireEvent.click(deleteButtons[0]);
+            await fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
+            expect(axios.put).toHaveBeenCalledWith("/doctor/vaccination-slots/1", { 
+                status: "CANCELED",
+            });
         });
     });
 })
