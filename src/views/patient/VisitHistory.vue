@@ -129,6 +129,12 @@
 					icon="pi pi-times"
 					class="p-button-danger"
 					@click="vaccinationCancelDialog = true" />
+				<Button
+					v-else
+					label="Download certificate"
+					icon="pi pi-download"
+					class="p-button-success"
+					@click="download" />
 			</template>
 		</Dialog>
 		<Dialog
@@ -183,7 +189,7 @@ import Paginator from "primevue/paginator";
 import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
-import { getVaccinationHistory, cancelVaccinationSlot, reserveSlot } from "@/services/api";
+import { getVaccinationHistory, cancelVaccinationSlot, reserveSlot, downloadCertificate } from "@/services/api";
 import { errorToast, formatDate, successToast, VaccinationStatuses } from "@/services/helpers";
 
 const vaccinationsSkeleton = [1, 2, 3];
@@ -227,6 +233,39 @@ onMounted(() => {
 	loadVaccinationHistory(1);
 });
 
+const download = () => {
+  downloadCertificate(selectedVaccination.value.id)
+    .then(certificate => {
+      const fileUrl = URL.createObjectURL(certificate.data);
+      const link = document.createElement('a');
+      link.href = fileUrl;
+      link.download = 'Vaccination certificate';
+      link.click();
+      URL.revokeObjectURL(link.href);
+      link.remove();
+    })
+    .catch(err => {
+      console.error(err);
+      errorToast(toast, "Could not download certificate", err);
+    })
+}
+
+const rescheduleVaccinationCallback = () => {
+	reserveSlot(newVaccinationDate.value.id, selectedVaccination.value.vaccine.id)
+		.then(() => {
+			successToast(toast, "Successfully rescheduled vaccination slot");
+			cancelVaccinationCallback(false);
+			loadVaccinationHistory(pagination.value.currentPage);
+		})
+		.catch((err) => {
+			console.error(err);
+			errorToast(toast, "Could not reschedule vaccination slot", err);
+		})
+		.finally(() => {
+			vaccinationRescheduleDialog.value = false;
+		});
+}
+
 const cancelVaccinationCallback = (showToast = true) => {
 	cancelVaccinationSlot(selectedVaccination.value.vaccinationSlot.id)
 		.then(() => {
@@ -244,22 +283,6 @@ const cancelVaccinationCallback = (showToast = true) => {
 		})
 		.finally(() => {
 			vaccinationCancelDialog.value = false;
-		});
-};
-
-const rescheduleVaccinationCallback = () => {
-	reserveSlot(newVaccinationDate.value.id, selectedVaccination.value.vaccine.id)
-		.then(() => {
-			successToast(toast, "Successfully rescheduled vaccination slot");
-			cancelVaccinationCallback(false);
-			loadVaccinationHistory(pagination.value.currentPage);
-		})
-		.catch((err) => {
-			console.error(err);
-			errorToast(toast, "Could not reschedule vaccination slot", err);
-		})
-		.finally(() => {
-			vaccinationRescheduleDialog.value = false;
 		});
 };
 
