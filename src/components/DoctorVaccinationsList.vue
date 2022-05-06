@@ -40,7 +40,8 @@
                 </Column>
                 <Column field="status" filterField="status" header="Status" :sortable="true" :showFilterMatchModes="false">
                      <template #body="{ data }">
-                        <span :class="getStatusColor(data.status)">{{ data.status }}</span><i :class="'ml-2 pi ' + getStatusIcon(data.status) + ' ' + getStatusColor(data.status)"/>
+                        <i :class="'mr-2 pi ' + getStatusIcon(data.status) + ' ' + getStatusColor(data.status)"/>
+                        <span :class="getStatusColor(data.status)">{{ data.status }}</span>
                     </template>
                     <template #filter="{filterModel}">
                          <div class="field-checkbox">
@@ -262,7 +263,8 @@ const deleteSelectedVaccinationsCallback = () => {
 };
 
 const getStatus = (data) => (
-    data.vaccination?.status ? data.vaccination.status : VaccinationStatuses.free
+    data.vaccination?.status ? data.vaccination.status : 
+        new Date(data.date) >= new Date() ? VaccinationStatuses.free : VaccinationStatuses.expired
 )
 
 const getStatusColor = (status) => (
@@ -270,7 +272,8 @@ const getStatusColor = (status) => (
         [VaccinationStatuses.planned]: 'blue-500',
         [VaccinationStatuses.completed]: 'green-500',
         [VaccinationStatuses.canceled]: 'pink-500',
-        [VaccinationStatuses.free]: 'gray-500'
+        [VaccinationStatuses.free]: 'gray-500',
+        [VaccinationStatuses.expired]: 'bluegray-500'
     }[status]
 )
 
@@ -279,7 +282,8 @@ const getStatusIcon = (status) => (
         [VaccinationStatuses.planned]: 'calendar',
         [VaccinationStatuses.completed]: 'check-circle',
         [VaccinationStatuses.canceled]: 'times-circle',
-        [VaccinationStatuses.free]: 'lock-open'
+        [VaccinationStatuses.free]: 'lock-open',
+        [VaccinationStatuses.expired]: 'calendar-times'
     }[status]
 )
 

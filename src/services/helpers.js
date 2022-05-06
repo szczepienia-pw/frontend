@@ -35,7 +35,8 @@ export const VaccinationStatuses = {
     planned: 'Planned',
     completed: 'Completed',
     canceled: 'Canceled',
-    free: 'Free'
+    free: 'Free',
+    expired: 'Expired'
  };
 
 export const formatTime = (date) => {
