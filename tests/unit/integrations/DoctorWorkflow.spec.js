@@ -43,9 +43,10 @@ describe("doctor workflow test", () => {
         const calendarButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('pi-calendar'))
         await fireEvent.click(calendarButtons[1])
         // click the current day
-        const today = new Date();
-        const date = today.toISOString();
-        await fireEvent.click(screen.getAllByText(today.getDate())[0])
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate()+1);
+        const date = tomorrow.toISOString();
+        await fireEvent.click(screen.getAllByText(tomorrow.getDate())[0])
         axios.post.mockImplementation((url, data) => {
             vaccinations = [...vaccinations, { date: data.date, id: 5 }]
             return Promise.resolve()
