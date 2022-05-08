@@ -6,7 +6,7 @@ import ConfirmPage from "@/views/patient/registration/ConfirmPage";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 import axios from "axios";
-import { formatTime } from "@/services/helpers";
+import { formatDate, formatTime } from "@/services/helpers";
 
 const mockFn = jest.fn();
 
@@ -102,7 +102,7 @@ describe("VaccinationSlots test", () => {
 			const date = await waitFor(() => screen.getAllByTestId("date"));
 			await fireEvent.click(date[0]);
 			const next = screen.getByTestId("next-1");
-			const slot = await waitFor(() => screen.getByText("17:15"));
+			const slot = await waitFor(() => screen.getByText(formatTime(mockResponse.data[0].date)));
 			await fireEvent.click(slot);
 			await fireEvent.click(next);
 			expect(mockFn).toHaveBeenCalled();
@@ -285,7 +285,7 @@ describe("Confirmation test", () => {
 					plugins: [PrimeVue, ToastService],
 				},
 			});
-			await screen.findByText("Date: 24/7/2019, 16:15");
+			await screen.findByText(`Date: ${formatDate('2019-08-24T14:15:22Z')}`);
 			await screen.findByText("Vaccine: Pfizer");
 			await screen.findByText("Disease: COVID-19");
 		});
