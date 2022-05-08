@@ -110,6 +110,7 @@ describe("patient workflow test", () => {
 
            
             await fireEvent.click(screen.getByText('Confirm'));
+            expect(axios.put).toHaveBeenCalledWith('/patient/vaccination-slots/1', {vaccineId: 1});
         })
     })
 })
