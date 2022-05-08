@@ -7,6 +7,7 @@
 			icon="pi pi-angle-right"
 			@click="nextStep"
 			class="mt-5"
+			data-testid="next-1"
 			:disabled="selectedSlot.date == ''" />
 	</div>
 </template>

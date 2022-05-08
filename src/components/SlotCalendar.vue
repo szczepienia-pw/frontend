@@ -12,7 +12,8 @@
 									new Date(s.date).getDate() == date.day
 							)
 						"
-						class="highlighted-day">
+						class="highlighted-day" data-testid="date">
+						
 						{{ date.day }}
 					</strong>
 					<template v-else>{{ date.day }}</template>
