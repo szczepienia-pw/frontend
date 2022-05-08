@@ -4,6 +4,7 @@ import PrimeVue from 'primevue/config';
 import ToastService from "primevue/toastservice";
 import axios from 'axios';
 import { formatTime } from '@/services/helpers';
+import { nextTick } from 'vue';
 
 describe("SlotCalendar test", () => {
     describe("when component is rendered", () => {
@@ -24,11 +25,14 @@ describe("SlotCalendar test", () => {
                     plugins: [PrimeVue, ToastService]
                 }
             })
+            
 
             expect(axios.get).toHaveBeenCalledWith('/vaccination-slots');
-
+            // wait for dom to update
+            await nextTick();
+            await nextTick();
             // click today's date
-            await fireEvent.click(screen.getAllByText(today.getDate()).filter(el => el.classList.contains('p-highlight'))[0]);
+            await fireEvent.click(screen.getAllByText(today.getDate()).filter(el => el.classList.contains('highlighted-day'))[0]);
             // click the slot's time
             await fireEvent.click(screen.getByRole('button', { name: formatTime(today.toISOString()) }));
             // expect v-model to be updated
