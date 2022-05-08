@@ -5,6 +5,8 @@ import ToastService from "primevue/toastservice";
 import axios from 'axios';
 import { fireEvent } from '@testing-library/dom';
 
+const currentYear = new Date().getFullYear();
+
 const mockResponse = {
     data: {
         pagination: {
@@ -15,7 +17,7 @@ const mockResponse = {
         },
         data: [{
             id: 1,
-            date: "2019-08-24T14:15:22Z",
+            date: new Date(currentYear+1, 1).toISOString(),
             vaccination: {
                 id: 1,
                 vaccine: {
@@ -44,7 +46,7 @@ const mockResponse = {
         },
         {
             id: 2,
-            date: "2020-08-24T15:15:22Z",
+            date: new Date(currentYear+2, 1).toISOString(),
         }]
     }
 }
