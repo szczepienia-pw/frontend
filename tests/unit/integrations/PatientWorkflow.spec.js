@@ -210,7 +210,6 @@ describe("patient workflow test", () => {
             axios.get.mockResolvedValueOnce(mockDates);
             await fireEvent.click(screen.getByText('Reschedule visit'));
             await screen.findByText('Choose new date');
-            console.log(screen.getAllByText(today.getDate())[0].classList.toString())
             await fireEvent.click(screen.getAllByText(today.getDate()).filter(el => el.classList.contains('highlighted-day'))[0]);
             // click the slot's time
             await fireEvent.click(screen.getByRole('button', { name: formatTime(today.toISOString()) }));
