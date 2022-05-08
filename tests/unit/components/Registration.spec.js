@@ -57,7 +57,7 @@ describe("VaccinationSlots test", () => {
 	};
 	describe("when component is rendered", () => {
 		it("should correctly display available days", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccinationSlots, {
 				global: {
@@ -72,7 +72,7 @@ describe("VaccinationSlots test", () => {
 
 	describe("when slot is selected", () => {
 		it("should correctly display available hours", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccinationSlots, {
 				global: {
@@ -90,7 +90,7 @@ describe("VaccinationSlots test", () => {
 	});
 	describe("when slot is selected", () => {
 		it("should enable clicking on 'Next' and push new route", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccinationSlots, {
 				global: {
@@ -110,7 +110,7 @@ describe("VaccinationSlots test", () => {
 
 	describe("when slot is not selected", () => {
 		it("should not be possible to click on 'Next'", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccinationSlots, {
 				global: {
@@ -123,7 +123,7 @@ describe("VaccinationSlots test", () => {
 		});
 
 		it("should not be possible to click on 'Next'", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccinationSlots, {
 				global: {
@@ -143,7 +143,7 @@ describe("Disease type test", () => {
 	const mockResponse = ["COVID-19", "COVID-21", "Flu", "OTHER"];
 	describe("when component is rendered", () => {
 		it("should correctly display available diseases", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(DiseaseType, {
 				global: {
@@ -160,7 +160,7 @@ describe("Disease type test", () => {
 
 	describe("when disease is selected", () => {
 		it("should enable clicking on 'Next' and push new route", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(DiseaseType, {
 				global: {
@@ -168,7 +168,7 @@ describe("Disease type test", () => {
 				},
 			});
 
-			const next = screen.getByTestId("next-2");
+			const next = await screen.findByTestId("next-2");
 			const disease = await waitFor(() => screen.getByText("COVID-19"));
 			await fireEvent.click(disease);
 			await fireEvent.click(next);
@@ -178,7 +178,7 @@ describe("Disease type test", () => {
 
 	describe("when disease is not selected", () => {
 		it("should not be possible to click on 'Next'", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(DiseaseType, {
 				global: {
@@ -191,7 +191,7 @@ describe("Disease type test", () => {
 		});
 
 		it("should not be possible to click on 'Next'", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(DiseaseType, {
 				global: {
@@ -226,7 +226,7 @@ describe("Vaccine type test", () => {
 	};
 	describe("when component is rendered", () => {
 		it("should correctly display available vaccines", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 			
 			render(VaccineTypes, {
 				global: {
@@ -243,7 +243,7 @@ describe("Vaccine type test", () => {
 	describe("when vaccine is selected", () => {
 		window.HTMLElement.prototype.scrollIntoView = function () { };
 		it("should enable clicking on 'Next' and push new route", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccineTypes, {
 				global: {
@@ -260,7 +260,7 @@ describe("Vaccine type test", () => {
 
 	describe("when vaccine is not selected", () => {
 		it("should not be possible to click on 'Next'", async () => {
-			axios.get.mockResolvedValueOnce(mockResponse);
+			axios.get.mockResolvedValue(mockResponse);
 
 			render(VaccineTypes, {
 				global: {
