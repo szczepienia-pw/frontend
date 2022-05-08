@@ -10,6 +10,7 @@
 				@click="() => nextStep()"
 				:loading="loading"
 				class="ml-1"
+				data-testid="next-2"
 				:disabled="selectedDisease == ''" />
 		</div>
 	</div>

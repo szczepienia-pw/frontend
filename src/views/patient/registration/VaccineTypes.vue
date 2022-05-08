@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-column align-items-center">
-		<Dropdown v-model="selectedVaccine" :options="vaccines" placeholder="Select vaccine" optionLabel="name" />
+		<Dropdown v-model="selectedVaccine" :options="vaccines" placeholder="Select vaccine" optionLabel="name" data-testid="dropdown"/>
 		<div class="mt-5">
 			<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" :loading="loading" class="mr-1" />
 			<Button
@@ -10,6 +10,7 @@
 				@click="nextStep"
 				:loading="loading"
 				class="ml-1"
+				data-testid="next-3"
 				:disabled="!selectedVaccine" />
 		</div>
 	</div>
