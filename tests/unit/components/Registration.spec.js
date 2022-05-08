@@ -6,6 +6,7 @@ import ConfirmPage from "@/views/patient/registration/ConfirmPage";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 import axios from "axios";
+import { formatTime } from "@/services/helpers";
 
 const mockFn = jest.fn();
 
@@ -82,10 +83,10 @@ describe("VaccinationSlots test", () => {
 
 			const date = await waitFor(() => screen.getAllByTestId("date"));
 			await fireEvent.click(date[0]);
-			await screen.findByText("17:15");
-			await screen.findByText("18:15");
-			expect(screen.queryByText("16:15")).toBeNull();
-			expect(screen.queryByText("19:15")).toBeNull();
+			await screen.findByText(formatTime(mockResponse.data[0].date))
+            await screen.findByText(formatTime(mockResponse.data[1].date))
+			expect(screen.queryByText(formatTime(mockResponse.data[2].date))).toBeNull();
+			expect(screen.queryByText(formatTime(mockResponse.data[3].date))).toBeNull();
 		});
 	});
 	describe("when slot is selected", () => {
