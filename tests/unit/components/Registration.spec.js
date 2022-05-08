@@ -162,7 +162,7 @@ describe("Disease type test", () => {
 		it("should enable clicking on 'Next' and push new route", async () => {
 			axios.get.mockResolvedValueOnce(mockResponse);
 
-			render(VaccinationSlots, {
+			render(DiseaseType, {
 				global: {
 					plugins: [PrimeVue, ToastService],
 				},
