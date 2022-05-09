@@ -10,6 +10,7 @@
 				@click="() => nextStep()"
 				:loading="loading"
 				class="ml-1"
+				data-testid="next-2"
 				:disabled="selectedDisease == ''" />
 		</div>
 	</div>
@@ -21,17 +22,15 @@ import { ref } from "vue";
 import SelectButton from "primevue/selectbutton";
 import { getDiseases } from "@/services/api";
 import { useRouter } from "vue-router";
+import { setVisitRegistration } from "@/services/useVisitRegistration"
 
 const router = useRouter();
 const selectedDisease = ref("");
 const diseases = ref(getDiseases());
 const loading = ref(false);
 
-// eslint-disable-next-line
-const emit = defineEmits(["select-option"]);
-
 const nextStep = () => {
-	emit("select-option", { option: "disease", value: selectedDisease });
+	setVisitRegistration('disease', selectedDisease.value);
 	router.push("vaccines");
 };
 </script>

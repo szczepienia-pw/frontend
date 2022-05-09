@@ -74,6 +74,18 @@ export const deleteVaccinationSlot = (id) => {
 	return api.delete(`/doctor/vaccination-slots/${id}`);
 };
 
+export const confirmVaccinationSlot = (id) => {
+	return api.put(`/doctor/vaccination-slots/${id}`, {
+		status: "COMPLETED",
+	});
+};
+
+export const cancelPlannedVaccinationSlot = (id) => {
+	return api.put(`/doctor/vaccination-slots/${id}`, {
+		status: "CANCELED",
+	});
+};
+
 export const reportBug = (name, description) => {
 	return api.post(`/bugs`, {
 		name,
@@ -97,12 +109,12 @@ export const changeData = (data) => {
 };
 
 export const getVaccinationHistory = (page = 1) => {
-    return api.get(`/patient/vaccinations?page=${page}`)
-}
+	return api.get(`/patient/vaccinations?page=${page}`);
+};
 
 export const cancelVaccinationSlot = (id) => {
-    return api.delete(`/patient/vaccination-slots/${id}`);
-}
+	return api.delete(`/patient/vaccination-slots/${id}`);
+};
 
 export const getAdminSettings = () => {
 	return api.get(`/admin/settings`);
@@ -123,7 +135,7 @@ export const getVaccines = (disease) => {
 };
 
 export const getSlots = () => {
-	return api.get("/patient/vaccination-slots");
+	return api.get("/vaccination-slots");
 };
 
 export const reserveSlot = (vaccinationSlotId, vaccineId) => {
@@ -131,3 +143,20 @@ export const reserveSlot = (vaccinationSlotId, vaccineId) => {
 		vaccineId,
 	});
 };
+
+export const getPatients = (page = 1) => {
+	return api.get(`/admin/patients?page=${page}`);
+};
+
+export const editPatient = (id, data) => {
+	return api.put(`/admin/patients/${id}`, data);
+};
+
+export const deletePatient = (id) => {
+	return api.delete(`/admin/patients/${id}`);
+};
+export const downloadCertificate = (vaccinationId) => {
+	return api.get(`/patient/vaccinations/${vaccinationId}/certificate`, {
+		responseType: 'blob'
+	});
+}

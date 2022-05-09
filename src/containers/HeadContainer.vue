@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<nav v-if="userSession.isLoggedIn">
 			<div class="username">
-				<i class="pi pi-user mr-3" />
+				<i class="pi pi-user" />
 				{{ userSession.userInfo.firstName + " " + userSession.userInfo.lastName }}
 			</div>
 			<Button
@@ -84,9 +84,9 @@ const menuItems = computed(() => {
 				page: "doctors",
 			},
 			{
-				label: "Users",
+				label: "Patients",
 				icon: "pi-users",
-				disabled: true,
+				page: "patients"
 			},
 			{
 				label: "Vaccinations",
@@ -140,7 +140,6 @@ nav :deep() {
 		font-size: 1.25rem;
 		margin-bottom: 2rem;
 		display: flex;
-		flex-direction: row;
 	}
 
 	.p-button.p-button-plain {

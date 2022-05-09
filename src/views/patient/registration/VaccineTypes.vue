@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-column align-items-center">
-		<Dropdown v-model="selectedVaccine" :options="vaccines" placeholder="Select vaccine" optionLabel="name" />
+		<Dropdown v-model="selectedVaccine" :options="vaccines" placeholder="Select vaccine" optionLabel="name" data-testid="dropdown"/>
 		<div class="mt-5">
 			<Button label="Back" icon="pi pi-angle-left" @click="$router.back()" :loading="loading" class="mr-1" />
 			<Button
@@ -10,7 +10,8 @@
 				@click="nextStep"
 				:loading="loading"
 				class="ml-1"
-				:disabled="selectedVaccine == {}" />
+				data-testid="next-3"
+				:disabled="!selectedVaccine" />
 		</div>
 	</div>
 </template>
@@ -21,21 +22,16 @@ import Dropdown from "primevue/dropdown";
 import { ref, onMounted } from "vue";
 import { getVaccines } from "@/services/api";
 import { useRouter } from "vue-router";
+import { useVisitRegistration, setVisitRegistration } from "@/services/useVisitRegistration"
 
+const registrationInfo = useVisitRegistration();
 const router = useRouter();
-// eslint-disable-next-line
-const props = defineProps({
-	selectedOptions: {
-		type: Object,
-		required: true,
-	},
-});
 
-let selectedVaccine = ref({});
+let selectedVaccine = ref(null);
 const vaccines = ref([]);
 
 onMounted(() => {
-	getVaccines(props.selectedOptions.disease)
+	getVaccines(registrationInfo.disease)
 		.then((response) => {
 			response = response.data;
 			vaccines.value = response.vaccines;
@@ -50,8 +46,8 @@ const emit = defineEmits(["select-option"]);
 const loading = ref(false);
 
 const nextStep = () => {
+	setVisitRegistration('vaccine', selectedVaccine.value);
 	router.push("confirm");
-	emit("select-option", { option: "vaccine", value: selectedVaccine.value });
 };
 </script>
 
