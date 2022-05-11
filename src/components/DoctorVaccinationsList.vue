@@ -50,14 +50,14 @@
                         </div>
                     </template>
                 </Column>
-                <Column style="min-width:8rem">
+                <Column style="min-width:10rem">
                     <template #body="{ data }">
-                        <Button v-if="data.status === VaccinationStatuses.free" icon="pi pi-trash delete" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
-                        <div v-else-if="data.status === VaccinationStatuses.planned">
-                            <Button  icon="pi pi-trash cancel" class="p-button-danger p-button-rounded" @click="confirmCancelVaccination(data)" />
+                        <Button v-if="data.vaccine" icon="pi pi-info-circle" class="p-button-info p-button-rounded" @click="showVaccinationDetails(data)" />
+                        <span v-if="data.status === VaccinationStatuses.planned" class="ml-2">
+                            <Button  icon="pi pi-times-circle" class="p-button-danger p-button-rounded" @click="confirmCancelVaccination(data)" />
                             <Button  icon="pi pi-check" class="ml-2 p-button-success p-button-rounded" @click="confirmVaccination(data)" />
-                        </div>
-                        
+                        </span>
+                        <Button v-else-if="data.status === VaccinationStatuses.free" icon="pi pi-trash delete" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
                     </template>
                 </Column>
                 <template #paginatorstart>
@@ -112,6 +112,52 @@
                 <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="cancelVaccinationCallback" />
             </template>
         </Dialog>
+
+        <Dialog
+			v-model:visible="vaccinationDetailsDialog"
+			header="Vaccination details"
+			modal
+			:draggable="false"
+			:style="{ width: '600px' }">
+			<div class="flex flex-row w-full">
+				<div class="flex-1">
+					<div class="vaccination-details__field">
+						<div class="field-label">Vaccine</div>
+						{{ vaccination.vaccine.name }}
+					</div>
+					<div class="vaccination-details__field">
+						<div class="field-label">Disease</div>
+						{{ vaccination.vaccine.disease }}
+					</div>
+					<div class="vaccination-details__field">
+						<div class="field-label">Required doses</div>
+						{{ vaccination.vaccine.requiredDoses }}
+					</div>
+					<div class="vaccination-details__field">
+						<div class="field-label">Serial number</div>
+						{{ vaccination.vaccine.serialNumber }}
+					</div>
+				</div>
+				<div class="flex-1">
+					<div class="vaccination-details__field">
+						<div class="field-label">Date</div>
+						{{ formatDate(vaccination.date.toISOString()) }}
+					</div>
+					<div class="vaccination-details__field">
+						<div class="field-label">Status</div>
+						{{ vaccination.status }}
+					</div>
+					<div class="vaccination-details__field">
+						<div class="field-label">Patient</div>
+						{{ vaccination.patient }}
+					</div>
+					<div class="vaccination-details__field">
+						<div class="field-label">Contact</div>
+						{{ vaccination.patientEmail }}
+					</div>
+				</div>
+			</div>
+		</Dialog>
 	</div>
 </template>
 
@@ -138,6 +184,7 @@ const deleteVaccinationDialog = ref(false);
 const deleteVaccinationsDialog = ref(false);
 const confirmVaccinationDialog = ref(false);
 const cancelVaccinationDialog = ref(false);
+const vaccinationDetailsDialog = ref(false);
 const vaccination = ref({});
 const selectedVaccinations = ref();
 const filters = ref({
@@ -165,10 +212,12 @@ const loadVaccinations = (page = 1) => {
             pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
             vaccinations.value = vaccinationsBackup.value = response.data.map(item => ({
                 patient: item.vaccination?.patient ? `${item.vaccination.patient.firstName} ${item.vaccination.patient.lastName}` : '',
+                patientEmail: item.vaccination?.patient?.email,
                 date: new Date(item.date),
                 id: item.id,
                 time: formatTime(new Date(item.date)),
-                status: getStatus(item)
+                status: getStatus(item),
+                vaccine: item.vaccination?.vaccine
             }))
         })
         .catch(err => {
@@ -186,18 +235,24 @@ defineExpose({
 onMounted(() => {
     loadVaccinations();
 })
-const confirmDeleteVaccination = (doct) => {
-    vaccination.value = {...doct};
+const confirmDeleteVaccination = (vacc) => {
+    vaccination.value = {...vacc};
     deleteVaccinationDialog.value = true;
 };
-const confirmVaccination = (doct) => {
-    vaccination.value = {...doct};
+const confirmVaccination = (vacc) => {
+    vaccination.value = {...vacc};
     confirmVaccinationDialog.value = true;
 };
-const confirmCancelVaccination = (doct) => {
-    vaccination.value = {...doct};
+const confirmCancelVaccination = (vacc) => {
+    vaccination.value = {...vacc};
     cancelVaccinationDialog.value = true;
 };
+
+const showVaccinationDetails = (vacc) => {
+    vaccination.value = {...vacc};
+    vaccinationDetailsDialog.value = true;
+};
+
 const deleteVaccinationCallback = () => {
     deleteVaccinationSlot(vaccination.value.id)
         .then(() => {

@@ -379,30 +379,6 @@ const vaccinations = ref([]);
 	}
 }
 
-.vaccination-details__field {
-	position: relative;
-	padding-bottom: 1rem;
-
-	&:not(:first-child) {
-		margin-top: 1rem;
-	}
-
-	.field-label {
-		opacity: 0.7;
-		font-size: 0.75rem;
-	}
-
-	&::after {
-		position: absolute;
-		left: 0;
-		bottom: 0;
-		width: 90%;
-		height: 1px;
-		background-color: var(--primary-color);
-		content: "";
-	}
-}
-
 .no-visits-info {
 	display: flex;
 	flex-direction: column;
