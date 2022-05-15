@@ -155,8 +155,28 @@ export const editPatient = (id, data) => {
 export const deletePatient = (id) => {
 	return api.delete(`/admin/patients/${id}`);
 };
+
 export const downloadCertificate = (vaccinationId) => {
 	return api.get(`/patient/vaccinations/${vaccinationId}/certificate`, {
-		responseType: 'blob'
+		responseType: "blob",
 	});
+};
+
+export const getVaccinationds = (disease, doctorId, page, patientId) => {
+	return api.get(`/admin/vaccinations`, {
+		disease,
+		doctorId,
+		page,
+		patientId,
+	});
+};
+
+export const getVaccinations = (page = 1) => {
+	return api.get(`/admin/vaccinations?page=${page}`);
+};
+
+export const changeVaccinationSlot = (vaccinationSlotId, vaccinationId) => {
+	return api.post(`admin/vaccinations/${vaccinationId}/change-slot/`,{
+		vaccinationSlotId
+	})
 }

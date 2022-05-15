@@ -80,6 +80,10 @@ const router = createRouter({
                     component: () => import("@/views/admin/Patients.vue"),
                 },
                 {
+                    path: 'vaccinations',
+                    component: () => import("@/views/admin/Vaccinations.vue"),
+                },
+                {
                     path: 'settings',
                     component: () => import("@/views/admin/Settings.vue"),
                 }

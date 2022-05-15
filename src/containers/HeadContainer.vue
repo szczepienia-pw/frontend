@@ -91,7 +91,7 @@ const menuItems = computed(() => {
 			{
 				label: "Vaccinations",
 				icon: "pi-list",
-				disabled: true,
+				page: "vaccinations"
 			},
 			{
 				label: "Settings",
