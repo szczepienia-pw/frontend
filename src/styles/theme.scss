@@ -4,6 +4,30 @@ $success-hover: #1a966d;
 $danger: #D32F2F;
 $info: #0288D1;
 
+.vaccination-details__field {
+	position: relative;
+	padding-bottom: 1rem;
+
+	&:not(:first-child) {
+		margin-top: 1rem;
+	}
+
+	.field-label {
+		opacity: 0.7;
+		font-size: 0.75rem;
+	}
+
+	&::after {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 90%;
+		height: 1px;
+		background-color: var(--primary-color);
+		content: "";
+	}
+}
+
 * {
     margin: 0;
     padding: 0;
