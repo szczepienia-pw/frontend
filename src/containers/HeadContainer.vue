@@ -19,7 +19,7 @@
 					icon="pi pi-exclamation-circle"
 					label="Report a bug"
 					@click="bugReportDialogVisible = true" />
-				<Button
+				<Button v-if="userSession.userType === userTypes.patient"
 					icon="pi pi-trash"
 					class="p-button-text p-button-plain"
 					label="Delete account"
