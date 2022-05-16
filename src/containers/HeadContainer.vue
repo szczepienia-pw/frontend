@@ -87,6 +87,8 @@ const deletePatient = () => {
 				detail: err?.response?.data?.msg || "Could not delete account",
 				life: 3000,
 			});
+		})
+		.finally(() => {
 			deletePatientDialog.value = false;
 		})
 };
