@@ -207,7 +207,7 @@ import { ref, onMounted } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
 import { getPatients, deletePatient, editPatient } from "@/services/api";
-import { errorToast, objectDiff } from "@/services/helpers";
+import { errorToast, objectDiff, successToast } from "@/services/helpers";
 
 const pageSize = ref(0);
 const toast = useToast();
@@ -244,12 +244,7 @@ const loadPatients = (page = 1) => {
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not fetch patients",
-				life: 3000,
-			});
+            errorToast(toast, 'Could not fetch patients', err);
 		})
 		.finally(() => (loading.value = false));
 };
@@ -273,17 +268,12 @@ const saveEditedPatient = () => {
 	}
 	editPatient(patient.value.id, changes)
 		.then(() => {
-			toast.add({ severity: "success", summary: "Success", detail: "Patient information saved", life: 3000 });
+            successToast(toast, 'Patient information saved');
 			loadPatients(pagination.value.currentPage);
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not edit patient",
-				life: 3000,
-			});
+            errorToast(toast, 'Could not edit patient', err);
 		})
 		.finally(() => {
 			patientDialog.value = false;
@@ -305,22 +295,11 @@ const confirmDeletePatient = (pat) => {
 const deletePatientCallback = () => {
 	deletePatient(patient.value.id)
 		.then(() => {
-			toast.add({
-				severity: "success",
-				summary: "Success",
-				detail: `Patient ${patient.value.firstName} ${patient.value.lastName} removed`,
-				life: 3000,
-			});
-			loadPatients(pagination.value.currentPage);
+            successToast(toast, `Patient ${patient.value.firstName} ${patient.value.lastName} removed`);
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not delete patient",
-				life: 3000,
-			});
+            errorToast(toast, 'Could not delete patient', err);
 		})
 		.finally(() => {
 			deletePatientDialog.value = false;
@@ -337,12 +316,7 @@ const deleteSelectedPatientsCallback = () => {
 			await deletePatient(patient.id);
 		} catch (err) {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not delete patient",
-				life: 3000,
-			});
+            errorToast(toast, 'Could not delete patient', err);
 			return false;
 		}
 		return true;
