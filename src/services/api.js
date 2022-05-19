@@ -155,8 +155,13 @@ export const editPatient = (id, data) => {
 export const deletePatient = (id) => {
 	return api.delete(`/admin/patients/${id}`);
 };
+
 export const downloadCertificate = (vaccinationId) => {
 	return api.get(`/patient/vaccinations/${vaccinationId}/certificate`, {
 		responseType: 'blob'
 	});
+}
+
+export const deleteAccount = () => {
+	return api.delete(`/patient/account`);
 }
