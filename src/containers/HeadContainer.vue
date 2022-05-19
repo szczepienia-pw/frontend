@@ -56,7 +56,7 @@ import Dialog from "primevue/dialog";
 import BugReportDialog from "@/components/BugReportDialog";
 import { useRouter } from "vue-router";
 import { useUserSession, clearUserSession, userTypes } from "@/services/useUserSession";
-import { successToast } from "@/services/helpers";
+import { successToast, errorToast } from "@/services/helpers";
 import { useToast } from "primevue/usetoast";
 import { computed, ref } from "vue";
 import { deleteAccount } from "@/services/api";
@@ -70,23 +70,13 @@ const toast = useToast();
 const deletePatient = () => {
 	deleteAccount()
 		.then(() => {
-			toast.add({
-				severity: "success",
-				summary: "Success",
-				detail: `Your account was deleted`,
-				life: 3000,
-			});
+			successToast(toast, "Your account was deleted");
 			clearUserSession();
 			router.push({ name: "login" });
 		})
 		.catch((err) => {
 			console.error(err);
-			toast.add({
-				severity: "error",
-				summary: err?.response?.statusText || "Error",
-				detail: err?.response?.data?.msg || "Could not delete account",
-				life: 3000,
-			});
+			errorToast(toast, "Could not delete account", err)
 		})
 		.finally(() => {
 			deletePatientDialog.value = false;
