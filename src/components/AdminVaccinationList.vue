@@ -35,29 +35,117 @@
 					</div>
 				</template>
 
-				<Column field="patient" header="Patient" :sortable="true">
-					{{ patient }}
-				</Column>
-				<Column field="doctor" header="Doctor" :sortable="true">
-					{{ doctor }}
-				</Column>
 				<Column
-					field="date"
-					filterField="date"
-					dataType="date"
-					header="Date"
+					field="patient"
+					header="Patient"
 					:sortable="true"
-					:filterMatchModeOptions="matchModes"
-					:showFilterOperator="false">
+					filterField="patient"
+					:showFilterMatchModes="false"
+					:filterMenuStyle="{ width: '14rem' }"
+					style="min-width: 14rem">
 					<template #body="{ data }">
-						{{ new Date(data.date).toLocaleDateString() }}
+						{{ data.patient }}
 					</template>
 					<template #filter="{ filterModel }">
-						<Calendar v-model="filterModel.value" dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" />
+						<Dropdown
+							v-model="filterModel.value"
+							:options="lazyPatients"
+							:virtualScrollerOptions="{
+								lazy: true,
+								onLazyLoad: lazyLoadPatients,
+								itemSize: 38,
+								showLoader: true,
+								loading: loadingPatients,
+								delay: 250,
+							}"
+							placeholder="Select patient"
+                        >
+							<template #value="props">
+								<span v-if="props.value">
+									{{ props.value.firstName + " " + props.value.lastName }}
+								</span>
+								<span v-else>
+									{{ props.placeholder }}
+								</span>
+							</template>
+							<template #option="{ option }">
+								{{ option.firstName + " " + option.lastName }}
+							</template>
+							<template v-slot:loader="{ options }">
+								<div class="flex align-items-center p-2" style="height: 38px">
+									<Skeleton :width="options.even ? '60%' : '50%'" height="1rem" />
+								</div>
+							</template>
+						</Dropdown>
 					</template>
 				</Column>
-				<Column field="time" header="Time" :sortable="true">
-					{{ time }}
+				<Column 
+                    field="doctor"
+					header="Doctor"
+					:sortable="true"
+					filterField="doctor"
+					:showFilterMatchModes="false"
+					:filterMenuStyle="{ width: '14rem' }"
+					style="min-width: 14rem">
+					<template #body="{ data }">
+						{{ data.doctor }}
+					</template>
+					<template #filter="{ filterModel }">
+						<Dropdown
+							v-model="filterModel.value"
+							:options="lazyDoctors"
+							:virtualScrollerOptions="{
+								lazy: true,
+								onLazyLoad: lazyLoadDoctors,
+								itemSize: 38,
+								showLoader: true,
+								loading: loadingDoctors,
+								delay: 250,
+							}"
+							placeholder="Select doctor"
+                        >
+							<template #value="props">
+								<span v-if="props.value">
+									{{ props.value.firstName + " " + props.value.lastName }}
+								</span>
+								<span v-else>
+									{{ props.placeholder }}
+								</span>
+							</template>
+							<template #option="{ option }">
+								{{ option.firstName + " " + option.lastName }}
+							</template>
+							<template v-slot:loader="{ options }">
+								<div class="flex align-items-center p-2" style="height: 38px">
+									<Skeleton :width="options.even ? '60%' : '50%'" height="1rem" />
+								</div>
+							</template>
+						</Dropdown>
+					</template>
+				</Column>
+				<Column field="date" dataType="date" header="Date" :sortable="true">
+					<template #body="{ data }">
+						{{ formatDate(data.date) }}
+					</template>
+				</Column>
+				<Column 
+                    field="disease"
+					header="Disease"
+					:sortable="true"
+					filterField="disease"
+					:showFilterMatchModes="false"
+					:filterMenuStyle="{ width: '14rem' }"
+					style="min-width: 14rem">
+					<template #body="{ data }">
+						{{ data.disease }}
+					</template>
+					<template #filter="{ filterModel }">
+						<Dropdown
+							v-model="filterModel.value"
+							:options="diseases"
+							placeholder="Select disease"
+                        />
+					</template>
 				</Column>
 				<Column
 					field="status"
@@ -185,21 +273,31 @@
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
+import Dropdown from "primevue/dropdown";
+import Skeleton from "primevue/skeleton";
 import Column from "primevue/column";
-import Calendar from "primevue/calendar";
 import InputText from "primevue/inputtext";
 import TriStateCheckbox from "primevue/tristatecheckbox";
 import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
-import { getVaccinations, changeVaccinationSlot } from "@/services/api";
+import { getVaccinations, changeVaccinationSlot, getPatients, getDoctors, getDiseases } from "@/services/api";
 import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from "@/services/helpers";
 
 const toast = useToast();
 const loading = ref(true);
 const dt = ref();
 const vaccinations = ref();
+const loadingPatients = ref(false);
+const patients = ref();
+const lazyPatients = ref();
+const patientsMaxPage = ref(1);
+const loadingDoctors = ref(false);
+const doctors = ref();
+const lazyDoctors = ref();
+const doctorsMaxPage = ref(1);
+const diseases = getDiseases();
 const vaccinationsBackup = ref();
 const vaccinationDetailsDialog = ref(false);
 const vaccination = ref({});
@@ -208,13 +306,11 @@ const vaccinationRescheduleDialog = ref(false);
 const newVaccinationDate = ref({ date: "", id: "" });
 const filters = ref({
 	global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-	date: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-	status: { value: null },
+	doctor: { value: null },
+	patient: { value: null },
+	disease: { value: null },
 });
-const matchModes = [
-	{ label: "Starts With", value: FilterMatchMode.STARTS_WITH },
-	{ label: "Ends with", value: FilterMatchMode.ENDS_WITH },
-];
+
 const pagination = ref({
 	currentPage: 0,
 	totalPages: 0,
@@ -224,10 +320,9 @@ const pagination = ref({
 const pageSize = ref(0);
 const loadVaccinations = (page = 1) => {
 	loading.value = true;
-	getVaccinations(page, getFilterStartDate(), getFilterEndDate(), getFilterOnlyReserved())
+	getVaccinations(page, getFilterDisease(), getFilterDoctor(), getFilterPatient())
 		.then((response) => {
 			response = response.data;
-			console.log(response.data);
 			pagination.value = response.pagination;
 			pageSize.value = Math.max(pageSize.value, pagination.value.currentRecords);
 			vaccinations.value = vaccinationsBackup.value = response.data.map((item) => ({
@@ -240,9 +335,9 @@ const loadVaccinations = (page = 1) => {
 				time: formatTime(new Date(item.vaccinationSlot.date)),
 				status: item.status,
 				vaccine: item.vaccine,
+				disease: item.vaccine.disease,
 				vaccinationSlot: item.vaccinationSlot,
 			}));
-			console.log(vaccinations.value);
 		})
 		.catch((err) => {
 			console.error(err);
@@ -272,9 +367,60 @@ defineExpose({
 	loadVaccinations,
 });
 
+const loadPatients = (page = 1, append = false) => {
+    loadingPatients.value = true;
+	getPatients(page)
+        .then(response => {
+            response = response.data;
+            patients.value = append ? [...patients.value, response.data] : response.data;
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, 'Could not fetch patients', err);
+        })
+        .finally(() => {
+            loadingPatients.value = false;
+        })
+};
+
+const loadDoctors = (page = 1, append = false) => {
+    loadingDoctors.value = true;
+	getDoctors(page)
+        .then(response => {
+            response = response.data;
+            doctors.value = append ? [...doctors.value, response.data] : response.data;
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, 'Could not fetch doctors', err);
+        })
+        .finally(() => {
+            loadingDoctors.value = false;
+        })
+};
+
 onMounted(() => {
+	doctors.value = [];
+    loadPatients();
+    loadDoctors();
 	loadVaccinations();
 });
+
+const lazyLoadPatients = ({first, last}) => {
+    if(first > patients.value.length) {
+        patientsMaxPage.value++;
+        loadPatients(patientsMaxPage.value, true);
+    }
+    lazyPatients.value = patients.value.slice(first, last+1);
+};
+
+const lazyLoadDoctors = ({first, last}) => {
+    if(first > doctors.value.length) {
+        doctorsMaxPage.value++;
+        loadDoctors(doctorsMaxPage.value, true);
+    }
+    lazyDoctors.value = doctors.value.slice(first, last+1);
+};
 
 const showVaccinationDetails = (vacc) => {
 	vaccination.value = { ...vacc };
@@ -316,14 +462,11 @@ const onSearch = () => {
 	);
 };
 
-const getFilterStartDate = () =>
-	filters.value.date.constraints.find((el) => el.matchMode === "startsWith")?.value?.toISOString();
+const getFilterDoctor = () => filters.value.doctor.value?.id;
 
-const getFilterEndDate = () =>
-	filters.value.date.constraints.find((el) => el.matchMode === "endsWith")?.value?.toISOString();
+const getFilterPatient = () => filters.value.patient.value?.id;
 
-const getFilterOnlyReserved = () =>
-	filters.value.status.value === true ? "1" : filters.value.status.value === false ? "0" : null;
+const getFilterDisease = () => filters.value.disease.value;
 
 const onFilter = () => {
 	loadVaccinations(pagination.value.currentPage);
@@ -357,6 +500,6 @@ const onFilter = () => {
 .change-date {
 	position: absolute;
 	left: 210px;
-    margin-right: 0;
+	margin-right: 0;
 }
 </style>

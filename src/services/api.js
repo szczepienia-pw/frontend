@@ -162,17 +162,13 @@ export const downloadCertificate = (vaccinationId) => {
 	});
 };
 
-export const getVaccinationds = (disease, doctorId, page, patientId) => {
-	return api.get(`/admin/vaccinations`, {
-		disease,
-		doctorId,
-		page,
-		patientId,
-	});
-};
-
-export const getVaccinations = (page = 1) => {
-	return api.get(`/admin/vaccinations?page=${page}`);
+export const getVaccinations = (page = 1, disease = null, doctorId = null, patientId = null) => {
+	return api.get(
+		`/admin/vaccinations?page=${page}` +
+			`${disease ? "&disease=" + disease : ""}` +
+			`${doctorId ? "&doctorId=" + doctorId : ""}` +
+			`${patientId ? "&patientId=" + patientId : ""}`
+	);
 };
 
 export const changeVaccinationSlot = (vaccinationSlotId, vaccinationId) => {
