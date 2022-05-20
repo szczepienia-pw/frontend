@@ -108,6 +108,7 @@ import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getDoctors, deleteDoctor, createDoctor, editDoctor } from '@/services/api'
+import { errorToast, successToast } from '@/services/helpers'
 
 const toast = useToast();
 const loading = ref(true)
@@ -143,7 +144,7 @@ const loadDoctors = (page = 1) => {
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not fetch doctors', life: 3000});
+            errorToast(toast, 'Could not fetch doctors', err);
         })
         .finally(() => loading.value = false)
 }
@@ -167,12 +168,12 @@ const saveNewDoctor = () => {
     if(!doctor.value.firstName || !doctor.value.lastName || !doctor.value.email || !doctor.value.password) return;
     createDoctor(doctor.value.firstName, doctor.value.lastName, doctor.value.email, doctor.value.password)
         .then(() => {
-            toast.add({severity:'success', summary: 'Success', detail: 'Doctor information saved', life: 3000});
+            successToast(toast, 'Doctor information saved');
             loadDoctors();
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not create doctor', life: 3000});
+            errorToast(toast, 'Could not create doctor', err);
         })
         .finally(() => {
             doctorDialog.value = false;
@@ -185,12 +186,12 @@ const saveEditedDoctor = () => {
     if(!doctor.value.firstName || !doctor.value.lastName || !doctor.value.email) return;
     editDoctor(doctor.value.id, doctor.value.firstName, doctor.value.lastName, doctor.value.email)
         .then(() => {
-            toast.add({severity:'success', summary: 'Success', detail: 'Doctor information saved', life: 3000});
+            successToast(toast, 'Doctor information saved');
             loadDoctors(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
-           toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not edit doctor', life: 3000});
+            errorToast(toast, 'Could not edit doctor', err);
         })
         .finally(() => {
             doctorDialog.value = false;
@@ -211,12 +212,12 @@ const confirmDeleteDoctor = (doct) => {
 const deleteDoctorCallback = () => {
     deleteDoctor(doctor.value.id)
         .then(() => {
-            toast.add({severity:'success', summary: 'Success', detail: `Doctor ${doctor.value.firstName} ${doctor.value.lastName} removed`, life: 3000});
+            successToast(toast, `Doctor ${doctor.value.firstName} ${doctor.value.lastName} removed`);
             loadDoctors(pagination.value.currentPage);
         })
         .catch(err => {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not delete doctor', life: 3000});
+            errorToast(toast, 'Could not delete doctor', err);
         })
         .finally(() => {
             deleteDoctorDialog.value = false;
@@ -233,7 +234,7 @@ const deleteSelectedDoctorsCallback = () => {
             await deleteDoctor(doctor.id);
         } catch(err) {
             console.error(err);
-            toast.add({severity:'error', summary: err?.response?.statusText || 'Error', detail: err?.response?.data?.msg || 'Could not delete doctor', life: 3000});
+            errorToast(toast, 'Could not delete doctor', err);
             return false;
         }
         return true;

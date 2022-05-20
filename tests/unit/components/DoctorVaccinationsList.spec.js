@@ -58,7 +58,10 @@ describe("DoctorVaccinationsList test", () => {
 
             render(DoctorVaccinationsList, {
                 global: {
-                    plugins: [PrimeVue, ToastService]
+                    plugins: [PrimeVue, ToastService],
+                    directives: {
+                        tooltip() { }
+                    },
                 }
             })
 
@@ -75,13 +78,17 @@ describe("DoctorVaccinationsList test", () => {
 
             render(DoctorVaccinationsList, {
                 global: {
-                    plugins: [PrimeVue, ToastService]
+                    plugins: [PrimeVue, ToastService],
+                    directives: {
+                        tooltip() { }
+                    },
                 }
             })
 
             await screen.findByText('John Patient');
-            const deleteButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('delete'));
-            await fireEvent.click(deleteButtons[0]);
+            const deleteButtons = screen.getAllByRole('button').filter(el => el.classList.contains('p-button-danger'));
+            // the first button is for deleting selected, the second is for canceling the first planned vaccination
+            await fireEvent.click(deleteButtons[2]);
             await fireEvent.click(screen.getByRole('button', { name: 'Yes' }));
             expect(axios.delete).toHaveBeenCalledWith("/doctor/vaccination-slots/2");
         });
