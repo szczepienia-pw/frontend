@@ -170,6 +170,7 @@
 							v-if="data.vaccine"
 							icon="pi pi-info-circle"
 							class="p-button-info p-button-rounded"
+							v-tooltip="'Details'"
 							@click="showVaccinationDetails(data)" />
 					</template>
 				</Column>
@@ -284,7 +285,9 @@ import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
 import { getVaccinations, rescheduleVaccination, getPatients, getDoctors, getDiseases } from "@/services/api";
 import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from "@/services/helpers";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const toast = useToast();
 const loading = ref(true);
 const dt = ref();
@@ -362,11 +365,6 @@ const rescheduleVaccinationCallback = () => {
 		});
 };
 
-// eslint-disable-next-line
-defineExpose({
-	loadVaccinations,
-});
-
 const loadPatients = (page = 1, append = false) => {
     loadingPatients.value = true;
 	getPatients(page)
@@ -385,7 +383,7 @@ const loadPatients = (page = 1, append = false) => {
 
 const loadDoctors = (page = 1, append = false) => {
     loadingDoctors.value = true;
-	getDoctors(page)
+	return getDoctors(page)
         .then(response => {
             response = response.data;
             doctors.value = append ? [...doctors.value, response.data] : response.data;
@@ -402,7 +400,12 @@ const loadDoctors = (page = 1, append = false) => {
 onMounted(() => {
 	doctors.value = [];
     loadPatients();
-    loadDoctors();
+    loadDoctors()
+		.then(() => {
+			if(route.query.doctor) {
+				filters.value.doctor.value = doctors.value.find(d => d.id == route.query.doctor);
+			}
+		})
 	loadVaccinations();
 });
 
