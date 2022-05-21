@@ -6,6 +6,19 @@ import axios from "axios";
 import { fireEvent } from "@testing-library/dom";
 import { formatDate} from "@/services/helpers";
 
+jest.mock("vue-router", () => ({
+	useRouter: () => ({
+		push: () => mockFn(),
+		replace: () => mockFn(),
+	}),
+    useRoute: jest.fn(() => {
+         return {
+            query: {
+                doctor: 1
+            }
+        }
+    })
+}));
 
 const today = new Date();
 const mockResponse = {
@@ -76,7 +89,6 @@ describe("AdminVaccinationList test", () => {
 			await screen.findByText("Ben Doctor");
 			await screen.findByText("COVID-19");
             await screen.findByText(formatDate(today.toISOString()));
-			screen.debug();
 		});
 	});
 
