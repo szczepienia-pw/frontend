@@ -31,8 +31,9 @@
                 <Column field="email" header="Email" :sortable="true" style="min-width:8rem"></Column>
                 <Column :exportable="false" style="min-width:8rem">
                     <template #body="slotProps">
-                        <Button icon="pi pi-pencil" class="p-button-rounded mr-2" @click="startEditingDoctor(slotProps.data)" />
-                        <Button icon="pi pi-trash" class="p-button-danger p-button-rounded" @click="confirmDeleteDoctor(slotProps.data)" />
+                        <Button icon="pi pi-pencil" class="p-button-rounded mr-2" v-tooltip.bottom="'Edit'" @click="startEditingDoctor(slotProps.data)" />
+                        <Button icon="pi pi-book" class="p-button-rounded mr-2" v-tooltip.bottom="'Show vaccinations'" @click="showDoctorHistory(slotProps.data)" />
+                        <Button icon="pi pi-trash" class="p-button-danger p-button-rounded" v-tooltip.bottom="'Delete'" @click="confirmDeleteDoctor(slotProps.data)" />
                     </template>
                 </Column>
                 <template #paginatorstart>
@@ -109,7 +110,9 @@ import { FilterMatchMode } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
 import { getDoctors, deleteDoctor, createDoctor, editDoctor } from '@/services/api'
 import { errorToast, successToast } from '@/services/helpers'
+import { useRouter } from 'vue-router'
 
+const router = useRouter();
 const toast = useToast();
 const loading = ref(true)
 const dt = ref();
@@ -208,6 +211,9 @@ const startEditingDoctor = (doct) => {
 const confirmDeleteDoctor = (doct) => {
     doctor.value = {...doct};
     deleteDoctorDialog.value = true;
+};
+const showDoctorHistory = (doct) => {
+    router.replace(`/admin/vaccinations?doctor=${doct.id}`);
 };
 const deleteDoctorCallback = () => {
     deleteDoctor(doctor.value.id)
