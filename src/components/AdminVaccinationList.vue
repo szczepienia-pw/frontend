@@ -282,7 +282,7 @@ import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
-import { getVaccinations, changeVaccinationSlot, getPatients, getDoctors, getDiseases } from "@/services/api";
+import { getVaccinations, rescheduleVaccination, getPatients, getDoctors, getDiseases } from "@/services/api";
 import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from "@/services/helpers";
 
 const toast = useToast();
@@ -347,7 +347,7 @@ const loadVaccinations = (page = 1) => {
 };
 
 const rescheduleVaccinationCallback = () => {
-	changeVaccinationSlot(newVaccinationDate.value.id, selectedVaccination.value)
+	rescheduleVaccination(newVaccinationDate.value.id, selectedVaccination.value)
 		.then(() => {
 			successToast(toast, "Successfully rescheduled vaccination slot");
 			loadVaccinations(pagination.value.currentPage);
