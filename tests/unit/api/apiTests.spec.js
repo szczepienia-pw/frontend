@@ -219,4 +219,20 @@ describe("api tests", () => {
             expect(axios.delete).toHaveBeenCalledWith("/admin/patients/1");
         });
     });
+
+    describe("when deleteAccount() is called", () => {
+        it("should correctly send request", async () => {
+            await Api.deleteAccount();
+            expect(axios.delete).toHaveBeenCalledWith(`/patient/account`);
+        });
+    });
+
+    describe("when changeVaccinationSlot() is called", () => {
+        it("should correctly send request", async () => {
+            await Api.changeVaccinationSlot(1,1);
+            expect(axios.post).toHaveBeenCalledWith(`/doctor/vaccinations/1/change-slot/`, {
+                vaccinationSlotId: 1
+            });
+        });
+    });
 });
