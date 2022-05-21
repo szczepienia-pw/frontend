@@ -165,6 +165,7 @@
 							icon="pi pi-info-circle"
 							class="p-button-info p-button-rounded"
 							data-testid="details"
+							v-tooltip="'Details'"
 							@click="showVaccinationDetails(data)" />
 					</template>
 				</Column>
@@ -278,9 +279,11 @@ import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
-import { getVaccinations, changeVaccinationSlot, getPatients, getDoctors, getDiseases } from "@/services/api";
+import { getVaccinations, rescheduleVaccination, getPatients, getDoctors, getDiseases } from "@/services/api";
 import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from "@/services/helpers";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const toast = useToast();
 const loading = ref(true);
 const dt = ref();
@@ -343,7 +346,7 @@ const loadVaccinations = (page = 1) => {
 };
 
 const rescheduleVaccinationCallback = () => {
-	changeVaccinationSlot(newVaccinationDate.value.id, selectedVaccination.value)
+	rescheduleVaccination(newVaccinationDate.value.id, selectedVaccination.value)
 		.then(() => {
 			successToast(toast, "Successfully rescheduled vaccination slot");
 			loadVaccinations(pagination.value.currentPage);
@@ -357,11 +360,6 @@ const rescheduleVaccinationCallback = () => {
 			vaccinationDetailsDialog.value = false;
 		});
 };
-
-// eslint-disable-next-line
-defineExpose({
-	loadVaccinations,
-});
 
 const loadPatients = (page = 1, append = false) => {
 	loadingPatients.value = true;
@@ -380,25 +378,30 @@ const loadPatients = (page = 1, append = false) => {
 };
 
 const loadDoctors = (page = 1, append = false) => {
-	loadingDoctors.value = true;
-	getDoctors(page)
-		.then((response) => {
-			response = response.data;
-			doctors.value = append ? [...doctors.value, response.data] : response.data;
-		})
-		.catch((err) => {
-			console.error(err);
-			errorToast(toast, "Could not fetch doctors", err);
-		})
-		.finally(() => {
-			loadingDoctors.value = false;
-		});
+    loadingDoctors.value = true;
+	return getDoctors(page)
+        .then(response => {
+            response = response.data;
+            doctors.value = append ? [...doctors.value, response.data] : response.data;
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, 'Could not fetch doctors', err);
+        })
+        .finally(() => {
+            loadingDoctors.value = false;
+        })
 };
 
 onMounted(() => {
 	doctors.value = [];
-	loadPatients();
-	loadDoctors();
+    loadPatients();
+    loadDoctors()
+		.then(() => {
+			if(route.query.doctor) {
+				filters.value.doctor.value = doctors.value.find(d => d.id == route.query.doctor);
+			}
+		})
 	loadVaccinations();
 });
 

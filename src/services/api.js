@@ -110,6 +110,12 @@ export const register = (firstName, lastName, pesel, email, password, address) =
 	});
 };
 
+export const confirmRegistration = (token) => {
+	return api.post(`/patient/registration/confirm`, {
+		token
+	});
+};
+
 export const changeData = (data) => {
 	return api.put(`/patient/account`, data);
 };
@@ -176,6 +182,12 @@ export const getVaccinations = (page = 1, disease = null, doctorId = null, patie
 			`${patientId ? "&patientId=" + patientId : ""}`
 	);
 };
+
+export const rescheduleVaccination = (vaccinationSlotId, vaccinationId) => {
+	return api.post(`admin/vaccinations/${vaccinationId}/change-slot/`,{
+		vaccinationSlotId
+	})
+}
 
 export const deleteAccount = () => {
 	return api.delete(`/patient/account`);
