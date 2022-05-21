@@ -177,7 +177,7 @@ export const getVaccinations = (page = 1, disease = null, doctorId = null, patie
 	);
 };
 
-export const changeVaccinationSlot = (vaccinationSlotId, vaccinationId) => {
+export const rescheduleVaccination = (vaccinationSlotId, vaccinationId) => {
 	return api.post(`admin/vaccinations/${vaccinationId}/change-slot/`,{
 		vaccinationSlotId
 	})

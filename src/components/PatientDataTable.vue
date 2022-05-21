@@ -50,10 +50,12 @@
 						<Button
 							icon="pi pi-pencil"
 							class="p-button-rounded mr-2"
+							v-tooltip.bottom="'Edit'"
 							@click="startEditingPatient(slotProps.data)" />
 						<Button
 							icon="pi pi-trash"
 							class="p-button-danger p-button-rounded"
+							v-tooltip.bottom="'Delete'"
 							@click="confirmDeletePatient(slotProps.data)" />
 					</template>
 				</Column>
