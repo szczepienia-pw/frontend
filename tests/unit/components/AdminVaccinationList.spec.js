@@ -8,9 +8,6 @@ import { formatDate} from "@/services/helpers";
 
 
 const today = new Date();
-const currentYear = today.getFullYear();
-const currentMonth = today.getMonth();
-const currentDay = today.getDate();
 const mockResponse = {
 	data: {
 		pagination: {
@@ -107,19 +104,6 @@ describe("AdminVaccinationList test", () => {
 			expect(await screen.findAllByText("COVID-19")).toHaveLength(2);
 			await screen.findAllByText("Phizer");
             expect(await screen.findAllByText(formatDate(today.toISOString()))).toHaveLength(2);
-			const mockSlots = {
-				data: [
-					{
-						id: 1,
-						date: today.toISOString(),
-					},
-				],
-			};
-			axios.get.mockResolvedValue(mockSlots);
-			const rescheduleButton = screen.getByTestId("reschedule");
-			expect(rescheduleButton).not.toBeNull();
-			await fireEvent.click(rescheduleButton);
-			expect(axios.get).toHaveBeenCalledWith("/vaccination-slots");
 		});
 	});
 
