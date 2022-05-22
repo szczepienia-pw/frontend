@@ -4,6 +4,12 @@ import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 import axios from "axios";
 
+jest.mock('vue-router', () => ({
+    useRouter: () => ({
+        replace: () => {},
+    }),
+}));
+
 const mockResponse = {
 	data: {
 		pagination: {
