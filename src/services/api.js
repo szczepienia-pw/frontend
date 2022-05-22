@@ -189,6 +189,16 @@ export const rescheduleVaccination = (vaccinationSlotId, vaccinationId) => {
 	})
 }
 
+export const getVaccinationReport = (startDate, endDate) => {
+	return api.get(`/admin/vaccinations/report?startDate=${startDate}&endDate=${endDate}`);
+}
+
+export const downloadVaccinationReport = (startDate, endDate) => {
+	return api.get(`/admin/vaccinations/report/download?startDate=${startDate}&endDate=${endDate}`, {
+		responseType: "blob",
+	});
+};
+
 export const deleteAccount = () => {
 	return api.delete(`/patient/account`);
 }
