@@ -131,6 +131,11 @@ const menuItems = computed(() => {
 				page: "vaccinations"
 			},
 			{
+				label: "Statistics",
+				icon: "pi-chart-line",
+				page: "statistics"
+			},
+			{
 				label: "Settings",
 				icon: "pi-cog",
 				page: "settings",
