@@ -363,7 +363,7 @@ const rescheduleVaccinationCallback = () => {
 
 const loadPatients = (page = 1, append = false) => {
 	loadingPatients.value = true;
-	getPatients(page)
+	return getPatients(page)
 		.then((response) => {
 			response = response.data;
 			patients.value = append ? [...patients.value, response.data] : response.data;
@@ -378,30 +378,31 @@ const loadPatients = (page = 1, append = false) => {
 };
 
 const loadDoctors = (page = 1, append = false) => {
-    loadingDoctors.value = true;
+	loadingDoctors.value = true;
 	return getDoctors(page)
-        .then(response => {
-            response = response.data;
-            doctors.value = append ? [...doctors.value, response.data] : response.data;
-        })
-        .catch(err => {
-            console.error(err);
-            errorToast(toast, 'Could not fetch doctors', err);
-        })
-        .finally(() => {
-            loadingDoctors.value = false;
-        })
+		.then((response) => {
+			response = response.data;
+			doctors.value = append ? [...doctors.value, response.data] : response.data;
+		})
+		.catch((err) => {
+			console.error(err);
+			errorToast(toast, "Could not fetch doctors", err);
+		})
+		.finally(() => {
+			loadingDoctors.value = false;
+		});
 };
 
-onMounted(() => {
+onMounted(async () => {
 	doctors.value = [];
-    loadPatients();
-    loadDoctors()
-		.then(() => {
-			if(route.query.doctor) {
-				filters.value.doctor.value = doctors.value.find(d => d.id == route.query.doctor);
-			}
-		})
+	await loadPatients();
+	if (route.query.patient) {
+		filters.value.patient.value = patients.value.find((d) => d.id == route.query.patient);
+	}
+	await loadDoctors();
+	if (route.query.doctor) {
+		filters.value.doctor.value = doctors.value.find((d) => d.id == route.query.doctor);
+	}
 	loadVaccinations();
 });
 
