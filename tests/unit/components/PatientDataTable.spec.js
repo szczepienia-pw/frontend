@@ -55,9 +55,6 @@ describe("PatientDataTable test", () => {
 			render(PatientDataTable, {
 				global: {
 					plugins: [PrimeVue, ToastService],
-					directives: {
-                        tooltip() { /* stub */ }
-                    },
 				},
 			});
 
@@ -78,9 +75,6 @@ describe("PatientDataTable test", () => {
 			render(PatientDataTable, {
 				global: {
 					plugins: [PrimeVue, ToastService],
-					directives: {
-                        tooltip() { /* stub */ }
-                    },
 				},
 			});
 
@@ -102,9 +96,6 @@ describe("PatientDataTable test", () => {
 			render(PatientDataTable, {
 				global: {
 					plugins: [PrimeVue, ToastService],
-					directives: {
-                        tooltip() { /* stub */ }
-                    },
 				},
 			});
 

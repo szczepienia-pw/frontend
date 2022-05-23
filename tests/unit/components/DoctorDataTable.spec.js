@@ -4,12 +4,6 @@ import PrimeVue from 'primevue/config';
 import ToastService from "primevue/toastservice";
 import axios from 'axios';
 
-jest.mock('vue-router', () => ({
-    useRouter: () => ({
-        push: () => mockfn,
-    }),
-}));
-
 const mockResponse = {
     data: {
         pagination: {
@@ -42,10 +36,7 @@ describe("DoctorDataTable test", () => {
 
             render(DoctorDataTable, {
                 global: {
-                    plugins: [PrimeVue, ToastService],
-                    directives: {
-                        tooltip() { /* stub */ }
-                    },
+                    plugins: [PrimeVue, ToastService]
                 }
             })
 
@@ -65,10 +56,7 @@ describe("DoctorDataTable test", () => {
 
             render(DoctorDataTable, {
                 global: {
-                    plugins: [PrimeVue, ToastService],
-                    directives: {
-                        tooltip() { /* stub */ }
-                    },
+                    plugins: [PrimeVue, ToastService]
                 }
             })
 
@@ -87,10 +75,7 @@ describe("DoctorDataTable test", () => {
 
             render(DoctorDataTable, {
                 global: {
-                    plugins: [PrimeVue, ToastService],
-                    directives: {
-                        tooltip() { /* stub */ }
-                    },
+                    plugins: [PrimeVue, ToastService]
                 }
             })
 
@@ -117,10 +102,7 @@ describe("DoctorDataTable test", () => {
 
             render(DoctorDataTable, {
                 global: {
-                    plugins: [PrimeVue, ToastService],
-                    directives: {
-                        tooltip() { /* stub */ }
-                    },
+                    plugins: [PrimeVue, ToastService]
                 }
             })
 
