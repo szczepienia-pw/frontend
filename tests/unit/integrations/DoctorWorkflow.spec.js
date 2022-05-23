@@ -57,8 +57,8 @@ describe("doctor workflow test", () => {
 
         // delete slot
 
-        const deleteButtons = screen.getAllByRole('button').filter(el => el.classList.contains('p-button-danger'));
-        await fireEvent.click(deleteButtons[2]);
+        const deleteButtons = screen.getAllByRole('button').filter(el => el.children[0]?.classList.contains('delete'));
+        await fireEvent.click(deleteButtons[0]);
         axios.delete.mockImplementation((url) => {
             vaccinations = vaccinations.filter(v => v.id != url.slice(-1))
             return Promise.resolve()

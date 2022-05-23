@@ -52,34 +52,12 @@
                 </Column>
                 <Column style="min-width:10rem">
                     <template #body="{ data }">
-                        <Button
-                            v-if="data.vaccine"
-                            icon="pi pi-info-circle"
-                            class="p-button-info p-button-rounded"
-                            v-tooltip="'Details'"
-                            @click="showVaccinationDetails(data)"
-                        />
+                        <Button v-if="data.vaccine" icon="pi pi-info-circle" class="p-button-info p-button-rounded" @click="showVaccinationDetails(data)" />
                         <span v-if="data.status === VaccinationStatuses.planned" class="ml-2">
-                            <Button
-                                icon="pi pi-times-circle"
-                                class="p-button-danger p-button-rounded"
-                                v-tooltip="'Cancel'"
-                                @click="confirmCancelVaccination(data)"
-                            />
-                            <Button
-                                icon="pi pi-check"
-                                class="ml-2 p-button-success p-button-rounded"
-                                v-tooltip="'Confirm'"
-                                @click="confirmVaccination(data)"
-                            />
+                            <Button  icon="pi pi-times-circle" class="p-button-danger p-button-rounded" @click="confirmCancelVaccination(data)" />
+                            <Button  icon="pi pi-check" class="ml-2 p-button-success p-button-rounded" @click="confirmVaccination(data)" />
                         </span>
-                        <Button
-                            v-else-if="data.status === VaccinationStatuses.free"
-                            icon="pi pi-trash"
-                            class="p-button-danger p-button-rounded"
-                            v-tooltip="'Delete'"
-                            @click="confirmDeleteVaccination(data)"
-                        />
+                        <Button v-else-if="data.status === VaccinationStatuses.free" icon="pi pi-trash delete" class="p-button-danger p-button-rounded" @click="confirmDeleteVaccination(data)" />
                     </template>
                 </Column>
                 <template #paginatorstart>
@@ -179,35 +157,6 @@
 					</div>
 				</div>
 			</div>
-            <template #footer>
-				<Button
-					v-if="vaccination.status === VaccinationStatuses.planned"
-					label="Reschedule visit"
-					icon="pi pi-pencil"
-					@click="
-						() => {
-							vaccinationRescheduleDialog = true;
-							newVaccinationDate = { date: '', id: '' };
-						}
-					" />
-            </template>
-		</Dialog>
-        <Dialog v-model:visible="vaccinationRescheduleDialog" header="Choose new date" modal :draggable="false">
-			<div class="confirmation-content">
-				<SlotCalendar v-model="newVaccinationDate" />
-			</div>
-			<template #footer>
-				<Button
-					label="Cancel"
-					icon="pi pi-times"
-					class="p-button-text"
-					@click="vaccinationRescheduleDialog = false" />
-				<Button
-					label="Reschedule"
-					icon="pi pi-pencil"
-					class="p-button-text"
-					@click="rescheduleVaccinationCallback" />
-			</template>
 		</Dialog>
 	</div>
 </template>
@@ -220,11 +169,10 @@ import Column from 'primevue/column'
 import Calendar from 'primevue/calendar'
 import InputText from 'primevue/inputtext'
 import TriStateCheckbox  from 'primevue/tristatecheckbox'
-import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode,FilterOperator } from 'primevue/api';
 import { useToast } from 'primevue/usetoast';
-import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot, cancelPlannedVaccinationSlot, changeVaccinationSlot } from '@/services/api'
+import { getVaccinationSlots, deleteVaccinationSlot, confirmVaccinationSlot, cancelPlannedVaccinationSlot } from '@/services/api'
 import { errorToast, successToast, formatDate, formatTime, VaccinationStatuses } from '@/services/helpers'
 
 const toast = useToast();
@@ -237,8 +185,6 @@ const deleteVaccinationsDialog = ref(false);
 const confirmVaccinationDialog = ref(false);
 const cancelVaccinationDialog = ref(false);
 const vaccinationDetailsDialog = ref(false);
-const vaccinationRescheduleDialog = ref(false);
-const newVaccinationDate = ref({ date: "", id: "" });
 const vaccination = ref({});
 const selectedVaccinations = ref();
 const filters = ref({
@@ -269,7 +215,6 @@ const loadVaccinations = (page = 1) => {
                 patientEmail: item.vaccination?.patient?.email,
                 date: new Date(item.date),
                 id: item.id,
-                vaccinationId: item.vaccination?.id,
                 time: formatTime(new Date(item.date)),
                 status: getStatus(item),
                 vaccine: item.vaccination?.vaccine
@@ -353,24 +298,6 @@ const cancelVaccinationCallback = () => {
             vaccination.value = {};
         })
 };
-
-const rescheduleVaccinationCallback = () => {
-    console.log(vaccination.value)
-	changeVaccinationSlot(newVaccinationDate.value.id, vaccination.value.vaccinationId)
-		.then(() => {
-			successToast(toast, "Successfully rescheduled vaccination");
-            vaccinationDetailsDialog.value = false;
-			loadVaccinations(pagination.value.currentPage);
-		})
-		.catch((err) => {
-			console.error(err);
-			errorToast(toast, "Could not reschedule vaccination", err);
-		})
-		.finally(() => {
-			vaccinationRescheduleDialog.value = false;
-		});
-}
-
 const confirmDeleteSelected = () => {
     deleteVaccinationsDialog.value = true;
 };

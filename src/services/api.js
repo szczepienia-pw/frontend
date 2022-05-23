@@ -86,12 +86,6 @@ export const cancelPlannedVaccinationSlot = (id) => {
 	});
 };
 
-export const changeVaccinationSlot = (vaccinationSlotId, vaccinationId) => {
-	return api.post(`/doctor/vaccinations/${vaccinationId}/change-slot/`, {
-		vaccinationSlotId
-	});
-};
-
 export const reportBug = (name, description) => {
 	return api.post(`/bugs`, {
 		name,
