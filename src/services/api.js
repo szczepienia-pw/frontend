@@ -164,23 +164,8 @@ export const deletePatient = (id) => {
 
 export const downloadCertificate = (vaccinationId) => {
 	return api.get(`/patient/vaccinations/${vaccinationId}/certificate`, {
-		responseType: "blob",
+		responseType: 'blob'
 	});
-};
-
-export const getVaccinations = (page = 1, disease = null, doctorId = null, patientId = null) => {
-	return api.get(
-		`/admin/vaccinations?page=${page}` +
-			`${disease ? "&disease=" + disease : ""}` +
-			`${doctorId ? "&doctorId=" + doctorId : ""}` +
-			`${patientId ? "&patientId=" + patientId : ""}`
-	);
-};
-
-export const changeVaccinationSlot = (vaccinationSlotId, vaccinationId) => {
-	return api.post(`admin/vaccinations/${vaccinationId}/change-slot/`,{
-		vaccinationSlotId
-	})
 }
 
 export const deleteAccount = () => {
