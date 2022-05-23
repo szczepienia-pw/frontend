@@ -53,11 +53,6 @@
 							v-tooltip.bottom="'Edit'"
 							@click="startEditingPatient(slotProps.data)" />
 						<Button
-							icon="pi pi-book"
-							class="p-button-rounded mr-2"
-							v-tooltip.bottom="'Show vaccinations'"
-							@click="showPatientHistory(slotProps.data)" />
-						<Button
 							icon="pi pi-trash"
 							class="p-button-danger p-button-rounded"
 							v-tooltip.bottom="'Delete'"
@@ -215,9 +210,7 @@ import { FilterMatchMode } from "primevue/api";
 import { useToast } from "primevue/usetoast";
 import { getPatients, deletePatient, editPatient } from "@/services/api";
 import { errorToast, objectDiff, successToast } from "@/services/helpers";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
 const pageSize = ref(0);
 const toast = useToast();
 const loading = ref(true);
@@ -253,7 +246,7 @@ const loadPatients = (page = 1) => {
 		})
 		.catch((err) => {
 			console.error(err);
-			errorToast(toast, "Could not fetch patients", err);
+            errorToast(toast, 'Could not fetch patients', err);
 		})
 		.finally(() => (loading.value = false));
 };
@@ -277,12 +270,12 @@ const saveEditedPatient = () => {
 	}
 	editPatient(patient.value.id, changes)
 		.then(() => {
-			successToast(toast, "Patient information saved");
+            successToast(toast, 'Patient information saved');
 			loadPatients(pagination.value.currentPage);
 		})
 		.catch((err) => {
 			console.error(err);
-			errorToast(toast, "Could not edit patient", err);
+            errorToast(toast, 'Could not edit patient', err);
 		})
 		.finally(() => {
 			patientDialog.value = false;
@@ -304,11 +297,11 @@ const confirmDeletePatient = (pat) => {
 const deletePatientCallback = () => {
 	deletePatient(patient.value.id)
 		.then(() => {
-			successToast(toast, `Patient ${patient.value.firstName} ${patient.value.lastName} removed`);
+            successToast(toast, `Patient ${patient.value.firstName} ${patient.value.lastName} removed`);
 		})
 		.catch((err) => {
 			console.error(err);
-			errorToast(toast, "Could not delete patient", err);
+            errorToast(toast, 'Could not delete patient', err);
 		})
 		.finally(() => {
 			deletePatientDialog.value = false;
@@ -325,7 +318,7 @@ const deleteSelectedPatientsCallback = () => {
 			await deletePatient(patient.id);
 		} catch (err) {
 			console.error(err);
-			errorToast(toast, "Could not delete patient", err);
+            errorToast(toast, 'Could not delete patient', err);
 			return false;
 		}
 		return true;
@@ -348,10 +341,6 @@ const onSearch = () => {
 			item[property].toString().toLowerCase().includes(filters.value.global.value.toLowerCase())
 		)
 	);
-};
-
-const showPatientHistory = (pat) => {
-	router.replace(`/admin/vaccinations?patient=${pat.id}`);
 };
 </script>
 
