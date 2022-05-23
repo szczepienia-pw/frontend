@@ -89,10 +89,6 @@ const router = createRouter({
                     component: () => import("@/views/admin/Vaccinations.vue"),
                 },
                 {
-                    path: 'statistics',
-                    component: () => import("@/views/admin/Statistics.vue"),
-                },
-                {
                     path: 'settings',
                     component: () => import("@/views/admin/Settings.vue"),
                 }

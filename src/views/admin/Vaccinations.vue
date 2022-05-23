@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-column ">
-        <AdminVaccinationList class="mb-5" />
+    <div>
+        <AdminVaccinationList ref="vaccinations" class="mb-5" />
     </div>
 </template>
 

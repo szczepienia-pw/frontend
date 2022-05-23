@@ -133,8 +133,7 @@
 					filterField="disease"
 					:showFilterMatchModes="false"
 					:filterMenuStyle="{ width: '14rem' }"
-					style="min-width: 14rem"
-				>
+					style="min-width: 14rem">
 					<template #body="{ data }">
 						{{ data.disease }}
 					</template>
@@ -144,12 +143,19 @@
 				</Column>
 				<Column
 					field="status"
+					filterField="status"
 					header="Status"
 					:sortable="true"
-				>
+					:showFilterMatchModes="false">
 					<template #body="{ data }">
 						<i :class="'mr-2 pi ' + getStatusIcon(data.status) + ' ' + getStatusColor(data.status)" />
 						<span :class="getStatusColor(data.status)">{{ data.status }}</span>
+					</template>
+					<template #filter="{ filterModel }">
+						<div class="field-checkbox">
+							<TriStateCheckbox v-model="filterModel.value" />
+							<label>Planned vaccinations</label>
+						</div>
 					</template>
 				</Column>
 				<Column style="min-width: 10rem">
@@ -268,6 +274,7 @@ import Dropdown from "primevue/dropdown";
 import Skeleton from "primevue/skeleton";
 import Column from "primevue/column";
 import InputText from "primevue/inputtext";
+import TriStateCheckbox from "primevue/tristatecheckbox";
 import SlotCalendar from "@/components/SlotCalendar";
 import { ref, onMounted } from "vue";
 import { FilterMatchMode } from "primevue/api";
