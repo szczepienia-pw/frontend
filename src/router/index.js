@@ -15,11 +15,6 @@ const router = createRouter({
             component: () => import("@/views/LoginPage.vue")
         },
         {
-            path: '/register',
-            name: 'register',
-            component: () => import("@/views/RegisterPage.vue")
-        },
-        {
             path: '/doctor',
             name: 'doctor',
             redirect: '/doctor/slots',
@@ -98,9 +93,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const allowedPaths = ['login', 'register']
-    if (!allowedPaths.includes(to.name) && !useUserSession().isLoggedIn) next({ name: 'login' })
-    else if (allowedPaths.includes(to.name) && useUserSession().isLoggedIn) next({ name: useUserSession().userType })
+    if (to.name !== 'login' && !useUserSession().isLoggedIn) next({ name: 'login' })
+    else if (to.name === 'login' && useUserSession().isLoggedIn) next({ name: useUserSession().userType })
     else next();
 });
 

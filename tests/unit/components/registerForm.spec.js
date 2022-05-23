@@ -10,12 +10,6 @@ jest.mock('@/services/useUserSession', () => ({
     saveUserSession: () => { }
 }))
 
-jest.mock('vue-router', () => ({
-    useRouter: () => ({
-        replace: () => {},
-    }),
-}));
-
 describe("registration test", () => {
     describe("when register button is clicked", () => {
         it("should correctly post entered data", async () => {

@@ -110,12 +110,6 @@ export const register = (firstName, lastName, pesel, email, password, address) =
 	});
 };
 
-export const confirmRegistration = (token) => {
-	return api.post(`/patient/registration/confirm`, {
-		token
-	});
-};
-
 export const changeData = (data) => {
 	return api.put(`/patient/account`, data);
 };

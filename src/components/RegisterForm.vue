@@ -184,7 +184,6 @@ import { useVuelidate } from "@vuelidate/core";
 import { register } from "@/services/api";
 import { useToast } from "primevue/usetoast";
 import { errorToast, successToast } from "@/services/helpers";
-import { useRouter } from "vue-router";
 
 const toast = useToast();
 
@@ -220,7 +219,6 @@ const rules = {
 
 const submitted = ref(false);
 const isLoading = ref(false);
-const router = useRouter();
 
 const v$ = useVuelidate(rules, state);
 
@@ -234,7 +232,6 @@ const handleSubmit = (isFormValid) => {
 		.then(() => {
 			resetForm();
 			successToast(toast, "Successfully registered");
-			router.replace('/register')
 		})
 		.catch((err) => {
 			console.error(err);
