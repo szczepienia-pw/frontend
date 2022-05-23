@@ -355,6 +355,7 @@ const cancelVaccinationCallback = () => {
 };
 
 const rescheduleVaccinationCallback = () => {
+    console.log(vaccination.value)
 	changeVaccinationSlot(newVaccinationDate.value.id, vaccination.value.vaccinationId)
 		.then(() => {
 			successToast(toast, "Successfully rescheduled vaccination");

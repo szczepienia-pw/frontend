@@ -58,7 +58,8 @@
 								loading: loadingPatients,
 								delay: 250,
 							}"
-							placeholder="Select patient">
+							placeholder="Select patient"
+                        >
 							<template #value="props">
 								<span v-if="props.value">
 									{{ props.value.firstName + " " + props.value.lastName }}
@@ -78,8 +79,8 @@
 						</Dropdown>
 					</template>
 				</Column>
-				<Column
-					field="doctor"
+				<Column 
+                    field="doctor"
 					header="Doctor"
 					:sortable="true"
 					filterField="doctor"
@@ -101,7 +102,8 @@
 								loading: loadingDoctors,
 								delay: 250,
 							}"
-							placeholder="Select doctor">
+							placeholder="Select doctor"
+                        >
 							<template #value="props">
 								<span v-if="props.value">
 									{{ props.value.firstName + " " + props.value.lastName }}
@@ -126,8 +128,8 @@
 						{{ formatDate(data.date) }}
 					</template>
 				</Column>
-				<Column
-					field="disease"
+				<Column 
+                    field="disease"
 					header="Disease"
 					:sortable="true"
 					filterField="disease"
@@ -138,7 +140,11 @@
 						{{ data.disease }}
 					</template>
 					<template #filter="{ filterModel }">
-						<Dropdown v-model="filterModel.value" :options="diseases" placeholder="Select disease" />
+						<Dropdown
+							v-model="filterModel.value"
+							:options="diseases"
+							placeholder="Select disease"
+                        />
 					</template>
 				</Column>
 				<Column
@@ -164,7 +170,6 @@
 							v-if="data.vaccine"
 							icon="pi pi-info-circle"
 							class="p-button-info p-button-rounded"
-							data-testid="details"
 							v-tooltip="'Details'"
 							@click="showVaccinationDetails(data)" />
 					</template>
@@ -209,7 +214,6 @@
 						<div class="flex flex-row align-items-center">
 							{{ formatDate(vaccination.date.toISOString()) }}
 							<Button
-								data-testid="reschedule"
 								icon="pi pi-pencil"
 								class="p-button-rounded mr-2 change-date"
 								@click="
@@ -362,19 +366,19 @@ const rescheduleVaccinationCallback = () => {
 };
 
 const loadPatients = (page = 1, append = false) => {
-	loadingPatients.value = true;
+    loadingPatients.value = true;
 	getPatients(page)
-		.then((response) => {
-			response = response.data;
-			patients.value = append ? [...patients.value, response.data] : response.data;
-		})
-		.catch((err) => {
-			console.error(err);
-			errorToast(toast, "Could not fetch patients", err);
-		})
-		.finally(() => {
-			loadingPatients.value = false;
-		});
+        .then(response => {
+            response = response.data;
+            patients.value = append ? [...patients.value, response.data] : response.data;
+        })
+        .catch(err => {
+            console.error(err);
+            errorToast(toast, 'Could not fetch patients', err);
+        })
+        .finally(() => {
+            loadingPatients.value = false;
+        })
 };
 
 const loadDoctors = (page = 1, append = false) => {
@@ -405,20 +409,20 @@ onMounted(() => {
 	loadVaccinations();
 });
 
-const lazyLoadPatients = ({ first, last }) => {
-	if (first > patients.value.length) {
-		patientsMaxPage.value++;
-		loadPatients(patientsMaxPage.value, true);
-	}
-	lazyPatients.value = patients.value.slice(first, last + 1);
+const lazyLoadPatients = ({first, last}) => {
+    if(first > patients.value.length) {
+        patientsMaxPage.value++;
+        loadPatients(patientsMaxPage.value, true);
+    }
+    lazyPatients.value = patients.value.slice(first, last+1);
 };
 
-const lazyLoadDoctors = ({ first, last }) => {
-	if (first > doctors.value.length) {
-		doctorsMaxPage.value++;
-		loadDoctors(doctorsMaxPage.value, true);
-	}
-	lazyDoctors.value = doctors.value.slice(first, last + 1);
+const lazyLoadDoctors = ({first, last}) => {
+    if(first > doctors.value.length) {
+        doctorsMaxPage.value++;
+        loadDoctors(doctorsMaxPage.value, true);
+    }
+    lazyDoctors.value = doctors.value.slice(first, last+1);
 };
 
 const showVaccinationDetails = (vacc) => {
