@@ -90,12 +90,7 @@ const menuItems = computed(() => {
 				label: "Time slots",
 				icon: "pi-calendar",
 				page: "slots",
-			},
-			{
-				label: "Vaccination",
-				icon: "pi-book",
-				disabled: true,
-			},
+			}
 		],
 		[userTypes.patient]: [
 			{
