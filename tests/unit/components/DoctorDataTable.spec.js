@@ -138,4 +138,28 @@ describe("DoctorDataTable test", () => {
             });
         });
     });
+
+    describe("misc functionality test", () => {
+		it("should correctly sort, filter and mass delete", async () => {
+			axios.get.mockResolvedValue(mockResponse);
+			axios.put.mockResolvedValue({ msg: "mock" });
+
+			const wrapper = render(DoctorDataTable, {
+				global: {
+					plugins: [PrimeVue, ToastService],
+					directives: {
+                        tooltip() { /* stub */ }
+                    },
+				},
+			});
+
+			await screen.findByText('John');
+			await fireEvent.click(screen.getByText('ID'))
+			await fireEvent.update(screen.getByPlaceholderText('Search...'), 'John')
+			await fireEvent.click(screen.getAllByRole('checkbox')[1])
+			await fireEvent.click(screen.getByText('Delete'))
+			await fireEvent.click(screen.getByText('Yes'))
+			expect(axios.delete).toHaveBeenCalledWith("/admin/doctors/1");
+		});
+	});
 })

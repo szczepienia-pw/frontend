@@ -1,9 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/vue";
+import { render, screen, fireEvent } from "@testing-library/vue";
 import AdminVaccinationList from "@/components/AdminVaccinationList";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 import axios from "axios";
-import { fireEvent } from "@testing-library/dom";
 import { formatDate} from "@/services/helpers";
 
 jest.mock("vue-router", () => ({
@@ -149,6 +148,32 @@ describe("AdminVaccinationList test", () => {
 			expect(rescheduleButton).not.toBeNull();
 			await fireEvent.click(rescheduleButton);
 			expect(axios.get).toHaveBeenCalledWith("/vaccination-slots");
+		});
+	});
+
+	describe("misc functionality test", () => {
+		it("should correctly sort, filter and mass delete", async () => {
+			window.HTMLElement.prototype.scrollIntoView = function() {};
+			axios.get.mockResolvedValue(mockResponse);
+			axios.put.mockResolvedValue({ msg: "mock" });
+
+			const wrapper = render(AdminVaccinationList, {
+				global: {
+					plugins: [PrimeVue, ToastService],
+					directives: {
+                        tooltip() { /* stub */ }
+                    },
+				},
+			});
+
+			await screen.findByText('John Patient');
+			await fireEvent.click(screen.getByText('Date'))
+			await fireEvent.update(screen.getByPlaceholderText('Search...'), 'John')
+			await fireEvent.click(screen.getAllByRole('button')[2])
+			await fireEvent.click(screen.getByText('Select disease'))
+			await fireEvent.click(screen.getByText('OTHER'))
+			await fireEvent.click(screen.getByText('Apply'))
+			expect(axios.get).toHaveBeenLastCalledWith("/admin/vaccinations?page=1&disease=OTHER&doctorId=1")
 		});
 	});
 });

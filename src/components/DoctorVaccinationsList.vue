@@ -56,6 +56,7 @@
                             v-if="data.vaccine"
                             icon="pi pi-info-circle"
                             class="p-button-info p-button-rounded"
+                            data-testid="details"
                             v-tooltip="'Details'"
                             @click="showVaccinationDetails(data)"
                         />
@@ -70,6 +71,7 @@
                                 icon="pi pi-check"
                                 class="ml-2 p-button-success p-button-rounded"
                                 v-tooltip="'Confirm'"
+                                data-testid="confirm"
                                 @click="confirmVaccination(data)"
                             />
                         </span>
@@ -425,7 +427,7 @@ const onSort = (event) => {
 const onSearch = () => {
     vaccinations.value = vaccinationsBackup.value.filter(
         item => Object.keys(item).some(
-            (property) => item[property].toString().toLowerCase().includes(filters.value.global.value.toLowerCase())
+            (property) => item[property]?.toString().toLowerCase().includes(filters.value.global.value.toLowerCase())
         )
     )
 }
