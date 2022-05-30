@@ -60,9 +60,9 @@
 					</div>
 					<div v-else class="flex flex-column justify-content-center align-items-center" style="height: 100%">
 						<img
-							alt="Doctor"
+							alt="Logo"
 							style="object-fit: cover; width: 100%; max-width: 400px; height: auto"
-							:src="require('@/assets/doctor.png')" />
+							:src="require('@/assets/logo.png')" />
 					</div>
 				</template>
 			</Card>
@@ -147,6 +147,12 @@ function sendLoginRequest() {
 </script>
 
 <style lang="scss">
+
+main {
+	width: 100% !important;
+	left: 0 !important;
+}
+
 * {
 	padding: 0;
 	margin: 0;

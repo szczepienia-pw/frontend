@@ -355,7 +355,7 @@ const vaccinations = ref([]);
 	cursor: pointer;
 
 	&:hover {
-		background-color: var(--blue-100);
+		background-color: #737dec24;
 	}
 
 	.history-item__icon > i {
