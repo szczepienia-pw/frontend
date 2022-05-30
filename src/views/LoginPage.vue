@@ -147,6 +147,12 @@ function sendLoginRequest() {
 </script>
 
 <style lang="scss">
+
+main {
+	width: 100% !important;
+	left: 0 !important;
+}
+
 * {
 	padding: 0;
 	margin: 0;

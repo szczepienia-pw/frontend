@@ -46,4 +46,9 @@ onMounted(() => {
 
 <style lang="scss">
 
+main {
+	width: 100% !important;
+	left: 0 !important;
+}
+
 </style>
