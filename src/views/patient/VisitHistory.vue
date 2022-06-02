@@ -130,7 +130,7 @@
 					class="p-button-danger"
 					@click="vaccinationCancelDialog = true" />
 				<Button
-					v-else
+					v-else-if="selectedVaccination.status === VaccinationStatuses.completed"
 					label="Download certificate"
 					icon="pi pi-download"
 					class="p-button-success"
