@@ -47,7 +47,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 main {
 	width: 100% !important;
 	left: 0 !important;

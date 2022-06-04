@@ -146,43 +146,42 @@ function sendLoginRequest() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 main {
 	width: 100% !important;
 	left: 0 !important;
 }
 
-* {
-	padding: 0;
-	margin: 0;
-}
-.btw .p-card,
-.btw .p-card-body {
-	min-height: 24rem;
-	height: 100%;
-	width: 20rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	box-shadow: none;
-}
-.btw .p-card-content {
-	padding-top: 40px;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-.no-margin-top .p-card-content {
-	margin-top: 0;
-	padding-top: 0;
-	height: 100%;
-}
 
-.p-card-body,
-.p-card-content {
-	height: 100%;
+:deep() {
+	.btw .p-card,
+	.btw .p-card-body {
+		min-height: 24rem;
+		height: 100%;
+		width: 20rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		box-shadow: none;
+	}
+	.btw .p-card-content {
+		padding-top: 40px;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	.no-margin-top .p-card-content  {
+		margin-top: 0;
+		padding-top: 0;
+		height: 100%;
+	}
+
+	.p-card-body,
+	.p-card-content  {
+		height: 100%;
+	}
 }
 
 @media screen and (max-width: 768px) {
