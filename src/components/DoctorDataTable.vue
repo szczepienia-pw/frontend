@@ -45,7 +45,7 @@
             </DataTable>
         </div>
 
-        <Dialog v-model:visible="doctorDialog" :style="{width: '450px'}" header="Doctor Details" :modal="true" class="p-fluid">
+        <Dialog v-model:visible="doctorDialog" :style="{width: '450px'}" header="Doctor Details" :modal="true" class="p-fluid" @update:visible="hideDialog">
             <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" :alt="doctor.image" class="doctor-image" v-if="doctor.image" />
             <div class="field">
                 <label for="firstName">First name</label>

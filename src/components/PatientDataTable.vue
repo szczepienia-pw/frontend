@@ -304,6 +304,7 @@ const confirmDeletePatient = (pat) => {
 const deletePatientCallback = () => {
 	deletePatient(patient.value.id)
 		.then(() => {
+            loadPatients(pagination.value.currentPage);
 			successToast(toast, `Patient ${patient.value.firstName} ${patient.value.lastName} removed`);
 		})
 		.catch((err) => {

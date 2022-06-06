@@ -142,4 +142,28 @@ describe("PatientDataTable test", () => {
 			});
 		});
 	});
+
+	describe("misc functionality test", () => {
+		it("should correctly sort, filter and mass delete", async () => {
+			axios.get.mockResolvedValue(mockResponse);
+			axios.put.mockResolvedValue({ msg: "mock" });
+
+			const wrapper = render(PatientDataTable, {
+				global: {
+					plugins: [PrimeVue, ToastService],
+					directives: {
+                        tooltip() { /* stub */ }
+                    },
+				},
+			});
+
+			await screen.findByText("Ben");
+			await fireEvent.click(screen.getByText('ID'))
+			await fireEvent.update(screen.getByPlaceholderText('Search...'), 'Ben')
+			await fireEvent.click(screen.getAllByRole('checkbox')[1])
+			await fireEvent.click(screen.getByText('Delete'))
+			await fireEvent.click(screen.getByText('Yes'))
+			expect(axios.delete).toHaveBeenCalledWith("/admin/patients/1");
+		});
+	});
 });

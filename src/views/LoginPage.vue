@@ -60,9 +60,9 @@
 					</div>
 					<div v-else class="flex flex-column justify-content-center align-items-center" style="height: 100%">
 						<img
-							alt="Doctor"
+							alt="Logo"
 							style="object-fit: cover; width: 100%; max-width: 400px; height: auto"
-							:src="require('@/assets/doctor.png')" />
+							:src="require('@/assets/logo.png')" />
 					</div>
 				</template>
 			</Card>
@@ -146,37 +146,36 @@ function sendLoginRequest() {
 }
 </script>
 
-<style lang="scss">
-* {
-	padding: 0;
-	margin: 0;
-}
-.btw .p-card,
-.btw .p-card-body {
-	min-height: 24rem;
-	height: 100%;
-	width: 20rem;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	box-shadow: none;
-}
-.btw .p-card-content {
-	padding-top: 40px;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-.no-margin-top .p-card-content {
-	margin-top: 0;
-	padding-top: 0;
-	height: 100%;
-}
+<style lang="scss" scoped>
 
-.p-card-body,
-.p-card-content {
-	height: 100%;
+:deep() {
+	.btw .p-card,
+	.btw .p-card-body {
+		min-height: 24rem;
+		height: 100%;
+		width: 20rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		box-shadow: none;
+	}
+	.btw .p-card-content {
+		padding-top: 40px;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	.no-margin-top .p-card-content  {
+		margin-top: 0;
+		padding-top: 0;
+		height: 100%;
+	}
+
+	.p-card-body,
+	.p-card-content  {
+		height: 100%;
+	}
 }
 
 @media screen and (max-width: 768px) {

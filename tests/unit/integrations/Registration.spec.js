@@ -17,11 +17,24 @@ jest.mock("vue-router", () => ({
 	}),
 }));
 
+
+const mockDate1 = new Date();
+mockDate1.setDate(mockDate1.getDate() + 1);
+const mockDate2 = new Date();
+mockDate2.setDate(mockDate2.getDate() + 1);
+mockDate2.setHours(1);
+const mockDate3 = new Date();
+mockDate3.setDate(mockDate3.getDate() + 2);
+mockDate3.setHours(2);
+const mockDate4 = new Date();
+mockDate4.setDate(mockDate4.getDate() + 2);
+mockDate4.setHours(3);
+
 jest.mock('@/services/useVisitRegistration', () => ({
     useVisitRegistration: () => ({
 		slot: {
 			id: 1,
-			date: "2019-08-24T14:15:22Z"
+			date: mockDate1.toISOString()
 		},
 		disease: "COVID-19",
 		vaccine: {
@@ -40,19 +53,19 @@ describe("VaccinationSlots test", () => {
 		data: [
 			{
 				id: 1,
-				date: "2022-05-23T15:15:22Z",
+				date: mockDate1.toISOString(),
 			},
 			{
 				id: 2,
-				date: "2022-05-23T16:15:22Z",
+				date: mockDate2.toISOString(),
 			},
 			{
 				id: 3,
-				date: "2022-05-24T14:15:22Z",
+				date: mockDate3.toISOString(),
 			},
 			{
 				id: 4,
-				date: "2022-05-25T17:15:22Z",
+				date: mockDate4.toISOString(),
 			},
 		],
 	};
@@ -67,7 +80,7 @@ describe("VaccinationSlots test", () => {
 			});
 
 			const date = await waitFor(() => screen.getAllByTestId("date"));
-			expect(date).toHaveLength(3);
+			expect(date).toHaveLength(2);
 		});
 	});
 
@@ -285,7 +298,7 @@ describe("Confirmation test", () => {
 					plugins: [PrimeVue, ToastService],
 				},
 			});
-			await screen.findByText(`Date: ${formatDate('2019-08-24T14:15:22Z')}`);
+			await screen.findByText(`Date: ${formatDate(mockDate1.toISOString())}`);
 			await screen.findByText("Vaccine: Pfizer");
 			await screen.findByText("Disease: COVID-19");
 		});
